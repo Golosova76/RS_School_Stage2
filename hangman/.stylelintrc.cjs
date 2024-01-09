@@ -18,7 +18,6 @@ module.exports = {
     'stylelint-declaration-block-no-ignored-properties',
   ],
   rules: {
-    'string-quotes': 'double',
     'order/order': [
       [
         'custom-properties',

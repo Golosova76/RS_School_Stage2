@@ -1,0 +1,19 @@
+.header {
+  // .header__container
+
+  &__container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding-top: 50px;
+    padding-bottom: 50px;
+  }
+
+  // .header__title
+
+  &__title {
+    font-size: 36px;
+    line-height: $font-line-height;
+  }
+}

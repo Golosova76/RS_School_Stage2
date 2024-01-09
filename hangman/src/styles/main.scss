@@ -1,0 +1,236 @@
+.page {
+  // .page__container
+
+  &__container {
+    display: flex;
+    gap: 20px;
+  }
+}
+
+.game {
+  // .game__gallows
+
+  &__gallows {
+    flex: 0 1 42%;
+  }
+
+  // .game__body
+
+  &__body {
+    flex: 0 1 58%;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
+  // .game__words
+
+  &__words {
+    @include margin-bottom40;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
+  // .game__word
+
+  &__word {
+    display: flex;
+    gap: 30px;
+    @include margin-bottom40;
+  }
+
+  // .game__hint
+
+  &__hint {
+    @include margin-bottom40;
+  }
+
+  // .game__incorrect
+
+  &__incorrect {
+  }
+
+  // .game__keyboards
+
+  &__keyboards {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+    max-width: 600px;
+    width: 100%;
+  }
+}
+
+.gallow {
+  position: relative;
+  height: 469px;
+  // .gallow__post
+
+  &__post {
+    position: absolute;
+    left: 0;
+    bottom: 8px;
+    height: 98%;
+    width: 10px;
+    background-color: black;
+  }
+
+  // .gallow__beam
+
+  &__beam {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 10px;
+    width: 50%;
+    background-color: black;
+  }
+
+  // .gallow__support
+
+  &__support {
+    position: absolute;
+    top: 16%;
+    left: 0;
+    height: 10px;
+    width: 20%;
+    background-color: black;
+    transform: rotate(-45deg);
+    transform-origin: 0 0;
+  }
+
+  // .gallow__noose
+
+  &__noose {
+    position: absolute;
+    top: 10px;
+    left: calc(50px + 38.5%);
+    height: 50px;
+    width: 10px;
+    background-color: black;
+  }
+  // .gallow__bottom
+
+  &__bottom {
+    position: absolute;
+    bottom: 0px;
+    left: -80px;
+    height: 8px;
+    width: 75%;
+    background-color: black;
+  }
+
+  // .gallow__head
+
+  &__head {
+    position: absolute;
+    top: 62px;
+    left: 208px;
+  }
+
+  // .gallow__body
+
+  &__body {
+    position: absolute;
+    top: 168px;
+    left: 258px;
+  }
+
+  // .gallow__left-arm
+
+  &__left-arm {
+    position: absolute;
+    top: 178px;
+    left: 188px;
+  }
+
+  // .gallow__right-arm
+
+  &__right-arm {
+    position: absolute;
+    top: 178px;
+    left: 266px;
+  }
+
+  // .gallow__left-leg
+
+  &__left-leg {
+    position: absolute;
+    bottom: 108px;
+    left: 188px;
+  }
+
+  // .gallow__right-leg
+
+  &__right-leg {
+    position: absolute;
+    bottom: 108px;
+    left: 266px;
+  }
+}
+
+.letter {
+  height: 2px;
+  width: 20px;
+  background-color: black;
+}
+
+.hint {
+}
+
+.hint-text {
+}
+
+.incorrect-text {
+}
+
+.prev {
+}
+
+.next {
+}
+
+.button {
+  // .button__key
+
+  &__key {
+    cursor: pointer;
+    svg {
+      stroke: black;
+      font-weight: 900;
+      user-select: none;
+    }
+    padding: 10px 20px;
+    border: 2px solid transparent;
+    border-radius: 4px;
+    background: linear-gradient(145deg, #e6e6e6, #ffffff);
+
+    color: #333;
+    text-transform: uppercase;
+    font-weight: 900;
+    user-select: none;
+    transition:
+      background-color 0.3s,
+      transform 0.1s,
+      box-shadow 0.2s;
+
+    &:hover {
+      background: linear-gradient(145deg, #ffffff, #e6e6e6);
+      box-shadow:
+        inset 6px 6px 16px #b8b8b8,
+        inset -6px -6px 16px #ffffff;
+    }
+
+    &:active {
+      transform: translateY(4px);
+      box-shadow:
+        inset 6px 6px 10px #b8b8b8,
+        inset -6px -6px 10px #ffffff;
+    }
+  }
+}
