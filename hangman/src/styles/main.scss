@@ -17,30 +17,32 @@
   // .game__body
 
   &__body {
-    flex: 0 1 58%;
-    padding: 20px;
     display: flex;
+    flex: 0 1 58%;
     flex-direction: column;
-    justify-content: center;
     align-items: center;
+    justify-content: center;
+    padding: 20px;
   }
 
   // .game__words
 
   &__words {
     @include margin-bottom40;
+
     display: flex;
     flex-direction: column;
-    justify-content: center;
     align-items: center;
+    justify-content: center;
   }
 
   // .game__word
 
   &__word {
+    @include margin-bottom40;
+
     display: flex;
     gap: 30px;
-    @include margin-bottom40;
   }
 
   // .game__hint
@@ -59,24 +61,25 @@
   &__keyboards {
     display: flex;
     flex-wrap: wrap;
-    justify-content: center;
     gap: 20px;
-    max-width: 600px;
+    justify-content: center;
     width: 100%;
+    max-width: 600px;
   }
 }
 
 .gallow {
   position: relative;
   height: 469px;
+
   // .gallow__post
 
   &__post {
     position: absolute;
-    left: 0;
     bottom: 8px;
-    height: 98%;
+    left: 0;
     width: 10px;
+    height: 98%;
     background-color: black;
   }
 
@@ -86,8 +89,8 @@
     position: absolute;
     top: 0;
     left: 0;
-    height: 10px;
     width: 50%;
+    height: 10px;
     background-color: black;
   }
 
@@ -97,11 +100,11 @@
     position: absolute;
     top: 16%;
     left: 0;
-    height: 10px;
-    width: 20%;
-    background-color: black;
-    transform: rotate(-45deg);
     transform-origin: 0 0;
+    transform: rotate(-45deg);
+    width: 20%;
+    height: 10px;
+    background-color: black;
   }
 
   // .gallow__noose
@@ -110,18 +113,19 @@
     position: absolute;
     top: 10px;
     left: calc(50px + 38.5%);
-    height: 50px;
     width: 10px;
+    height: 50px;
     background-color: black;
   }
+
   // .gallow__bottom
 
   &__bottom {
     position: absolute;
-    bottom: 0px;
+    bottom: 0;
     left: -80px;
-    height: 8px;
     width: 75%;
+    height: 8px;
     background-color: black;
   }
 
@@ -175,9 +179,10 @@
 }
 
 .letter {
-  height: 2px;
   width: 20px;
+  height: 2px;
   background-color: black;
+  text-transform: uppercase;
 }
 
 .hint {
@@ -200,37 +205,37 @@
 
   &__key {
     cursor: pointer;
-    svg {
-      stroke: black;
-      font-weight: 900;
-      user-select: none;
-    }
+    user-select: none;
     padding: 10px 20px;
-    border: 2px solid transparent;
-    border-radius: 4px;
-    background: linear-gradient(145deg, #e6e6e6, #ffffff);
-
+    font-weight: 900;
     color: #333;
     text-transform: uppercase;
-    font-weight: 900;
-    user-select: none;
+    background: linear-gradient(145deg, #e6e6e6, #fff);
+    border: 2px solid transparent;
+    border-radius: 4px;
     transition:
       background-color 0.3s,
       transform 0.1s,
       box-shadow 0.2s;
 
+    svg {
+      user-select: none;
+      font-weight: 900;
+      stroke: black;
+    }
+
     &:hover {
-      background: linear-gradient(145deg, #ffffff, #e6e6e6);
+      background: linear-gradient(145deg, #fff, #e6e6e6);
       box-shadow:
         inset 6px 6px 16px #b8b8b8,
-        inset -6px -6px 16px #ffffff;
+        inset -6px -6px 16px #fff;
     }
 
     &:active {
       transform: translateY(4px);
       box-shadow:
         inset 6px 6px 10px #b8b8b8,
-        inset -6px -6px 10px #ffffff;
+        inset -6px -6px 10px #fff;
     }
   }
 }

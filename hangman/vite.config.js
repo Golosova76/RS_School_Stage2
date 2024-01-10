@@ -20,6 +20,7 @@ export default {
       '@fonts': path.resolve(__dirname, 'src/assets/fonts'),
       '@styles': path.resolve(__dirname, 'src/styles'),
       '@public': path.resolve(__dirname, 'public'),
+      '@js': path.resolve(__dirname, 'src/js'),
     },
   },
   plugins: [Inspect()],

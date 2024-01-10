@@ -1,27 +1,33 @@
 body {
-  font: $font-weight $font-size $font-family;
-  color: $color-text-dark;
-  //background-color: $main-background-color;
-  //background: linear-gradient(135deg, #9efcff, #9e9eff);
-  background: linear-gradient(
-    135deg,
-    rgba(2, 0, 36, 1) 0%,
-    rgba(194, 71, 135, 1) 39%,
-    rgba(0, 212, 255, 1) 100%
-  );
-  background-size: 400% 400%;
-  animation: gradientBG 15s ease infinite;
-  @keyframes gradientBG {
+  @keyframes gradient-back {
     0% {
       background-position: 0% 50%;
     }
+
     50% {
       background-position: 100% 50%;
     }
+
     100% {
       background-position: 0% 50%;
     }
   }
+
+  font: $font-weight $font-size $font-family;
+  color: $color-text-dark;
+
+  // background-color: $main-background-color;
+
+  // background: linear-gradient(135deg, #9efcff, #9e9eff);
+
+  background: linear-gradient(
+    135deg,
+    rgb(2 0 36 / 100%) 0%,
+    rgb(194 71 135 / 100%) 39%,
+    rgb(0 212 255 / 100%) 100%
+  );
+  background-size: 400% 400%;
+  animation: gradient-back 15s ease infinite;
 }
 
 html {

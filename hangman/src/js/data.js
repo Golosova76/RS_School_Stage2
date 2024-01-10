@@ -1,0 +1,28 @@
+export const words = [
+  'lesson',
+  'matrix',
+  'quiz',
+  'campus',
+  'market',
+  'ketchup',
+  'kindness',
+  'title',
+  'tinfoil',
+  'queue',
+  'mass',
+  'strength',
+];
+export const hints = [
+  'What can you cook but can not eat.',
+  'The cultural, social, or political environment in which something develops.',
+  'An informal test or examination of a student or class.',
+  'The buildings of a college or university and the land that surrounds them.',
+  'A place or event at which people meet in order to buy and sell things.',
+  'A thick sauce made from tomatoes that is eaten cold with food.',
+  'The quality of being friendly, generous, and considerate.',
+  'A descriptive heading or caption, as of a chapter, section, or other part of a book.',
+  'Shiny, metal material, as thin as paper, that is used especially for wrapping food in order to store it or cook it.',
+  'A list of jobs that a computer has to do.',
+  'A large amount or number of something.',
+  'The quality or state of being physically strong.',
+];

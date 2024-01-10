@@ -46,6 +46,7 @@ module.exports = {
           ['@images', path.resolve(__dirname, 'src/assets/image')],
           ['@fonts', path.resolve(__dirname, 'src/assets/fonts')],
           ['@styles', path.resolve(__dirname, 'src/styles')],
+          ['@js', path.resolve(__dirname, 'src/js')],
         ],
         extensions: ['.js', '.jsx', '.json', '.scss', '.html'],
       },
