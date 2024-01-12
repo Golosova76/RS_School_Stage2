@@ -12,9 +12,11 @@ function createModal() {
 
   const modalText = document.createElement('div');
   modalText.className = 'modal__text';
+  modalText.textContent = 'Congratulations! You win!';
 
   const modalWord = document.createElement('div');
   modalWord.className = 'modal__word';
+  modalWord.textContent = 'Answer was: kindness';
 
   const playAgainButton = document.createElement('button');
   playAgainButton.className = 'modal__button';
@@ -28,32 +30,33 @@ function createModal() {
   modalBody.appendChild(modalContent);
   modal.appendChild(modalBody);
 
-  return { modal, modalContent, modalText, modalWord, playAgainButton };
+  return modal;
 }
 
-let modalElements = null;
-console.log(modalElements);
-
 function showGameOverModal(isWin) {
-  console.log(modalElements);
-  if (!modalElements) {
-    modalElements = createModal();
-    console.log(modalElements);
-  }
+  const modal = createModal();
 
-  // Использование modalText и modalWord из modalElements
-  modalElements.modalText.textContent = isWin
-    ? 'Поздравляем! Вы выиграли!'
-    : 'К сожалению, вы проиграли.';
-  modalElements.modalWord.textContent = `Загаданное слово было: ${currentWord}`;
+  // Найдите элементы внутри модального окна
+  const modalContent = modal.querySelector('.modal__content');
+  const modalText = modal.querySelector('.modal__text');
+  const modalWord = modal.querySelector('.modal__word');
 
-  // Показ модального окна
+  // Установка текста
+  modalText.textContent = isWin
+    ? 'Congratulations! You win!'
+    : 'Unfortunately, you lost!';
+  modalWord.textContent = `Answer was: ${currentWord}`;
 
-  modalElements.modal.style.opacity = '1';
-  modalElements.modal.style.visibility = 'visible';
+  // Изменение стилей для отображения модального окна
+  modal.style.opacity = '1';
+  modal.style.visibility = 'visible';
 
-  modalElements.modalContent.style.opacity = '1';
-  modalElements.modalContent.style.transform =
+  modal.style.display = 'none'; // Сначала скрыть
+  modal.style.display = 'block'; // Затем снова показать
+
+  modalContent.style.opacity = '1';
+  document.body.appendChild(modal);
+  modalContent.style.transform =
     'perspective(600px) translate(0px, 0px) rotateX(0deg)';
 }
 

@@ -12,9 +12,7 @@ document.addEventListener('DOMContentLoaded', function onDOMContentLoaded() {
   wrapper.className = 'wrapper';
   document.body.appendChild(wrapper);
 
-  const { modal } = createModal();
-
-  wrapper.appendChild(modal);
+  wrapper.appendChild(createModal());
   wrapper.appendChild(createHeader());
   wrapper.appendChild(createMain());
   wrapper.appendChild(createFooter());

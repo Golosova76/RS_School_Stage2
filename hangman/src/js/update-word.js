@@ -67,12 +67,8 @@ function handleLetterClick(letter) {
   }
 
   if (incorrectCounter === 6) {
-    console.log(incorrectCounter);
-    console.log('Вызов showGameOverModal с false');
     showGameOverModal(false);
   } else if (isWordCorrect) {
-    console.log(isWordCorrect);
-    console.log('Вызов showGameOverModal с true');
     showGameOverModal(true);
   }
 }
