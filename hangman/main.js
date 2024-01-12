@@ -3,6 +3,8 @@ import createHeader from '@js/header.js';
 import createFooter from '@js/footer.js';
 import createMain from '@js/main-page/page';
 
+import { createModal } from '@js/modal.js';
+
 import { handleLetterClick } from '@js/update-word.js';
 
 document.addEventListener('DOMContentLoaded', function onDOMContentLoaded() {
@@ -10,6 +12,9 @@ document.addEventListener('DOMContentLoaded', function onDOMContentLoaded() {
   wrapper.className = 'wrapper';
   document.body.appendChild(wrapper);
 
+  const { modal } = createModal();
+
+  wrapper.appendChild(modal);
   wrapper.appendChild(createHeader());
   wrapper.appendChild(createMain());
   wrapper.appendChild(createFooter());

@@ -1,3 +1,5 @@
+import { currentWord } from './main-page/words';
+
 function createModal() {
   const modal = document.createElement('div');
   modal.className = 'modal';
@@ -26,10 +28,33 @@ function createModal() {
   modalBody.appendChild(modalContent);
   modal.appendChild(modalBody);
 
-  // Добавляем модальное окно в DOM
-  document.body.appendChild(modal);
-
-  return modal;
+  return { modal, modalContent, modalText, modalWord, playAgainButton };
 }
 
-export default createModal;
+let modalElements = null;
+console.log(modalElements);
+
+function showGameOverModal(isWin) {
+  console.log(modalElements);
+  if (!modalElements) {
+    modalElements = createModal();
+    console.log(modalElements);
+  }
+
+  // Использование modalText и modalWord из modalElements
+  modalElements.modalText.textContent = isWin
+    ? 'Поздравляем! Вы выиграли!'
+    : 'К сожалению, вы проиграли.';
+  modalElements.modalWord.textContent = `Загаданное слово было: ${currentWord}`;
+
+  // Показ модального окна
+
+  modalElements.modal.style.opacity = '1';
+  modalElements.modal.style.visibility = 'visible';
+
+  modalElements.modalContent.style.opacity = '1';
+  modalElements.modalContent.style.transform =
+    'perspective(600px) translate(0px, 0px) rotateX(0deg)';
+}
+
+export { createModal, showGameOverModal };

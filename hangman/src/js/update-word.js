@@ -1,3 +1,4 @@
+import { showGameOverModal } from '@js/modal.js';
 import { currentWord } from './main-page/words';
 
 let incorrectCounter = 0;
@@ -35,10 +36,13 @@ function showBodyPart() {
   }
 }
 
+// сравнение загаданного слова и слова на экране
 function checkWordCorrect() {
   const displayLetters = document.querySelectorAll('.letter-content');
   const displayWord = Array.from(displayLetters)
-    .map((span) => span.textContent || '_')
+    .map((span) =>
+      span.style.visibility === 'visible' ? span.textContent : '_'
+    )
     .join('');
   return displayWord === currentWord;
 }
@@ -54,17 +58,22 @@ function handleLetterClick(letter) {
 
   updateWordDisplay(letter);
 
+  const isWordCorrect = checkWordCorrect();
+
   if (!currentWord.includes(letter.toLowerCase())) {
     showBodyPart();
     incorrectCounter += 1;
     updateIncorrectCounterDisplay();
+  }
 
-    const isWordCorrect = checkWordCorrect();
-    if (incorrectCounter === 6) {
-      // Логика для проигрыша или завершения игры
-      // вызов модального окна
-    } else if (isWordCorrect) {
-    }
+  if (incorrectCounter === 6) {
+    console.log(incorrectCounter);
+    console.log('Вызов showGameOverModal с false');
+    showGameOverModal(false);
+  } else if (isWordCorrect) {
+    console.log(isWordCorrect);
+    console.log('Вызов showGameOverModal с true');
+    showGameOverModal(true);
   }
 }
 
