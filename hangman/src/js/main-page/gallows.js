@@ -1,3 +1,5 @@
+import bodyParts from './body-part';
+
 function createGallows() {
   const gallows = document.createElement('div');
   gallows.className = 'game__gallows gallow';
@@ -10,18 +12,11 @@ function createGallows() {
     gallows.appendChild(div);
   });
 
-  const parts = [
-    'head',
-    'body',
-    'left-arm',
-    'right-arm',
-    'left-leg',
-    'right-leg',
-  ];
-
-  parts.forEach((part) => {
+  Object.entries(bodyParts).forEach(([part, svg]) => {
     const partDiv = document.createElement('div');
     partDiv.className = `gallow__${part}`;
+    partDiv.innerHTML = svg; // Установка SVG кода
+    partDiv.style.visibility = 'hidden';
     gallows.appendChild(partDiv);
   });
 

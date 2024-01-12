@@ -1,5 +1,8 @@
 import { words, hints } from '../data';
 
+// eslint-disable-next-line import/no-mutable-exports
+let currentWord = '';
+
 function createWordsSection() {
   const wordsSection = document.createElement('div');
   wordsSection.className = 'game__words';
@@ -9,11 +12,25 @@ function createWordsSection() {
   // выбираем случайное слово
   const wordIndex = Math.floor(Math.random() * words.length);
   const word = words[wordIndex];
+  currentWord = words[wordIndex];
   const hint = hints[wordIndex];
+  console.log(word);
+  console.log(hint);
 
   for (let i = 0; i < word.length; i += 1) {
     const letterSpan = document.createElement('span');
     letterSpan.className = 'letter';
+
+    const underlineSpan = document.createElement('span'); // Для подчеркивания
+    underlineSpan.className = 'underline';
+
+    const letterContentSpan = document.createElement('span'); // Для буквы
+    letterContentSpan.className = 'letter-content';
+    letterContentSpan.textContent = word[i];
+    letterContentSpan.style.visibility = 'hidden'; // Скрытие буквы изначально
+
+    letterSpan.appendChild(letterContentSpan);
+    letterSpan.appendChild(underlineSpan); // Добавляем подчеркивание
     wordDiv.appendChild(letterSpan);
   }
 
@@ -40,7 +57,7 @@ function createWordsSection() {
 
   const prevSpan = document.createElement('span');
   prevSpan.className = 'prev';
-  prevSpan.textContent = '0'; // Начальное значение
+  prevSpan.textContent = '0'; // Начальное значение ошибок
   incorrectDiv.appendChild(prevSpan);
 
   const slash = document.createTextNode(' / ');
@@ -59,4 +76,6 @@ function createWordsSection() {
   return wordsSection;
 }
 
-export default createWordsSection;
+// export default createWordsSection;
+
+export { currentWord, createWordsSection };
