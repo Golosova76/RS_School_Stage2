@@ -3,17 +3,43 @@ import { words, hints } from '../data';
 // eslint-disable-next-line import/no-mutable-exports
 let currentWord = '';
 
+let lastWordIndex = -1; // положим последний индекс слова
+
+// Функция для установки индекса последнего слова
+// из-за Exporting mutable 'let' binding, use 'const' instead.eslint
+// экспорт let lastWordIndex = -1;
+function setLastWordIndex(index) {
+  lastWordIndex = index;
+}
+
+// Функция для получения индекса последнего слова
+function getLastWordIndex() {
+  return lastWordIndex;
+}
+
 function createWordsSection() {
   const wordsSection = document.createElement('div');
   wordsSection.className = 'game__words';
 
   const wordDiv = document.createElement('div');
   wordDiv.className = 'game__word';
+
   // выбираем случайное слово
-  const wordIndex = Math.floor(Math.random() * words.length);
+  let wordIndex;
+  let isNewWord = false;
+
+  while (!isNewWord) {
+    wordIndex = Math.floor(Math.random() * words.length);
+    if (wordIndex !== getLastWordIndex()) {
+      isNewWord = true; // Выходим из цикла, если слово отличается от предыдущего
+    }
+  }
+
+  lastWordIndex = wordIndex; // Обновляем индекс последнего слова
   const word = words[wordIndex];
-  currentWord = words[wordIndex];
+  currentWord = word;
   const hint = hints[wordIndex];
+
   console.log(word);
   console.log(hint);
 
@@ -78,4 +104,4 @@ function createWordsSection() {
 
 // export default createWordsSection;
 
-export { currentWord, createWordsSection };
+export { currentWord, createWordsSection, getLastWordIndex, setLastWordIndex };
