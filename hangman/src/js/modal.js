@@ -30,33 +30,29 @@ function createModal() {
   modalBody.appendChild(modalContent);
   modal.appendChild(modalBody);
 
-  return modal;
+  return { modal, modalContent, modalText, modalWord, playAgainButton };
 }
 
-function showGameOverModal(isWin) {
-  const modal = createModal();
+let modalElements = null;
 
-  // Найдите элементы внутри модального окна
-  const modalContent = modal.querySelector('.modal__content');
-  const modalText = modal.querySelector('.modal__text');
-  const modalWord = modal.querySelector('.modal__word');
+function showGameOverModal(isWin) {
+  if (!modalElements) {
+    modalElements = createModal();
+  }
 
   // Установка текста
-  modalText.textContent = isWin
+  modalElements.modalText.textContent = isWin
     ? 'Congratulations! You win!'
     : 'Unfortunately, you lost!';
-  modalWord.textContent = `Answer was: ${currentWord}`;
+  modalElements.modalWord.textContent = `Answer was: ${currentWord}`;
 
   // Изменение стилей для отображения модального окна
-  modal.style.opacity = '1';
-  modal.style.visibility = 'visible';
+  modalElements.modal.style.opacity = '1';
+  modalElements.modal.style.visibility = 'visible';
 
-  modal.style.display = 'none'; // Сначала скрыть
-  modal.style.display = 'block'; // Затем снова показать
-
-  modalContent.style.opacity = '1';
-  document.body.appendChild(modal);
-  modalContent.style.transform =
+  modalElements.modalContent.style.opacity = '1';
+  document.body.appendChild(modalElements.modal);
+  modalElements.modalContent.style.transform =
     'perspective(600px) translate(0px, 0px) rotateX(0deg)';
 }
 
