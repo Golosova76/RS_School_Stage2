@@ -34,16 +34,35 @@ function updateIncorrectCounterDisplay() {
   }
 }
 
+const bodyPartsOrder = [
+  'gallow__head',
+  'gallow__body',
+  'gallow__left-arm',
+  'gallow__right-arm',
+  'gallow__left-leg',
+  'gallow__right-leg',
+];
+
+// показ частей тела
 function showBodyPart() {
   if (getIncorrectCounter() < maxIncorrectCount) {
-    const parts = document.querySelectorAll(
-      '.gallow__head, .gallow__body, .gallow__left-arm, .gallow__right-arm, .gallow__left-leg, .gallow__right-leg'
+    const partToShow = document.querySelector(
+      `.${bodyPartsOrder[getIncorrectCounter()]}`
     );
-
-    if (parts[getIncorrectCounter()]) {
-      parts[getIncorrectCounter()].style.visibility = 'visible';
+    if (partToShow) {
+      partToShow.style.visibility = 'visible';
     }
   }
+}
+
+// очищение частей тела после game over
+function hideBodyParts() {
+  bodyPartsOrder.forEach((partClass) => {
+    const partToHide = document.querySelector(`.${partClass}`);
+    if (partToHide) {
+      partToHide.style.visibility = 'hidden';
+    }
+  });
 }
 
 // сравнение загаданного слова и слова на экране
@@ -89,4 +108,5 @@ export {
   updateIncorrectCounterDisplay,
   setIncorrectCounter,
   getIncorrectCounter,
+  hideBodyParts,
 };

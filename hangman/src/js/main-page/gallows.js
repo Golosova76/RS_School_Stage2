@@ -4,20 +4,25 @@ function createGallows() {
   const gallows = document.createElement('div');
   gallows.className = 'game__gallows gallow';
 
-  const elements = ['post', 'beam', 'support', 'noose', 'bottom'];
+  const combinedElements = [
+    'post',
+    'beam',
+    'support',
+    'noose',
+    'bottom',
+    ...Object.keys(bodyParts),
+  ];
 
-  elements.forEach((element) => {
+  combinedElements.forEach((element) => {
     const div = document.createElement('div');
     div.className = `gallow__${element}`;
-    gallows.appendChild(div);
-  });
 
-  Object.entries(bodyParts).forEach(([part, svg]) => {
-    const partDiv = document.createElement('div');
-    partDiv.className = `gallow__${part}`;
-    partDiv.innerHTML = svg; // Установка SVG кода
-    partDiv.style.visibility = 'hidden';
-    gallows.appendChild(partDiv);
+    if (bodyParts[element]) {
+      div.innerHTML = bodyParts[element]; // Установка SVG для частей тела
+      div.style.visibility = 'hidden';
+    }
+
+    gallows.appendChild(div);
   });
 
   return gallows;
