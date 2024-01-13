@@ -4,6 +4,16 @@ import { currentWord } from './main-page/words';
 let incorrectCounter = 0;
 const maxIncorrectCount = 6;
 
+// Функция для установки значения incorrectCounter
+function setIncorrectCounter(value) {
+  incorrectCounter = value;
+}
+
+// Функция для получения значения incorrectCounter
+function getIncorrectCounter() {
+  return incorrectCounter;
+}
+
 function updateWordDisplay(letter) {
   const lowerCaseLetter = letter.toLowerCase();
   const wordSpans = document.querySelectorAll('.letter-content');
@@ -20,18 +30,18 @@ function updateWordDisplay(letter) {
 function updateIncorrectCounterDisplay() {
   const prevSpan = document.querySelector('.prev');
   if (prevSpan) {
-    prevSpan.textContent = incorrectCounter;
+    prevSpan.textContent = getIncorrectCounter();
   }
 }
 
 function showBodyPart() {
-  if (incorrectCounter < maxIncorrectCount) {
+  if (getIncorrectCounter() < maxIncorrectCount) {
     const parts = document.querySelectorAll(
       '.gallow__head, .gallow__body, .gallow__left-arm, .gallow__right-arm, .gallow__left-leg, .gallow__right-leg'
     );
 
-    if (parts[incorrectCounter]) {
-      parts[incorrectCounter].style.visibility = 'visible';
+    if (parts[getIncorrectCounter()]) {
+      parts[getIncorrectCounter()].style.visibility = 'visible';
     }
   }
 }
@@ -62,15 +72,21 @@ function handleLetterClick(letter) {
 
   if (!currentWord.includes(letter.toLowerCase())) {
     showBodyPart();
-    incorrectCounter += 1;
+    setIncorrectCounter(getIncorrectCounter() + 1);
     updateIncorrectCounterDisplay();
   }
 
-  if (incorrectCounter === 6) {
+  if (getIncorrectCounter() === 6) {
     showGameOverModal(false);
   } else if (isWordCorrect) {
     showGameOverModal(true);
   }
 }
 
-export { updateWordDisplay, handleLetterClick };
+export {
+  updateWordDisplay,
+  handleLetterClick,
+  updateIncorrectCounterDisplay,
+  setIncorrectCounter,
+  getIncorrectCounter,
+};
