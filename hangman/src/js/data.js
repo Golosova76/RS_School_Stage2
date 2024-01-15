@@ -11,6 +11,10 @@ export const words = [
   'queue',
   'mass',
   'strength',
+  'hope',
+  'animal',
+  'people',
+  'student',
 ];
 export const hints = [
   'What can you cook but can not eat.',
@@ -25,4 +29,8 @@ export const hints = [
   'A list of jobs that a computer has to do.',
   'A large amount or number of something.',
   'The quality or state of being physically strong.',
+  'A feeling of expectation and desire for a particular thing to happen.',
+  'Something that lives and moves but is not a person, bird, fish, or insect.',
+  'More than one person.',
+  'Someone who is studying at a school or university.',
 ];
