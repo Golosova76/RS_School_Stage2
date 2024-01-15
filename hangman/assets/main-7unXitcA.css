@@ -94,18 +94,18 @@ html {
 [class*=__container] {
   max-width: 1360px;
   margin: 0 auto;
-  padding: 0 40px;
+  padding: 0 20px;
 }
 .modal {
   position: fixed;
-  width: 100%;
-  height: 100%;
+  z-index: 50;
   top: 0;
   left: 0;
-  z-index: 50;
-  background-color: rgba(0, 0, 0, 0.8);
-  opacity: 0;
+  width: 100%;
+  height: 100%;
   visibility: hidden;
+  opacity: 0;
+  background-color: rgba(0, 0, 0, 0.8);
   transition: transform 0.8s ease 0s;
 }
 .modal__body {
@@ -113,22 +113,22 @@ html {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 20px 25px;
   min-height: 100%;
+  padding: 20px 25px;
   transition: transform 0.8s ease 0s;
 }
 .modal__content {
-  max-width: 550px;
-  text-align: center;
+  transform: perspective(600px) translate(0, -100%) rotateX(45deg);
   width: 100%;
-  background-color: #fff;
+  max-width: 550px;
   padding: 20px 25px;
   font-size: 24px;
   font-weight: 900;
+  text-align: center;
+  opacity: 0;
+  background-color: #fff;
   border-radius: 10px;
   transition: transform 0.8s ease 0s;
-  opacity: 0;
-  transform: perspective(600px) translate(0px, -100%) rotateX(45deg);
 }
 .modal__text:not(:last-child) {
   margin-bottom: 40px;
@@ -137,14 +137,15 @@ html {
   margin-bottom: 40px;
 }
 .modal__button {
+  cursor: pointer;
+  user-select: none;
   padding: 10px 20px;
-  background: linear-gradient(135deg, rgb(2, 0, 36) 0%, rgb(194, 71, 135) 39%, rgb(0, 212, 255) 100%);
+  font-size: 24px;
   font-weight: 900;
   color: white;
+  background: linear-gradient(135deg, rgb(2, 0, 36) 0%, rgb(194, 71, 135) 39%, rgb(0, 212, 255) 100%);
   border: none;
   border-radius: 5px;
-  font-size: 24px;
-  cursor: pointer;
   transition: background-color 0.3s, transform 0.2s;
 }
 .modal__button:hover {
@@ -161,6 +162,12 @@ html {
   padding-bottom: 50px;
   text-align: center;
 }
+@media (width <= 980px) {
+  .header__container {
+    padding-top: 20px;
+    padding-bottom: 20px;
+  }
+}
 .header__title {
   font-size: 36px;
   line-height: 150%;
@@ -169,16 +176,43 @@ html {
   display: flex;
   gap: 20px;
 }
+@media (width <= 980px) {
+  .page__container {
+    flex-direction: column-reverse;
+  }
+}
 .game__gallows {
-  flex: 0 1 42%;
+  width: 100%;
+  max-width: 403px;
+  height: 454px;
+}
+@media (width <= 980px) {
+  .game__gallows {
+    height: 350px;
+  }
 }
 .game__body {
   display: flex;
-  flex: 0 1 58%;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  width: 100%;
+  max-width: 857px;
+  height: 454px;
   padding: 20px;
+}
+@media (width <= 980px) {
+  .game__body {
+    flex: 1 1 auto;
+    max-width: none;
+    height: 354px;
+    padding: 0;
+  }
+}
+@media (width <= 680px) {
+  .game__body {
+    height: 454px;
+  }
 }
 .game__words {
   display: flex;
@@ -188,6 +222,11 @@ html {
 }
 .game__words:not(:last-child) {
   margin-bottom: 40px;
+}
+@media (width <= 485px) {
+  .game__words:not(:last-child) {
+    margin-bottom: 20px;
+  }
 }
 .game__word {
   display: flex;
@@ -199,56 +238,102 @@ html {
 .game__hint:not(:last-child) {
   margin-bottom: 40px;
 }
+@media (width <= 485px) {
+  .game__hint {
+    font-size: 18px;
+  }
+  .game__hint:not(:last-child) {
+    margin-bottom: 20px;
+  }
+}
 .game__keyboards {
   display: flex;
   flex-wrap: wrap;
   gap: 20px;
   justify-content: center;
   width: 100%;
-  max-width: 600px;
 }
 .gallow {
   position: relative;
-  height: 469px;
 }
 .gallow__post {
   position: absolute;
   bottom: 8px;
-  left: 0;
+  left: 90px;
   width: 10px;
-  height: 98%;
+  height: 445px;
   background-color: black;
+}
+@media (width <= 980px) {
+  .gallow__post {
+    height: 305px;
+  }
+}
+@media (width <= 440px) {
+  .gallow__post {
+    left: 50px;
+  }
 }
 .gallow__beam {
   position: absolute;
   top: 0;
-  left: 0;
-  width: 50%;
+  left: 90px;
+  width: 230px;
   height: 10px;
   background-color: black;
 }
+@media (width <= 980px) {
+  .gallow__beam {
+    top: 35px;
+  }
+}
+@media (width <= 440px) {
+  .gallow__beam {
+    left: 50px;
+  }
+}
 .gallow__support {
   position: absolute;
-  top: 16%;
-  left: 0;
+  top: 48px;
+  left: 90px;
   transform-origin: 0 0;
   transform: rotate(-45deg);
-  width: 20%;
+  width: 64px;
   height: 10px;
   background-color: black;
+}
+@media (width <= 980px) {
+  .gallow__support {
+    top: 80px;
+  }
+}
+@media (width <= 440px) {
+  .gallow__support {
+    left: 50px;
+  }
 }
 .gallow__noose {
   position: absolute;
   top: 10px;
-  left: calc(50px + 38.5%);
+  left: 281px;
   width: 10px;
   height: 50px;
   background-color: black;
 }
+@media (width <= 980px) {
+  .gallow__noose {
+    top: 35px;
+  }
+}
+@media (width <= 440px) {
+  .gallow__noose {
+    left: 241px;
+  }
+}
 .gallow__bottom {
   position: absolute;
   bottom: 0;
-  left: -80px;
+  left: 30px;
   width: 75%;
   height: 8px;
   background-color: black;
@@ -256,69 +341,152 @@ html {
 .gallow__head {
   position: absolute;
   top: 62px;
-  left: 208px;
+  left: 236px;
+}
+@media (width <= 980px) {
+  .gallow__head {
+    top: 85px;
+    left: 250px;
+  }
+  .gallow__head svg {
+    width: 71px;
+    height: 76px;
+  }
+}
+@media (width <= 440px) {
+  .gallow__head {
+    left: 210px;
+  }
 }
 .gallow__body {
   position: absolute;
   top: 168px;
-  left: 258px;
+  left: 282px;
+}
+@media (width <= 980px) {
+  .gallow__body {
+    top: 162px;
+  }
+  .gallow__body svg {
+    height: 106px;
+  }
+}
+@media (width <= 440px) {
+  .gallow__body {
+    left: 242px;
+  }
 }
 .gallow__left-arm {
   position: absolute;
   top: 178px;
-  left: 188px;
+  left: 211px;
+}
+@media (width <= 980px) {
+  .gallow__left-arm {
+    top: 170px;
+    left: 231px;
+  }
+  .gallow__left-arm svg {
+    width: 48px;
+  }
+}
+@media (width <= 440px) {
+  .gallow__left-arm {
+    left: 191px;
+  }
 }
 .gallow__right-arm {
   position: absolute;
   top: 178px;
-  left: 266px;
+  left: 292px;
+}
+@media (width <= 980px) {
+  .gallow__right-arm {
+    top: 170px;
+  }
+  .gallow__right-arm svg {
+    width: 48px;
+  }
+}
+@media (width <= 440px) {
+  .gallow__right-arm {
+    left: 252px;
+  }
 }
 .gallow__left-leg {
   position: absolute;
   bottom: 108px;
-  left: 188px;
+  left: 211px;
+}
+@media (width <= 980px) {
+  .gallow__left-leg {
+    bottom: 20px;
+    left: 231px;
+  }
+  .gallow__left-leg svg {
+    width: 48px;
+  }
+}
+@media (width <= 440px) {
+  .gallow__left-leg {
+    left: 191px;
+  }
 }
 .gallow__right-leg {
   position: absolute;
   bottom: 108px;
-  left: 266px;
+  left: 292px;
+}
+@media (width <= 980px) {
+  .gallow__right-leg {
+    bottom: 20px;
+  }
+  .gallow__right-leg svg {
+    width: 48px;
+  }
+}
+@media (width <= 440px) {
+  .gallow__right-leg {
+    left: 252px;
+  }
 }
 .letter {
-  width: 20px;
-  height: auto;
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: auto;
 }
 .underline {
+  flex-grow: 1;
+  flex-shrink: 0;
   width: 100%;
   height: 2px;
-  background-color: black;
-  flex-shrink: 0;
-  flex-grow: 1;
   visibility: visible;
+  background-color: black;
 }
 .letter-content {
-  visibility: hidden;
   text-transform: uppercase;
+  visibility: hidden;
 }
 .button__key {
   cursor: pointer;
   user-select: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 60px;
+  height: 60px;
   padding: 10px 20px;
   font-weight: 900;
   color: #333;
+  text-align: center;
   text-transform: uppercase;
   background: linear-gradient(145deg, #e6e6e6, #fff);
   border: 2px solid transparent;
   border-radius: 4px;
   transition: background-color 0.3s, transform 0.1s, box-shadow 0.2s;
-}
-.button__key svg {
-  user-select: none;
-  font-weight: 900;
-  stroke: black;
 }
 .button__key:hover {
   background: linear-gradient(145deg, #fff, #e6e6e6);
@@ -335,8 +503,20 @@ html {
   box-shadow: none;
 }
 .button__key:disabled:hover, .button__key:disabled:active {
-  box-shadow: none;
   transform: none;
+  box-shadow: none;
+}
+@media (width <= 1205px) {
+  .button__key {
+    width: 35px;
+    height: 35px;
+  }
+}
+@media (width <= 485px) {
+  .button__key {
+    width: 30px;
+    height: 30px;
+  }
 }
 .footer__container {
   display: flex;
@@ -346,6 +526,11 @@ html {
   padding-top: 50px;
   padding-bottom: 20px;
   text-align: center;
+}
+@media (width <= 485px) {
+  .footer__container {
+    gap: 100px;
+  }
 }
 .footer__link {
   position: relative;

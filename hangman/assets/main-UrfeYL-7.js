@@ -123,7 +123,11 @@ const words = [
   "tinfoil",
   "queue",
   "mass",
-  "strength"
+  "strength",
+  "hope",
+  "animal",
+  "people",
+  "student"
 ];
 const hints = [
   "What can you cook but can not eat.",
@@ -137,7 +141,11 @@ const hints = [
   "Shiny, metal material, as thin as paper, that is used especially for wrapping food in order to store it or cook it.",
   "A list of jobs that a computer has to do.",
   "A large amount or number of something.",
-  "The quality or state of being physically strong."
+  "The quality or state of being physically strong.",
+  "A feeling of expectation and desire for a particular thing to happen.",
+  "Something that lives and moves but is not a person, bird, fish, or insect.",
+  "More than one person.",
+  "Someone who is studying at a school or university."
 ];
 let currentWord = "";
 let currentHint = "";
@@ -253,6 +261,13 @@ function hideModal() {
     modalElements.modalContent.style.transform = "perspective(600px) translate(0px, -100%) rotateX(45deg)";
   }
 }
+let gameIsActive = true;
+function setGameActive(isActive) {
+  gameIsActive = isActive;
+}
+function isGameActive() {
+  return gameIsActive;
+}
 function resetGame() {
   hideModal();
   setIncorrectCounter(0);
@@ -266,6 +281,7 @@ function resetGame() {
   buttons.forEach((button) => {
     button.disabled = false;
   });
+  setGameActive(true);
 }
 let incorrectCounter = 0;
 const maxIncorrectCount = 6;
@@ -383,10 +399,12 @@ function handleLetterClick(letter) {
   }
   if (getIncorrectCounter() === 6) {
     showGameOverModal(false);
+    setGameActive(false);
     setupPlayAgainButton();
     modalElements.playAgainButton.addEventListener("click", resetGame);
   } else if (isWordCorrect) {
     showGameOverModal(true);
+    setGameActive(false);
     setupPlayAgainButton();
     modalElements.playAgainButton.addEventListener("click", resetGame);
   }
@@ -433,10 +451,12 @@ document.addEventListener("DOMContentLoaded", function onDOMContentLoaded() {
   wrapper.appendChild(createMain());
   wrapper.appendChild(createFooter());
   document.addEventListener("keydown", function addEventListenerKey(event) {
-    const pressedKeyCode = event.code;
-    if (pressedKeyCode.startsWith("Key")) {
-      const pressedKey = pressedKeyCode.charAt(3).toUpperCase();
-      handleLetterClick(pressedKey);
+    if (isGameActive()) {
+      const pressedKeyCode = event.code;
+      if (pressedKeyCode.startsWith("Key")) {
+        const pressedKey = pressedKeyCode.charAt(3).toUpperCase();
+        handleLetterClick(pressedKey);
+      }
     }
   });
 });
