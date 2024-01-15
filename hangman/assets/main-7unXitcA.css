@@ -3,14 +3,18 @@
   font-weight: 400;
   font-style: normal;
   font-display: swap;
-  src: url("/assets/Roboto-Regular-IPqKTCBe.woff2") format("woff2"), url("/assets/Roboto-Regular-nww2GukN.woff") format("woff");
+  src:
+    url("./assets/Roboto-Regular-IPqKTCBe.woff2") format("woff2"),
+    url("./assets/Roboto-Regular-nww2GukN.woff") format("woff");
 }
 @font-face {
   font-family: Roboto;
   font-weight: 600;
   font-style: normal;
   font-display: swap;
-  src: url("/assets/Roboto-Black-BAyTuXfE.woff2") format("woff2"), url("/assets/Roboto-Black-QtVYjjVO.woff") format("woff");
+  src:
+    url("./assets/Roboto-Black-BAyTuXfE.woff2") format("woff2"),
+    url("./assets/Roboto-Black-QtVYjjVO.woff") format("woff");
 }
 * {
   margin: 0;
@@ -63,7 +67,9 @@ button {
   background-color: inherit;
 }
 body {
-  font: 400 20px "Roboto", sans-serif;
+  font:
+    400 20px "Roboto",
+    sans-serif;
   color: black;
   background: linear-gradient(135deg, rgb(2, 0, 36) 0%, rgb(194, 71, 135) 39%, rgb(0, 212, 255) 100%);
   background-size: 400% 400%;
@@ -91,7 +97,7 @@ html {
 .wrapper > main {
   flex: 1 1 auto;
 }
-[class*=__container] {
+[class*="__container"] {
   max-width: 1360px;
   margin: 0 auto;
   padding: 0 20px;
@@ -146,7 +152,9 @@ html {
   background: linear-gradient(135deg, rgb(2, 0, 36) 0%, rgb(194, 71, 135) 39%, rgb(0, 212, 255) 100%);
   border: none;
   border-radius: 5px;
-  transition: background-color 0.3s, transform 0.2s;
+  transition:
+    background-color 0.3s,
+    transform 0.2s;
 }
 .modal__button:hover {
   background-color: #45a049;
@@ -486,15 +494,22 @@ html {
   background: linear-gradient(145deg, #e6e6e6, #fff);
   border: 2px solid transparent;
   border-radius: 4px;
-  transition: background-color 0.3s, transform 0.1s, box-shadow 0.2s;
+  transition:
+    background-color 0.3s,
+    transform 0.1s,
+    box-shadow 0.2s;
 }
 .button__key:hover {
   background: linear-gradient(145deg, #fff, #e6e6e6);
-  box-shadow: inset 6px 6px 16px #b8b8b8, inset -6px -6px 16px #fff;
+  box-shadow:
+    inset 6px 6px 16px #b8b8b8,
+    inset -6px -6px 16px #fff;
 }
 .button__key:active {
   transform: translateY(4px);
-  box-shadow: inset 6px 6px 10px #b8b8b8, inset -6px -6px 10px #fff;
+  box-shadow:
+    inset 6px 6px 10px #b8b8b8,
+    inset -6px -6px 10px #fff;
 }
 .button__key:disabled {
   cursor: not-allowed;
@@ -502,7 +517,8 @@ html {
   background: #f0f0f0;
   box-shadow: none;
 }
-.button__key:disabled:hover, .button__key:disabled:active {
+.button__key:disabled:hover,
+.button__key:disabled:active {
   transform: none;
   box-shadow: none;
 }
