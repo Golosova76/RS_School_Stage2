@@ -4,8 +4,8 @@
   font-style: normal;
   font-display: swap;
   src:
-    url("./assets/Roboto-Regular-IPqKTCBe.woff2") format("woff2"),
-    url("./assets/Roboto-Regular-nww2GukN.woff") format("woff");
+    url("./Roboto-Regular-IPqKTCBe.woff2") format("woff2"),
+    url("./Roboto-Regular-nww2GukN.woff") format("woff");
 }
 @font-face {
   font-family: Roboto;
@@ -13,8 +13,8 @@
   font-style: normal;
   font-display: swap;
   src:
-    url("./assets/Roboto-Black-BAyTuXfE.woff2") format("woff2"),
-    url("./assets/Roboto-Black-QtVYjjVO.woff") format("woff");
+    url("./Roboto-Black-BAyTuXfE.woff2") format("woff2"),
+    url("./Roboto-Black-QtVYjjVO.woff") format("woff");
 }
 * {
   margin: 0;
