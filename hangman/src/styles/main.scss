@@ -4,6 +4,10 @@
   &__container {
     display: flex;
     gap: 20px;
+    //height: 454px;
+    @media (max-width: 980px) {
+      flex-direction: column-reverse;
+    }
   }
 }
 
@@ -11,18 +15,36 @@
   // .game__gallows
 
   &__gallows {
-    flex: 0 1 42%;
+    // flex: 0 1 32%;
+    max-width: 403px;
+    width: 100%;
+    height: 454px;
+    @media (max-width: 980px) {
+      height: 350px;
+    }
   }
 
   // .game__body
 
   &__body {
     display: flex;
-    flex: 0 1 58%;
+    // flex: 0 1 68%;
+    max-width: 857px;
+    width: 100%;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     padding: 20px;
+    height: 454px;
+    @media (max-width: 980px) {
+      height: 354px;
+      max-width: none;
+      flex: 1 1 auto;
+      padding: 0;
+    }
+    @media (max-width: 680px) {
+      height: 454px;
+    }
   }
 
   // .game__words
@@ -34,13 +56,15 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    @media (max-width: 485px) {
+      @include margin-bottom20;
+    }
   }
 
   // .game__word
 
   &__word {
     @include margin-bottom40;
-
     display: flex;
     gap: 30px;
   }
@@ -49,6 +73,10 @@
 
   &__hint {
     @include margin-bottom40;
+    @media (max-width: 485px) {
+      @include margin-bottom20;
+      font-size: 18px;
+    }
   }
 
   // .game__incorrect
@@ -64,23 +92,27 @@
     gap: 20px;
     justify-content: center;
     width: 100%;
-    max-width: 600px;
   }
 }
 
 .gallow {
   position: relative;
-  height: 469px;
 
   // .gallow__post
 
   &__post {
     position: absolute;
     bottom: 8px;
-    left: 0;
+    left: 90px;
     width: 10px;
-    height: 98%;
+    height: 445px;
     background-color: black;
+    @media (max-width: 980px) {
+      height: 305px;
+    }
+    @media (max-width: 440px) {
+      left: 50px;
+    }
   }
 
   // .gallow__beam
@@ -88,23 +120,35 @@
   &__beam {
     position: absolute;
     top: 0;
-    left: 0;
-    width: 50%;
+    left: 90px;
+    width: 230px;
     height: 10px;
     background-color: black;
+    @media (max-width: 980px) {
+      top: 35px;
+    }
+    @media (max-width: 440px) {
+      left: 50px;
+    }
   }
 
   // .gallow__support
 
   &__support {
     position: absolute;
-    top: 16%;
-    left: 0;
+    top: 48px;
+    left: 90px;
     transform-origin: 0 0;
     transform: rotate(-45deg);
-    width: 20%;
+    width: 64px;
     height: 10px;
     background-color: black;
+    @media (max-width: 980px) {
+      top: 80px;
+    }
+    @media (max-width: 440px) {
+      left: 50px;
+    }
   }
 
   // .gallow__noose
@@ -112,10 +156,16 @@
   &__noose {
     position: absolute;
     top: 10px;
-    left: calc(50px + 38.5%);
+    left: 281px;
     width: 10px;
     height: 50px;
     background-color: black;
+    @media (max-width: 980px) {
+      top: 35px;
+    }
+    @media (max-width: 440px) {
+      left: 241px;
+    }
   }
 
   // .gallow__bottom
@@ -123,7 +173,7 @@
   &__bottom {
     position: absolute;
     bottom: 0;
-    left: -80px;
+    left: 30px;
     width: 75%;
     height: 8px;
     background-color: black;
@@ -134,7 +184,18 @@
   &__head {
     position: absolute;
     top: 62px;
-    left: 208px;
+    left: 236px;
+    @media (max-width: 980px) {
+      top: 85px;
+      left: 250px;
+      svg {
+        width: 71px;
+        height: 76px;
+      }
+    }
+    @media (max-width: 440px) {
+      left: 210px;
+    }
   }
 
   // .gallow__body
@@ -142,7 +203,16 @@
   &__body {
     position: absolute;
     top: 168px;
-    left: 258px;
+    left: 282px;
+    @media (max-width: 980px) {
+      top: 162px;
+      svg {
+        height: 106px;
+      }
+    }
+    @media (max-width: 440px) {
+      left: 242px;
+    }
   }
 
   // .gallow__left-arm
@@ -150,7 +220,17 @@
   &__left-arm {
     position: absolute;
     top: 178px;
-    left: 188px;
+    left: 211px;
+    @media (max-width: 980px) {
+      top: 170px;
+      left: 231px;
+      svg {
+        width: 48px;
+      }
+    }
+    @media (max-width: 440px) {
+      left: 191px;
+    }
   }
 
   // .gallow__right-arm
@@ -158,7 +238,16 @@
   &__right-arm {
     position: absolute;
     top: 178px;
-    left: 266px;
+    left: 292px;
+    @media (max-width: 980px) {
+      top: 170px;
+      svg {
+        width: 48px;
+      }
+    }
+    @media (max-width: 440px) {
+      left: 252px;
+    }
   }
 
   // .gallow__left-leg
@@ -166,7 +255,17 @@
   &__left-leg {
     position: absolute;
     bottom: 108px;
-    left: 188px;
+    left: 211px;
+    @media (max-width: 980px) {
+      bottom: 20px;
+      left: 231px;
+      svg {
+        width: 48px;
+      }
+    }
+    @media (max-width: 440px) {
+      left: 191px;
+    }
   }
 
   // .gallow__right-leg
@@ -174,7 +273,16 @@
   &__right-leg {
     position: absolute;
     bottom: 108px;
-    left: 266px;
+    left: 292px;
+    @media (max-width: 980px) {
+      bottom: 20px;
+      svg {
+        width: 48px;
+      }
+    }
+    @media (max-width: 440px) {
+      left: 252px;
+    }
   }
 }
 
@@ -218,6 +326,12 @@
   // .button__key
 
   &__key {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 60px;
+    height: 60px;
+    text-align: center;
     cursor: pointer;
     user-select: none;
     padding: 10px 20px;
@@ -232,10 +346,13 @@
       transform 0.1s,
       box-shadow 0.2s;
 
-    svg {
-      user-select: none;
-      font-weight: 900;
-      stroke: black;
+    @media (max-width: 1205px) {
+      width: 35px;
+      height: 35px;
+    }
+    @media (max-width: 485px) {
+      width: 30px;
+      height: 30px;
     }
 
     &:hover {

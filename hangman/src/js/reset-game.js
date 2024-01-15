@@ -9,6 +9,7 @@ import {
 } from '@js/update-word.js';
 
 import hideModal from '@js/close-element';
+import { setGameActive } from '@js/game-active';
 import { createWordsSection } from './main-page/words';
 
 function resetGame() {
@@ -26,6 +27,8 @@ function resetGame() {
     // eslint-disable-next-line no-param-reassign
     button.disabled = false;
   });
+
+  setGameActive(true);
 }
 
 export default resetGame;

@@ -9,6 +9,9 @@
     padding-top: 50px;
     padding-bottom: 20px;
     text-align: center;
+    @media (max-width: 485px) {
+      gap: 100px;
+    }
   }
 
   // .footer__year

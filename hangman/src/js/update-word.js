@@ -1,6 +1,7 @@
 import { showGameOverModal, modalElements } from '@js/modal.js';
 // eslint-disable-next-line import/no-cycle
 import resetGame from '@js/reset-game';
+import { setGameActive } from '@js/game-active';
 import { currentWord, currentHint } from './main-page/words';
 
 let incorrectCounter = 0;
@@ -157,10 +158,12 @@ function handleLetterClick(letter) {
 
   if (getIncorrectCounter() === 6) {
     showGameOverModal(false);
+    setGameActive(false);
     setupPlayAgainButton();
     modalElements.playAgainButton.addEventListener('click', resetGame);
   } else if (isWordCorrect) {
     showGameOverModal(true);
+    setGameActive(false);
     setupPlayAgainButton();
     modalElements.playAgainButton.addEventListener('click', resetGame);
   }

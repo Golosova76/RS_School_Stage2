@@ -14,3 +14,9 @@ $main-background-color: $color-background-body;
     margin-bottom: 40px;
   }
 }
+
+@mixin margin-bottom20 {
+  &:not(:last-child) {
+    margin-bottom: 20px;
+  }
+}
