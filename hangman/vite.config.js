@@ -9,7 +9,7 @@ export default {
       input: {
         main: path.resolve(__dirname, 'index.html'),
         // Например страница "about.html" в папке "src/html"
-        about: path.resolve(__dirname, 'src/html/about.html'),
+        // about: path.resolve(__dirname, 'src/html/about.html'),
       },
     },
   },
