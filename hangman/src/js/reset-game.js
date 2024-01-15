@@ -4,6 +4,8 @@ import {
   updateIncorrectCounterDisplay,
   hideBodyParts,
   setupPlayAgainButton,
+  updateHint,
+  updateWord,
 } from '@js/update-word.js';
 
 import hideModal from '@js/close-element';
@@ -13,8 +15,9 @@ function resetGame() {
   hideModal(); // закрытие модалки
   setIncorrectCounter(0); // сброс счетчика
   updateIncorrectCounterDisplay(); // обновление счетчика
-
   createWordsSection(); // генерация нового слова
+  updateHint();
+  updateWord();
   hideBodyParts(); // сброс частей тела game over
   setupPlayAgainButton(); // сброс старого обработчика и ставим новый
 

@@ -1,7 +1,7 @@
 import { showGameOverModal, modalElements } from '@js/modal.js';
 // eslint-disable-next-line import/no-cycle
 import resetGame from '@js/reset-game';
-import { currentWord } from './main-page/words';
+import { currentWord, currentHint } from './main-page/words';
 
 let incorrectCounter = 0;
 const maxIncorrectCount = 6;
@@ -40,10 +40,49 @@ function updateIncorrectCounterDisplay() {
 }
 
 // обновить подсказку
-function updateHint(newHint) {
+function updateHint() {
   const hintTextElement = document.querySelector('.hint-text');
-  if (hintTextElement) {
-    hintTextElement.textContent = newHint;
+  hintTextElement.textContent = currentHint;
+}
+
+function updateWord() {
+  const letterContentSpans = document.querySelectorAll('.letter-content');
+  const underlineSpans = document.querySelectorAll('.underline');
+
+  // Если количество букв в слове изменилось, нужно создать или удалить спаны
+  if (currentWord.length !== letterContentSpans.length) {
+    // Удаляем все текущие буквы и подчеркивания
+    const letterSpans = document.querySelectorAll('.letter');
+    letterSpans.forEach((span) => span.remove());
+    letterContentSpans.forEach((span) => span.remove());
+    underlineSpans.forEach((span) => span.remove());
+
+    // Создаем новые спаны для букв и подчеркиваний
+    const wordDiv = document.querySelector('.game__word'); // Убедитесь, что это правильный селектор
+    for (let i = 0; i < currentWord.length; i += 1) {
+      const letterSpan = document.createElement('span');
+      letterSpan.className = 'letter';
+      const underlineSpan = document.createElement('span');
+      underlineSpan.className = 'underline';
+      underlineSpan.style.visibility = 'visible';
+
+      const letterContentSpan = document.createElement('span');
+      letterContentSpan.className = 'letter-content';
+      letterContentSpan.textContent = currentWord[i];
+      letterContentSpan.style.visibility = 'hidden';
+
+      letterSpan.appendChild(letterContentSpan);
+      letterSpan.appendChild(underlineSpan);
+      wordDiv.appendChild(letterSpan);
+    }
+  } else {
+    // Если количество букв осталось тем же, просто обновляем текст в спанах
+    letterContentSpans.forEach((span, index) => {
+      // eslint-disable-next-line no-param-reassign
+      span.textContent = currentWord[index];
+      // eslint-disable-next-line no-param-reassign
+      span.style.visibility = 'hidden'; // Скрываем буквe
+    });
   }
 }
 
@@ -87,22 +126,6 @@ function checkWordCorrect() {
     )
     .join('');
   return displayWord === currentWord;
-}
-
-// скрытие слова или букв после игры
-function hideWordDisplay() {
-  const wordContainer = document.querySelectorAll('.game__word');
-  const underlineSpansContainer = document.querySelectorAll('.underline');
-
-  // Удаление всех буквенных спанов
-  wordContainer.forEach((span) => {
-    span.parentNode.removeChild(span);
-  });
-
-  // Удаление всех спанов подчеркивания
-  underlineSpansContainer.forEach((span) => {
-    span.parentNode.removeChild(span);
-  });
 }
 
 function setupPlayAgainButton() {
@@ -151,5 +174,6 @@ export {
   getIncorrectCounter,
   hideBodyParts,
   setupPlayAgainButton,
-  hideWordDisplay,
+  updateHint,
+  updateWord,
 };

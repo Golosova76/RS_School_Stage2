@@ -2,6 +2,8 @@ import { words, hints } from '../data';
 
 // eslint-disable-next-line import/no-mutable-exports
 let currentWord = '';
+// eslint-disable-next-line import/no-mutable-exports
+let currentHint = '';
 
 let lastWordIndex = -1; // положим последний индекс слова
 
@@ -40,6 +42,7 @@ function createWordsSection() {
   currentWord = word;
 
   const hint = hints[wordIndex];
+  currentHint = hint;
 
   console.log(word);
   console.log(hint);
@@ -105,4 +108,10 @@ function createWordsSection() {
 
 // export default createWordsSection;
 
-export { currentWord, createWordsSection, getLastWordIndex, setLastWordIndex };
+export {
+  currentWord,
+  currentHint,
+  createWordsSection,
+  getLastWordIndex,
+  setLastWordIndex,
+};
