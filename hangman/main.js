@@ -20,10 +20,11 @@ document.addEventListener('DOMContentLoaded', function onDOMContentLoaded() {
   // console.log(wrapper.innerHTML);
 
   document.addEventListener('keydown', function addEventListenerKey(event) {
-    const pressedKey = event.key.toUpperCase();
-    // нажатая клавиша - буква?
-    if (pressedKey.length === 1 && pressedKey >= 'A' && pressedKey <= 'Z') {
-      handleLetterClick(pressedKey);
+    const pressedKeyCode = event.code;
+    // Проверяем, является ли нажатая клавиша буквой
+    if (pressedKeyCode.startsWith('Key')) {
+      const pressedKey = pressedKeyCode.charAt(3).toUpperCase(); // Извлекаем букву из кода
+      handleLetterClick(pressedKey); // Передаем код буквы в функцию handleLetterClick
     }
   });
 });
