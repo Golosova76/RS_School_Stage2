@@ -38,6 +38,7 @@ function createWordsSection() {
   lastWordIndex = wordIndex; // Обновляем индекс последнего слова
   const word = words[wordIndex];
   currentWord = word;
+
   const hint = hints[wordIndex];
 
   console.log(word);

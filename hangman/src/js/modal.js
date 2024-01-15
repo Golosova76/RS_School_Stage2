@@ -33,6 +33,7 @@ function createModal() {
   return { modal, modalContent, modalText, modalWord, playAgainButton };
 }
 
+// eslint-disable-next-line import/no-mutable-exports
 let modalElements = null;
 
 function showGameOverModal(isWin) {
@@ -56,4 +57,4 @@ function showGameOverModal(isWin) {
     'perspective(600px) translate(0px, 0px) rotateX(0deg)';
 }
 
-export { createModal, showGameOverModal };
+export { createModal, showGameOverModal, modalElements };
