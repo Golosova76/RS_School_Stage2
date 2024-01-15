@@ -19,6 +19,14 @@
     }
 
     @include margin-bottom40;
+
+    @include media-query-max-width(small) {
+      font-size: clamp(2rem, -2.847rem + 20.41vw, 4.5rem);
+    }
+
+    @include media-query-max-width(xSmall) {
+      @include heading-mobile-two;
+    }
   }
 
   // .favorite__slider
@@ -31,24 +39,40 @@
 
   // .slider__wrapper
 
-  &__wrapper {}
+  &__wrapper {
+    max-width: 480px;
+    margin: 0 auto;
+    overflow: hidden;
+
+    &:not(:last-child) {
+      margin-bottom: 40px;
+    }
+  }
 
   // .slider__items
 
-  &__items {}
+  &__items {
+    display: flex;
+    transition: transform 0.8s ease-out;
+  }
 
   // .slider__item
 
   &__item {
-    max-width: 480px;
-    margin: 0 auto;
+    max-width: 488px;
+    flex: 0 0 100%;
     text-align: center;
+    user-select: none;
   }
 
   // .slider__navigation
 
   &__navigation {
     @include margin-bottom40;
+
+    @include media-query-max-width(mobileSmall) {
+      display: none;
+    }
   }
 
   // .slider__button-prev
@@ -96,11 +120,13 @@
       transition: all 0.4s ease 0s;
     }
 
-    &:hover {
-      background-color: $colorBackgroundContainer;
+    @media (any-hover: hover) {
+      &:hover {
+        background-color: $colorBackgroundContainer;
 
-      svg {
-        stroke: $colorTextLight;
+        svg {
+          stroke: $colorTextLight;
+        }
       }
     }
   }
@@ -120,11 +146,12 @@
     width: 40px;
     height: 4px;
     background-color: $colorBorderLight;
+    //transition: background-color 0.3s linear;
 
     // .slider__line_one
 
     &_one {
-      background-color: $colorBorderDark;
+      //background-color: $colorBorderDark;
     }
 
     // .slider__line_two
@@ -143,6 +170,7 @@
 
   &__image-ibg {
     padding-bottom: 100%;
+    pointer-events: none;
 
     &:not(:last-child) {
       margin-bottom: 20px;
