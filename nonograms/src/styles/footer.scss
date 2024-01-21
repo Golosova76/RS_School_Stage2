@@ -1,0 +1,41 @@
+.footer {
+  // .footer__container
+
+  &__container {
+    display: flex;
+    gap: 200px;
+    align-items: center;
+    justify-content: center;
+    padding-top: 50px;
+    padding-bottom: 20px;
+    text-align: center;
+
+    @media (width <= 485px) {
+      gap: 100px;
+    }
+  }
+
+  // .footer__link
+
+  &__link {
+    position: relative;
+
+    &::before {
+      content: "";
+      position: absolute;
+      bottom: -4px;
+      left: 0;
+      transform: scaleX(0);
+      width: 100%;
+      height: 2px;
+      background-color: $color-text-dark;
+      transition: transform 0.5s ease;
+    }
+
+    @media (any-hover: hover) {
+      &:hover::before {
+        transform: scaleX(1);
+      }
+    }
+  }
+}
