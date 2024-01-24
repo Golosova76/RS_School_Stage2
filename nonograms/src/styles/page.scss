@@ -31,6 +31,9 @@
     @media (max-width: 499px) {
       padding: 0;
     }
+    transition:
+      background-color 0.3s,
+      color 0.3s;
   }
 
   // .game__body
