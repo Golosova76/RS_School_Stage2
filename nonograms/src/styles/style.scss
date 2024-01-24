@@ -3,5 +3,7 @@
 @import "null";
 @import "common";
 @import "header";
-// @import "main";
+@import "page";
+@import "./main-page/game-hadling";
+@import "./main-page/game-body.scss";
 @import "footer";

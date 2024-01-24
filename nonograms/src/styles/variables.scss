@@ -1,9 +1,7 @@
 $font-family: "Roboto", sans-serif;
-$font-size: 20px;
+$font-size: 16px;
 $font-weight: 400;
 $font-line-height: 150%;
-
-// $color-text-dark: #333;
 
 $color-text-dark: black;
 $color-background-body: #bfb0a3;
@@ -18,5 +16,29 @@ $main-background-color: $color-background-body;
 @mixin margin-bottom20 {
   &:not(:last-child) {
     margin-bottom: 20px;
+  }
+}
+
+@mixin button-toggle {
+  max-width: 200px;
+  width: 100%;
+  padding: 5px;
+  border: 4px solid #aaa;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  font-family: "Courier New", monospace;
+  font-size: 24px;
+  color: black;
+  text-align: center;
+  background: repeating-linear-gradient(
+    110deg,
+    #f9f9f9,
+    #f9f9f9 2px,
+    #e0e0e0 2px,
+    #e0e0e0 5px
+  );
+  @media (max-width: 499px) {
+    max-width: 150px;
+    width: 100%;
   }
 }

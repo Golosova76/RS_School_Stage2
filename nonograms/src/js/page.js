@@ -1,5 +1,5 @@
-// import createGallows from './gallows';
-// import createBody from './body';
+import createGameHandling from '@js/game-handling/game-handling';
+import createGameBody from '@js/game-body/game-body';
 
 function createMain() {
   const page = document.createElement('main');
@@ -8,8 +8,8 @@ function createMain() {
   const pageContainer = document.createElement('div');
   pageContainer.className = 'page__container game';
 
-  // pageContainer.appendChild(createGallows());
-  // pageContainer.appendChild(createBody());
+  pageContainer.appendChild(createGameHandling());
+  pageContainer.appendChild(createGameBody());
   page.appendChild(pageContainer);
 
   return page;
