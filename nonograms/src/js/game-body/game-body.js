@@ -1,5 +1,5 @@
 import { createTopHints, createLeftHints } from '@js/game-body/parts/hints';
-import createGameBoard from '@js/game-body/parts/game-board';
+import { createGameBoard } from '@js/game-body/parts/game-board';
 import generateHints from '@js/game-body/hint-generator';
 
 function createGameBody(puzzle) {
@@ -11,7 +11,7 @@ function createGameBody(puzzle) {
 
   const topHints = createTopHints(size, hints.topHints);
   const leftHints = createLeftHints(size, hints.leftHints);
-  const gameBoard = createGameBoard(size);
+  const { gameBoard } = createGameBoard(size);
 
   gameBody.appendChild(topHints);
   gameBody.appendChild(leftHints);

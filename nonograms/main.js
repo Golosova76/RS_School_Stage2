@@ -2,6 +2,8 @@ import '@styles/style.scss';
 import createHeader from '@js/header.js';
 import createMain from '@js/page';
 import createFooter from '@js/footer.js';
+import initCellInteractive from '@js/interactiv/cell-interactive';
+import { cells } from '@js/game-body/parts/game-board'; // массив с клетиками игрового поля
 // import createToggleTheme from '@js/toggle'; // смена темы пока убрала тк нет JS блока
 // import puzzles from '@js/game-body/puzzle-generator'; // массив с головоломками
 // import generateHints from '@js/game-body/hint-generator'; // генератор подсказок
@@ -14,6 +16,8 @@ document.addEventListener('DOMContentLoaded', function onDOMContentLoaded() {
   wrapper.appendChild(createHeader());
   wrapper.appendChild(createMain());
   wrapper.appendChild(createFooter());
+
+  initCellInteractive(cells); // обработка клика по cell закрашивание черным и крестик
 
   // createToggleTheme();  пока убрала тк нет JS блока
 });

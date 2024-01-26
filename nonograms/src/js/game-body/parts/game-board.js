@@ -1,3 +1,5 @@
+const cells = []; // массив для клеток (обработка)
+
 function createGameBoard(size) {
   const gameBoard = document.createElement('div');
   gameBoard.className = 'game__board';
@@ -10,12 +12,13 @@ function createGameBoard(size) {
       const gameCell = document.createElement('div');
       gameCell.className = 'game-cell';
       gameRow.appendChild(gameCell);
+      cells.push(gameCell); // добавление клетки в массив
     }
 
     gameBoard.appendChild(gameRow);
   }
 
-  return gameBoard;
+  return { gameBoard, cells };
 }
 
-export default createGameBoard;
+export { createGameBoard, cells };

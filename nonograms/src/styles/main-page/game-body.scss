@@ -31,6 +31,7 @@
     grid-column: 2 / 3;
     grid-row: 2 / 3;
     border-top: 3px solid black;
+    cursor: pointer;
   }
 
   // .game__row
@@ -93,6 +94,7 @@
 }
 
 .game-cell {
+  position: relative;
   &:nth-child(5n) {
     border-right: 3px solid black;
   }
@@ -113,5 +115,31 @@
     .left-hint {
       border-bottom: 3px solid black;
     }
+  }
+}
+
+.cross {
+  &::before {
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 2px; /* Ширина линии крестика */
+    height: 100%; /* Высота линии крестика, относительно размера клетки */
+    background-color: #333;
+    transform: translate(-50%, -50%) rotate(45deg);
+  }
+}
+
+.cross {
+  &::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 2px;
+    height: 100%;
+    background-color: #333;
+    transform: translate(-50%, -50%) rotate(-45deg);
   }
 }
