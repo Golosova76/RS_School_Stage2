@@ -6,7 +6,7 @@
     align-items: center;
     justify-content: center;
     padding-top: 50px;
-    padding-bottom: 50px;
+    padding-bottom: 20px;
     text-align: center;
 
     @media (width <= 980px) {
@@ -19,6 +19,7 @@
 
   &__title {
     font-size: 36px;
+    font-weight: 600;
     line-height: $font-line-height;
   }
 }
