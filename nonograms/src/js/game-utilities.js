@@ -7,10 +7,14 @@ function findPuzzleByName(name) {
 }
 
 function updateGame(puzzle) {
-  const gameContainer = document.querySelector('main');
-  gameContainer.innerHTML = ''; // Очистка текущего содержимого игры
-  gameContainer.appendChild(createGameHandling()); // не знаю нужно или нет
-  gameContainer.appendChild(createGameBody(puzzle));
+  const gamePage = document.querySelector('main');
+
+  gamePage.innerHTML = ''; // Очистка текущего содержимого игры
+  const pageContainer = document.createElement('div');
+  pageContainer.className = 'page__container game';
+  pageContainer.appendChild(createGameHandling());
+  pageContainer.appendChild(createGameBody(puzzle));
+  gamePage.appendChild(pageContainer);
 }
 
 export { findPuzzleByName, updateGame };

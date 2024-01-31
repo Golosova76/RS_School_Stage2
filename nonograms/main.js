@@ -6,7 +6,6 @@ import initCellInteractive from '@js/interactiv/cell-interactive';
 import { cells } from '@js/game-body/parts/game-board'; // массив с клетиками игрового поля
 import createToggleTheme from '@js/toggle'; // смена темы
 import { findPuzzleByName, updateGame } from '@js/game-utilities';
-// import initPuzzleSelection from '@js/interactiv/puzzle-interactive';
 // import createGameChoice from '@js/game-handling/choice';
 // import puzzles from '@js/game-body/puzzle-generator'; // массив с головоломками
 // import generateHints from '@js/game-body/hint-generator'; // генератор подсказок
@@ -37,7 +36,7 @@ document.addEventListener('DOMContentLoaded', function onDOMContentLoaded() {
       targetElement = targetElement.parentElement;
     }
 
-    // Если targetElement - один из gameItemDiv, выводим информацию в консоль
+    // Если targetElement - один из gameItemDiv, работаем дальше
     if (
       targetElement != null &&
       targetElement.classList.contains('game__items')
@@ -47,15 +46,14 @@ document.addEventListener('DOMContentLoaded', function onDOMContentLoaded() {
       if (nameContent) {
         nameContent.classList.toggle('block');
       }
-      // console.log(liContents);
       if (liContents) {
         liContents.forEach((content) => {
           content.addEventListener('click', function hy() {
             const puzzleName = content.textContent;
-            console.log(puzzleName);
             const puzzleNameChoice = findPuzzleByName(puzzleName);
-            // console.log(puzzleNameChoice);
             updateGame(puzzleNameChoice);
+            initCellInteractive(cells);
+            createToggleTheme();
           });
         });
       }
