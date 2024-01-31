@@ -16,10 +16,12 @@ function createGameChoice() {
 
   const buttonsChoice = [];
   const listItemsChoice = [];
+  const gameItemDiv = [];
 
   levels.forEach(({ level, items }) => {
     const gameItemsDiv = document.createElement('div');
     gameItemsDiv.className = `game__items ${level}`;
+    gameItemDiv.push(gameItemsDiv);
 
     const button = document.createElement('button');
     button.className = `button-choice ${level} button`;
@@ -45,6 +47,7 @@ function createGameChoice() {
 
   return {
     gameChoiceDiv,
+    gameItemDiv,
     buttonsChoice,
     listItemsChoice,
   };

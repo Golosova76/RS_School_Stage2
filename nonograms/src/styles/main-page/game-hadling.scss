@@ -143,13 +143,6 @@
   &__items {
     position: relative;
     display: block;
-    @media (any-hover: hover) {
-      &:hover {
-        .name-content {
-          display: block;
-        }
-      }
-    }
   }
 }
 
@@ -171,6 +164,9 @@
   text-align: center;
   box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
   z-index: 1;
+  &.block {
+    display: block;
+  }
 
   // .easy-content__item
 
