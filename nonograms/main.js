@@ -5,7 +5,11 @@ import createFooter from '@js/footer.js';
 import initCellInteractive from '@js/interactiv/cell-interactive';
 import { cells } from '@js/game-body/parts/game-board'; // массив с клетиками игрового поля
 import createToggleTheme from '@js/toggle'; // смена темы
-import { findPuzzleByName, updateGame } from '@js/game-utilities';
+import {
+  findPuzzleByName,
+  updateGame,
+  clearCurrentGame,
+} from '@js/game-utilities';
 // import createGameChoice from '@js/game-handling/choice';
 // import puzzles from '@js/game-body/puzzle-generator'; // массив с головоломками
 // import generateHints from '@js/game-body/hint-generator'; // генератор подсказок
@@ -23,10 +27,15 @@ document.addEventListener('DOMContentLoaded', function onDOMContentLoaded() {
 
   createToggleTheme();
 
-  // клик на кнопках выбора
-  wrapper.addEventListener('click', function ff(event) {
+  // клик на кнопках выбора, clear
+  wrapper.addEventListener('click', function wrapperClick(event) {
     // event.target - это элемент, на который непосредственно был сделан клик
     let targetElement = event.target;
+
+    // кнопка clear
+    if (targetElement === event.target.closest('.button-clear')) {
+      clearCurrentGame();
+    }
 
     // Проверка, что клик был сделан на элементах gameItemDiv или их детях
     while (

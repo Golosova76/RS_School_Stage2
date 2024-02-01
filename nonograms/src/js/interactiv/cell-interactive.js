@@ -8,15 +8,12 @@ function handleLeftClick(event) {
     // если cell содержит крестик, убираем его и красим
     cell.classList.remove('cross');
     cell.style.backgroundColor = 'black';
-    cell.style.border = '1px solid #d3d3d3';
   } else if (cell.style.backgroundColor === 'black') {
     // если cell закрашена снимаем краску
     cell.style.backgroundColor = '';
-    cell.style.border = '1px solid black';
   } else {
     // если нет краски и крестика - красим
     cell.style.backgroundColor = 'black';
-    cell.style.border = '1px solid #d3d3d3';
   }
 }
 
@@ -27,7 +24,6 @@ function handleRightClick(event) {
   if (cell.style.backgroundColor === 'black') {
     // если cell закрашена, убираем, ставим х
     cell.style.backgroundColor = '';
-    cell.style.border = '1px solid black';
     cell.classList.add('cross');
   } else if (cell.classList.contains('cross')) {
     // если стоит х убираем его

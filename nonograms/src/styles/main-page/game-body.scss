@@ -58,12 +58,6 @@
   background-color: #f0f0f0;
 }
 
-.left-hint {
-  &:nth-child(5n) {
-    //border-bottom: 3px solid black;
-  }
-}
-
 .game-cell,
 .hint-cell {
   width: 25px;
