@@ -18,4 +18,4 @@ function createMain() {
   return page;
 }
 
-export default createMain;
+export { createMain, selectedPuzzle };

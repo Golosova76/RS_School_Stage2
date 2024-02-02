@@ -29,4 +29,41 @@ function clearCurrentGame() {
   });
 }
 
-export { findPuzzleByName, updateGame, clearCurrentGame };
+// выбор случайного puzzles
+function selectRandomPuzzle() {
+  const randomIndex = Math.floor(Math.random() * puzzles.length);
+  return puzzles[randomIndex];
+}
+
+// показ решения
+function showSolution(puzzle) {
+  const { solution } = puzzle;
+  const cellsShow = document.querySelectorAll('.game-cell');
+
+  let cellIndex = 0;
+  solution.forEach((row) => {
+    row.forEach((isFilled) => {
+      if (cellIndex < cellsShow.length) {
+        const cell = cellsShow[cellIndex];
+
+        if (isFilled) {
+          cell.style.backgroundColor = 'black'; // Закрашиваем ячейку
+          cell.classList.remove('cross'); // Убираем крестик, если он есть
+        } else {
+          cell.style.backgroundColor = ''; // Убираем закрашивание
+          cell.classList.remove('cross'); // Убираем крестик
+        }
+      }
+
+      cellIndex += 1; // Переходим к следующей ячейке
+    });
+  });
+}
+
+export {
+  findPuzzleByName,
+  updateGame,
+  clearCurrentGame,
+  selectRandomPuzzle,
+  showSolution,
+};
