@@ -5,6 +5,7 @@ import createFooter from '@js/footer.js';
 import {
   initCellInteractive,
   handleNewGame,
+  resetIsTimerStarted,
 } from '@js/interactiv/cell-interactive';
 import { cells } from '@js/game-body/parts/game-board'; // массив с клетиками игрового поля
 import createToggleTheme from '@js/toggle'; // смена темы
@@ -13,6 +14,7 @@ import {
   updateGame,
   clearCurrentGame,
 } from '@js/game-utilities';
+import { resetTimer } from './src/js/interactiv/timer';
 // import { resetTimer } from '@js/interactiv/timer';
 // import createGameChoice from '@js/game-handling/choice';
 // import puzzles from '@js/game-body/puzzle-generator'; // массив с головоломками
@@ -28,8 +30,14 @@ document.addEventListener('DOMContentLoaded', function onDOMContentLoaded() {
   wrapper.appendChild(createFooter());
 
   // работа с таймером
-  const spanMinutes = document.querySelector('.timer__minutes');
-  const spanSeconds = document.querySelector('.timer__seconds');
+  function getTimerElements() {
+    return {
+      spanMinutes: document.querySelector('.timer__minutes'),
+      spanSeconds: document.querySelector('.timer__seconds'),
+    };
+  }
+
+  const { spanMinutes, spanSeconds } = getTimerElements();
 
   initCellInteractive(cells, spanMinutes, spanSeconds); // обработка клика по cell закрашивание черным и крестик и таймер
 
@@ -50,7 +58,8 @@ document.addEventListener('DOMContentLoaded', function onDOMContentLoaded() {
     // кнопка new game
     if (targetElement === event.target.closest('.button-new-game')) {
       clearCurrentGame();
-      handleNewGame(spanMinutes, spanSeconds);
+      resetTimer(spanMinutes, spanSeconds);
+      handleNewGame();
     }
 
     // Проверка, что клик был сделан на элементах gameItemDiv или их детях
@@ -77,7 +86,14 @@ document.addEventListener('DOMContentLoaded', function onDOMContentLoaded() {
             const puzzleName = content.textContent;
             const puzzleNameChoice = findPuzzleByName(puzzleName);
             updateGame(puzzleNameChoice);
-            initCellInteractive(cells, spanMinutes, spanSeconds);
+            const timerElements = getTimerElements();
+            resetTimer(spanMinutes, spanSeconds);
+            resetIsTimerStarted();
+            initCellInteractive(
+              cells,
+              timerElements.spanMinutes,
+              timerElements.spanSeconds
+            );
             createToggleTheme();
           });
         });

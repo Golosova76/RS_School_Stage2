@@ -1,5 +1,7 @@
-// import { createGameBoard } from '@js/game-body/parts/game-board';
-import { startTimer, resetTimer } from '@js/interactiv/timer';
+import createGameHandling from '@js/game-handling/game-handling';
+import createGameBody from '@js/game-body/game-body';
+import puzzles from '@js/game-body/puzzle-generator';
+import { startTimer } from '@js/interactiv/timer';
 
 let isTimerStarted = false;
 
@@ -47,12 +49,24 @@ function handleRightClick(event, spanMinutes, spanSeconds) {
   }
 }
 
+const selectedPuzzle = puzzles[0];
+
 // при клике на кнопку new game
-function handleNewGame(spanMinutes, spanSeconds) {
-  // ... сброс игры ...
+function handleNewGame() {
+  const gamePage = document.querySelector('main');
+
+  gamePage.innerHTML = ''; // Очистка текущего содержимого игры
+  const pageContainer = document.createElement('div');
+  pageContainer.className = 'page__container game';
+  pageContainer.appendChild(createGameHandling());
+  pageContainer.appendChild(createGameBody(selectedPuzzle));
+  gamePage.appendChild(pageContainer);
 
   isTimerStarted = false;
-  resetTimer(spanMinutes, spanSeconds);
+}
+
+function resetIsTimerStarted() {
+  isTimerStarted = false;
 }
 
 // слушатель клика правой и левой кнопки мыши по клеткам игрового поля
@@ -67,4 +81,4 @@ function initCellInteractive(cells, spanMinutes, spanSeconds) {
   });
 }
 
-export { initCellInteractive, handleNewGame };
+export { initCellInteractive, handleNewGame, resetIsTimerStarted };

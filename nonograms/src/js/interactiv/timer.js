@@ -2,6 +2,7 @@ let timerInterval;
 let timerSeconds = 0;
 
 function startTimer(spanMinutes, spanSeconds) {
+  clearInterval(timerInterval); // очистка предыдущего интервала
   timerInterval = setInterval(() => {
     timerSeconds += 1;
     const minutes = Math.floor(timerSeconds / 60);

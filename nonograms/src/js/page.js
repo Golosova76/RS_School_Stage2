@@ -2,7 +2,7 @@ import createGameHandling from '@js/game-handling/game-handling';
 import createGameBody from '@js/game-body/game-body';
 import puzzles from '@js/game-body/puzzle-generator';
 
-const selectedPuzzle = puzzles[1];
+const selectedPuzzle = puzzles[0];
 
 function createMain() {
   const page = document.createElement('main');
