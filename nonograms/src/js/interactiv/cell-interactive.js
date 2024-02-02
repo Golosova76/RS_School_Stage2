@@ -1,6 +1,9 @@
 // import { createGameBoard } from '@js/game-body/parts/game-board';
+import { startTimer, resetTimer } from '@js/interactiv/timer';
 
-function handleLeftClick(event) {
+let isTimerStarted = false;
+
+function handleLeftClick(event, spanMinutes, spanSeconds) {
   event.preventDefault();
   const cell = event.target;
 
@@ -15,9 +18,14 @@ function handleLeftClick(event) {
     // если нет краски и крестика - красим
     cell.style.backgroundColor = 'black';
   }
+
+  if (!isTimerStarted) {
+    startTimer(spanMinutes, spanSeconds);
+    isTimerStarted = true;
+  }
 }
 
-function handleRightClick(event) {
+function handleRightClick(event, spanMinutes, spanSeconds) {
   event.preventDefault();
   const cell = event.target;
 
@@ -32,14 +40,31 @@ function handleRightClick(event) {
     // если нет х и нет закрашивания ставим х
     cell.classList.add('cross');
   }
+
+  if (!isTimerStarted) {
+    startTimer(spanMinutes, spanSeconds);
+    isTimerStarted = true;
+  }
+}
+
+// при клике на кнопку new game
+function handleNewGame(spanMinutes, spanSeconds) {
+  // ... сброс игры ...
+
+  isTimerStarted = false;
+  resetTimer(spanMinutes, spanSeconds);
 }
 
 // слушатель клика правой и левой кнопки мыши по клеткам игрового поля
-function initCellInteractive(cells) {
+function initCellInteractive(cells, spanMinutes, spanSeconds) {
   cells.forEach((cell) => {
-    cell.addEventListener('click', handleLeftClick);
-    cell.addEventListener('contextmenu', handleRightClick);
+    cell.addEventListener('click', (event) =>
+      handleLeftClick(event, spanMinutes, spanSeconds)
+    );
+    cell.addEventListener('contextmenu', (event) =>
+      handleRightClick(event, spanMinutes, spanSeconds)
+    );
   });
 }
 
-export default initCellInteractive;
+export { initCellInteractive, handleNewGame };

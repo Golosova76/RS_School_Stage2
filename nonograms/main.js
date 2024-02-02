@@ -2,7 +2,10 @@ import '@styles/style.scss';
 import createHeader from '@js/header.js';
 import createMain from '@js/page';
 import createFooter from '@js/footer.js';
-import initCellInteractive from '@js/interactiv/cell-interactive';
+import {
+  initCellInteractive,
+  handleNewGame,
+} from '@js/interactiv/cell-interactive';
 import { cells } from '@js/game-body/parts/game-board'; // массив с клетиками игрового поля
 import createToggleTheme from '@js/toggle'; // смена темы
 import {
@@ -10,6 +13,7 @@ import {
   updateGame,
   clearCurrentGame,
 } from '@js/game-utilities';
+// import { resetTimer } from '@js/interactiv/timer';
 // import createGameChoice from '@js/game-handling/choice';
 // import puzzles from '@js/game-body/puzzle-generator'; // массив с головоломками
 // import generateHints from '@js/game-body/hint-generator'; // генератор подсказок
@@ -23,7 +27,13 @@ document.addEventListener('DOMContentLoaded', function onDOMContentLoaded() {
   wrapper.appendChild(createMain());
   wrapper.appendChild(createFooter());
 
-  initCellInteractive(cells); // обработка клика по cell закрашивание черным и крестик
+  // работа с таймером
+  const spanMinutes = document.querySelector('.timer__minutes');
+  const spanSeconds = document.querySelector('.timer__seconds');
+
+  initCellInteractive(cells, spanMinutes, spanSeconds); // обработка клика по cell закрашивание черным и крестик и таймер
+
+  // initCellInteractive(cells); // обработка клика по cell закрашивание черным и крестик
 
   createToggleTheme();
 
@@ -35,6 +45,12 @@ document.addEventListener('DOMContentLoaded', function onDOMContentLoaded() {
     // кнопка clear
     if (targetElement === event.target.closest('.button-clear')) {
       clearCurrentGame();
+    }
+
+    // кнопка new game
+    if (targetElement === event.target.closest('.button-new-game')) {
+      clearCurrentGame();
+      handleNewGame(spanMinutes, spanSeconds);
     }
 
     // Проверка, что клик был сделан на элементах gameItemDiv или их детях
@@ -57,11 +73,11 @@ document.addEventListener('DOMContentLoaded', function onDOMContentLoaded() {
       }
       if (liContents) {
         liContents.forEach((content) => {
-          content.addEventListener('click', function hy() {
+          content.addEventListener('click', function contentUpdate() {
             const puzzleName = content.textContent;
             const puzzleNameChoice = findPuzzleByName(puzzleName);
             updateGame(puzzleNameChoice);
-            initCellInteractive(cells);
+            initCellInteractive(cells, spanMinutes, spanSeconds);
             createToggleTheme();
           });
         });
