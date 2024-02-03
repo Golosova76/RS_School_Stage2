@@ -63,6 +63,10 @@ function handleNewGame() {
   gamePage.appendChild(pageContainer);
 
   isTimerStarted = false;
+
+  // пользовательское событие
+  const event = new CustomEvent('newGameStarted', { detail: selectedPuzzle });
+  document.dispatchEvent(event);
 }
 
 function resetIsTimerStarted() {

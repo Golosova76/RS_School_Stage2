@@ -45,9 +45,12 @@ document.addEventListener('DOMContentLoaded', function onDOMContentLoaded() {
   // переменная для выбранного puzzles
   let currentPuzzleSolution = selectedPuzzle;
 
-  initCellInteractive(cells, spanMinutes, spanSeconds); // обработка клика по cell закрашивание черным и крестик и таймер
+  // пользовательское событие для solution
+  document.addEventListener('newGameStarted', function ff(e) {
+    currentPuzzleSolution = e.detail;
+  });
 
-  // initCellInteractive(cells); // обработка клика по cell закрашивание черным и крестик
+  initCellInteractive(cells, spanMinutes, spanSeconds); // обработка клика по cell закрашивание черным и крестик и таймер
 
   createToggleTheme();
 
@@ -65,13 +68,23 @@ document.addEventListener('DOMContentLoaded', function onDOMContentLoaded() {
     if (targetElement === event.target.closest('.button-new-game')) {
       clearCurrentGame();
       resetTimer(spanMinutes, spanSeconds);
-      handleNewGame();
+      handleNewGame(currentPuzzleSolution);
+      const timerElements = getTimerElements();
+      resetTimer(spanMinutes, spanSeconds);
+      resetIsTimerStarted();
+      initCellInteractive(
+        cells,
+        timerElements.spanMinutes,
+        timerElements.spanSeconds
+      );
+      createToggleTheme();
     }
 
     // кнопка random game
     if (targetElement === event.target.closest('.button-random-game')) {
       const randomPuzzle = selectRandomPuzzle();
       updateGame(randomPuzzle);
+      currentPuzzleSolution = randomPuzzle;
       const timerElements = getTimerElements();
       resetTimer(spanMinutes, spanSeconds);
       resetIsTimerStarted();
@@ -86,6 +99,7 @@ document.addEventListener('DOMContentLoaded', function onDOMContentLoaded() {
     // кнопка solution
     if (targetElement === event.target.closest('.button-solution')) {
       showSolution(currentPuzzleSolution);
+      resetTimer(spanMinutes, spanSeconds);
     }
 
     // Проверка, что клик был сделан на элементах gameItemDiv или их детях
