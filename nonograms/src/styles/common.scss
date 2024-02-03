@@ -18,10 +18,40 @@ html {
   > main {
     flex: 1 1 auto;
   }
+
+  animation: gradientBackgroundLight 15s ease infinite;
+  background: linear-gradient(
+    270deg,
+    #f0f0f0,
+    #fde5e5,
+    /* светло-розовый */ #e5f9fd,
+    /* светло-голубой */ #e5fde7,
+    /* светло-зеленый */ #fdfde5,
+    /* светло-желтый */ #f0f0f0
+  );
+  background-size: 800% 800%;
 }
 
 [class*="__container"] {
   max-width: 1360px; // контейнер 1360 стал 1440 изза padding 40px
   margin: 0 auto;
   padding: 0 20px;
+}
+
+@keyframes gradientBackgroundLight {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.page__container {
+  position: relative;
+  z-index: 12;
+  background: #fff;
 }

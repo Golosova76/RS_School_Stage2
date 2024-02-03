@@ -55,9 +55,20 @@ function showSolution(puzzle) {
         }
       }
 
-      cellIndex += 1; // Переходим к следующей ячейке
+      cellIndex += 1; // к следующей cell
     });
   });
+
+  // Блокируем все ячейки после показа решения
+  cellsShow.forEach((cell) => {
+    cell.classList.add('blocked');
+  });
+
+  // Блокируем кнопку Save, если она есть
+  const saveButton = document.querySelector('.button-save');
+  if (saveButton) {
+    saveButton.disabled = true;
+  }
 }
 
 export {

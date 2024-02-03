@@ -112,6 +112,20 @@
     );
     background-size: 800% 800%;
   }
+
+  .cross {
+    &::before {
+      content: "";
+      background-color: black;
+    }
+  }
+
+  .cross {
+    &::after {
+      content: "";
+      background-color: black;
+    }
+  }
 }
 @keyframes gradientBackground {
   0% {

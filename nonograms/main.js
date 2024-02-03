@@ -150,5 +150,23 @@ document.addEventListener('DOMContentLoaded', function onDOMContentLoaded() {
     /// //////////////////////////// НЕ ТРОГАТЬ
   });
 
+  // закрытие списков по клику вне кнопки
+  document.addEventListener('click', function closeButtonsChoice(event) {
+    const buttonsChoice = document.querySelectorAll('.button-choice');
+
+    buttonsChoice.forEach((button) => {
+      const nameContent = button.nextElementSibling; // выпадающий список сразу после кнопки в DOM
+
+      // если клик вне кнопки и ее списка, скрываем список
+      if (
+        !button.contains(event.target) &&
+        nameContent &&
+        !nameContent.contains(event.target)
+      ) {
+        nameContent.classList.remove('block');
+      }
+    });
+  });
+
   /// /////////////////////   НЕ ТРОГАТЬ
 });

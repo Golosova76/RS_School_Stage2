@@ -199,3 +199,14 @@
 .hard {
   z-index: 3;
 }
+
+.button-save:disabled {
+  background-color: #ccc;
+  color: #666;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+.button-save:disabled:hover {
+  background-color: #ccc;
+}
