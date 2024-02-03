@@ -52,6 +52,12 @@ document.addEventListener('DOMContentLoaded', function onDOMContentLoaded() {
 
   initCellInteractive(cells, spanMinutes, spanSeconds); // обработка клика по cell закрашивание черным и крестик и таймер
 
+  // установка темы при загрузке страницы:
+  const savedTheme = localStorage.getItem('theme');
+  if (savedTheme === 'dark') {
+    document.body.classList.add('dark');
+  }
+
   createToggleTheme();
 
   // клик на кнопках выбора, clear
