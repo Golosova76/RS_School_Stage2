@@ -210,3 +210,10 @@
 .button-save:disabled:hover {
   background-color: #ccc;
 }
+
+.button-sound {
+  &.active-sound {
+    background-color: #aaa;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  }
+}

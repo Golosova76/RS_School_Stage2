@@ -8,6 +8,30 @@ import showWinMessage from '@js/interactiv/win-text';
 
 let isTimerStarted = false;
 
+let isMusicPlaying = false; // флаг для отслеживания состояния звуков
+
+const soundFiles = [
+  '../../../public/audio/background.mp3',
+  '../../../public/audio/cross.mp3',
+  '../../../public/audio/empty.mp3',
+];
+
+function handleButtonClickSounds() {
+  isMusicPlaying = !isMusicPlaying;
+
+  if (isMusicPlaying) {
+    // если музыка должна играть
+    const audio = new Audio(soundFiles[2]);
+    audio.play();
+  } else {
+    // если музыка не должна играть, останавливаем воспроизведение
+    const audio = new Audio(soundFiles[2]);
+    audio.pause();
+  }
+}
+
+let audioFile; // переменная для деструктуризации
+
 function handleLeftClick(event, spanMinutes, spanSeconds, puzzle) {
   event.preventDefault();
   const cell = event.target;
@@ -21,16 +45,26 @@ function handleLeftClick(event, spanMinutes, spanSeconds, puzzle) {
   if (cell.classList.contains('cross')) {
     // если cell содержит крестик, убираем его и красим
     cell.classList.remove('cross');
+    [, , audioFile] = soundFiles;
     cell.style.backgroundColor = 'black';
+    [audioFile] = soundFiles; // sound for backgroundColor
     gameState[row][column] = 1; // Обновление состояния клетки в массиве
   } else if (cell.style.backgroundColor === 'black') {
     // если cell закрашена снимаем краску
     cell.style.backgroundColor = '';
+    [, , audioFile] = soundFiles; // sound for empty
     gameState[row][column] = 0; // Возвращение к исходному состоянию
   } else {
     // если нет краски и крестика - красим
     cell.style.backgroundColor = 'black';
+    [audioFile] = soundFiles;
     gameState[row][column] = 1;
+  }
+
+  if (isMusicPlaying) {
+    // если музыка должна играть, создаем объект Audio
+    const audio = new Audio(audioFile);
+    audio.play();
   }
 
   if (!isTimerStarted) {
@@ -54,16 +88,26 @@ function handleRightClick(event, spanMinutes, spanSeconds, puzzle) {
   if (cell.style.backgroundColor === 'black') {
     // если cell закрашена, убираем, ставим х
     cell.style.backgroundColor = '';
+    [, , audioFile] = soundFiles;
     cell.classList.add('cross');
+    [, audioFile] = soundFiles; // sound for cross
     gameState[row][column] = 2; // Обновление состояния клетки в массиве
   } else if (cell.classList.contains('cross')) {
     // если стоит х убираем его
     cell.classList.remove('cross');
+    [, , audioFile] = soundFiles;
     gameState[row][column] = 0; // Возвращение к исходному состоянию
   } else {
     // если нет х и нет закрашивания ставим х
     cell.classList.add('cross');
+    [, audioFile] = soundFiles;
     gameState[row][column] = 2;
+  }
+
+  if (isMusicPlaying) {
+    // если музыка должна играть, создаем объект Audio
+    const audio = new Audio(audioFile);
+    audio.play();
   }
 
   if (!isTimerStarted) {
@@ -114,4 +158,9 @@ function initCellInteractive(cells, spanMinutes, spanSeconds, puzzle) {
   });
 }
 
-export { initCellInteractive, handleNewGame, resetIsTimerStarted };
+export {
+  initCellInteractive,
+  handleNewGame,
+  resetIsTimerStarted,
+  handleButtonClickSounds,
+};

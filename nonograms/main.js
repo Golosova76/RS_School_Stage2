@@ -7,6 +7,7 @@ import {
   initCellInteractive,
   handleNewGame,
   resetIsTimerStarted,
+  handleButtonClickSounds,
 } from '@js/interactiv/cell-interactive';
 // import { cells } from '@js/game-body/parts/game-board'; // массив с клетиками игрового поля
 import createToggleTheme from '@js/toggle'; // смена темы
@@ -72,6 +73,13 @@ document.addEventListener('DOMContentLoaded', function onDOMContentLoaded() {
     // кнопка clear
     if (targetElement === event.target.closest('.button-clear')) {
       clearCurrentGame();
+    }
+
+    // кнопка sound
+    if (targetElement === event.target.closest('.button-sound')) {
+      handleButtonClickSounds();
+      const activeSound = targetElement;
+      activeSound.classList.toggle('active-sound');
     }
 
     // кнопка new game
