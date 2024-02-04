@@ -16,7 +16,7 @@ import {
   selectRandomPuzzle,
   showSolution,
 } from '@js/game-utilities';
-import { resetTimer } from './src/js/interactiv/timer';
+import { resetTimer } from '@js/interactiv/timer';
 
 // import { resetTimer } from '@js/interactiv/timer';
 // import createGameChoice from '@js/game-handling/choice';

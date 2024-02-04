@@ -2,12 +2,15 @@
   // .game__body
 
   &__body {
+    position: relative;
     display: grid;
-    //grid-template-columns: auto 1fr;
-    grid-template-rows: auto 1fr;
-    padding-left: 30px;
+    // Первый столбец для левых подсказок, второй для игрового поля
+    grid-template-columns: auto min-content;
+    // Первая строка для верхних подсказок, вторая для игрового поля
+    grid-template-rows: min-content 1fr;
     justify-content: center;
     user-select: none;
+    padding-left: 30px;
     background-color: #f0f0f0;
     border-radius: 10px;
     transition:
@@ -32,6 +35,7 @@
   &__board {
     grid-column: 2 / 3;
     grid-row: 2 / 3;
+    max-height: 616px;
     border-top: 3px solid black;
     cursor: pointer;
   }
@@ -142,4 +146,14 @@
     background-color: #333;
     transform: translate(-50%, -50%) rotate(-45deg);
   }
+}
+
+.win-message {
+  z-index: 2;
+  position: absolute;
+  bottom: 0;
+  right: 5%;
+  font-size: 28px;
+  font-weight: 600;
+  line-height: 150%;
 }
