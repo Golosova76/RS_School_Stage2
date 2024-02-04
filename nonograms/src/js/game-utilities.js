@@ -71,10 +71,56 @@ function showSolution(puzzle) {
   }
 }
 
+// функция проверки решения с решением игрока
+/*
+function checkSolution(gameState, puzzle) {
+  if (!puzzle || !puzzle.solution) {
+    console.error('Отсутствует решение в переданном пазле.');
+    return false;
+  }
+
+  const { solution } = puzzle;
+  if (gameState.length !== solution.length) {
+    console.error('Размеры gameState и solution не совпадают.');
+    return false;
+  }
+
+  for (let i = 0; i < gameState.length; i++) {
+    if (gameState[i].length !== solution[i].length) {
+      console.error('Размеры строки gameState и solution не совпадают.');
+      return false;
+    }
+    for (let j = 0; j < gameState[i].length; j++) {
+      const cellIsFilled = gameState[i][j] === 1;
+      if (cellIsFilled !== solution[i][j]) {
+        return false;
+      }
+    }
+  }
+  return true;
+}
+*/
+
+function checkSolution(gameState, puzzle) {
+  const { solution } = puzzle;
+  for (let i = 0; i < gameState.length; i += 1) {
+    for (let j = 0; j < gameState[i].length; j += 1) {
+      // клетки с 1 в gameState как закрашенные (true),
+      //  а с 0 или 2 как незакрашенные (false)
+      const cellIsFilled = gameState[i][j] === 1;
+      if (cellIsFilled !== solution[i][j]) {
+        return false;
+      }
+    }
+  }
+  return true;
+}
+
 export {
   findPuzzleByName,
   updateGame,
   clearCurrentGame,
   selectRandomPuzzle,
   showSolution,
+  checkSolution,
 };

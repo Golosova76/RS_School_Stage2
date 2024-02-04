@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import '@styles/style.scss';
 import createHeader from '@js/header.js';
 import { createMain, selectedPuzzle } from '@js/page';
@@ -7,7 +8,7 @@ import {
   handleNewGame,
   resetIsTimerStarted,
 } from '@js/interactiv/cell-interactive';
-import { cells } from '@js/game-body/parts/game-board'; // массив с клетиками игрового поля
+// import { cells } from '@js/game-body/parts/game-board'; // массив с клетиками игрового поля
 import createToggleTheme from '@js/toggle'; // смена темы
 import {
   findPuzzleByName,
@@ -17,6 +18,7 @@ import {
   showSolution,
 } from '@js/game-utilities';
 import { resetTimer } from '@js/interactiv/timer';
+import { gameState, cells } from '@js/game-body/parts/game-board';
 
 // import { resetTimer } from '@js/interactiv/timer';
 // import createGameChoice from '@js/game-handling/choice';
@@ -45,12 +47,14 @@ document.addEventListener('DOMContentLoaded', function onDOMContentLoaded() {
   // переменная для выбранного puzzles
   let currentPuzzleSolution = selectedPuzzle;
 
+  // массив отражающий состояние игрового поля
+
   // пользовательское событие для solution
   document.addEventListener('newGameStarted', function ff(e) {
     currentPuzzleSolution = e.detail;
   });
 
-  initCellInteractive(cells, spanMinutes, spanSeconds); // обработка клика по cell закрашивание черным и крестик и таймер
+  initCellInteractive(cells, spanMinutes, spanSeconds, currentPuzzleSolution); // обработка клика по cell закрашивание черным и крестик и таймер
 
   // установка темы при загрузке страницы:
   const savedTheme = localStorage.getItem('theme');
@@ -81,7 +85,8 @@ document.addEventListener('DOMContentLoaded', function onDOMContentLoaded() {
       initCellInteractive(
         cells,
         timerElements.spanMinutes,
-        timerElements.spanSeconds
+        timerElements.spanSeconds,
+        currentPuzzleSolution
       );
       createToggleTheme();
     }
@@ -132,6 +137,10 @@ document.addEventListener('DOMContentLoaded', function onDOMContentLoaded() {
             const puzzleName = content.textContent;
             const puzzleNameChoice = findPuzzleByName(puzzleName);
             currentPuzzleSolution = puzzleNameChoice;
+            // gameState(currentPuzzleSolution);
+            console.log('Инициализированное gameState:', gameState);
+            // console.log(currentPuzzleSolution.size);
+            // console.log(gameState);
             updateGame(puzzleNameChoice);
             const timerElements = getTimerElements();
             resetTimer(spanMinutes, spanSeconds);
@@ -139,7 +148,8 @@ document.addEventListener('DOMContentLoaded', function onDOMContentLoaded() {
             initCellInteractive(
               cells,
               timerElements.spanMinutes,
-              timerElements.spanSeconds
+              timerElements.spanSeconds,
+              currentPuzzleSolution
             );
             createToggleTheme();
           });
