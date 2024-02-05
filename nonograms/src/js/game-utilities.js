@@ -64,7 +64,7 @@ function showSolution(puzzle) {
     cell.classList.add('blocked');
   });
 
-  // Блокируем кнопку Save, если она есть
+  // блокируем кнопку save
   const saveButton = document.querySelector('.button-save');
   if (saveButton) {
     saveButton.disabled = true;

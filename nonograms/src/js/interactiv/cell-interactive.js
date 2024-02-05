@@ -1,7 +1,7 @@
 import createGameHandling from '@js/game-handling/game-handling';
 import createGameBody from '@js/game-body/game-body';
 import puzzles from '@js/game-body/puzzle-generator';
-import { startTimer } from '@js/interactiv/timer';
+import { startTimer, stopTimer } from '@js/interactiv/timer';
 import { gameState } from '@js/game-body/parts/game-board';
 import { checkSolution } from '@js/game-utilities';
 import showWinMessage from '@js/interactiv/win-text';
@@ -11,9 +11,9 @@ let isTimerStarted = false;
 let isMusicPlaying = false; // флаг для отслеживания состояния звуков
 
 const soundFiles = [
-  '../../../public/audio/background.mp3',
-  '../../../public/audio/cross.mp3',
-  '../../../public/audio/empty.mp3',
+  '/audio/background.mp3',
+  '/audio/cross.mp3',
+  '/audio/empty.mp3',
 ];
 
 function handleButtonClickSounds() {
@@ -74,6 +74,7 @@ function handleLeftClick(event, spanMinutes, spanSeconds, puzzle) {
 
   if (checkSolution(gameState, puzzle)) {
     showWinMessage(spanMinutes, spanSeconds);
+    stopTimer();
   }
   console.log('gameState после клика:', gameState);
 }
@@ -117,6 +118,7 @@ function handleRightClick(event, spanMinutes, spanSeconds, puzzle) {
 
   if (checkSolution(gameState, puzzle)) {
     showWinMessage(spanMinutes, spanSeconds);
+    stopTimer();
   }
 
   console.log('gameState после клика:', gameState);

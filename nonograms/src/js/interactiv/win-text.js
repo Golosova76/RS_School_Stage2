@@ -12,6 +12,21 @@ function showWinMessage(spanMinutes, spanSeconds) {
   const containerWinText = document.querySelector('.game__body');
   containerWinText.appendChild(messageElement);
 
+  const audio = new Audio('/audio/win.mp3');
+  audio.play();
+
+  const cellsShow = document.querySelectorAll('.game-cell');
+  // Блокируем все ячейки после показа решения
+  cellsShow.forEach((cell) => {
+    cell.classList.add('blocked');
+  });
+
+  // блокируем кнопку save
+  const saveButton = document.querySelector('.button-save');
+  if (saveButton) {
+    saveButton.disabled = true;
+  }
+
   return messageElement;
 }
 
