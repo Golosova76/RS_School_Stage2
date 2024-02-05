@@ -10,6 +10,7 @@ function findPuzzleByName(name) {
 
 // полное обновление всего
 function updateGame(puzzle) {
+  // clearGameState();
   const gamePage = document.querySelector('main');
 
   gamePage.innerHTML = ''; // Очистка текущего содержимого игры

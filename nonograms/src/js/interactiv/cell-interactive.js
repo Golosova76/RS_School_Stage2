@@ -39,9 +39,6 @@ function handleLeftClick(event, spanMinutes, spanSeconds, puzzle) {
   const row = parseInt(cell.dataset.row, 10);
   const column = parseInt(cell.dataset.column, 10);
 
-  // Логирование для проверки значений row и column
-  console.log('Row:', row, 'Column:', column);
-
   if (cell.classList.contains('cross')) {
     // если cell содержит крестик, убираем его и красим
     cell.classList.remove('cross');
@@ -76,7 +73,6 @@ function handleLeftClick(event, spanMinutes, spanSeconds, puzzle) {
     showWinMessage(spanMinutes, spanSeconds);
     stopTimer();
   }
-  console.log('gameState после клика:', gameState);
 }
 
 function handleRightClick(event, spanMinutes, spanSeconds, puzzle) {
@@ -120,8 +116,6 @@ function handleRightClick(event, spanMinutes, spanSeconds, puzzle) {
     showWinMessage(spanMinutes, spanSeconds);
     stopTimer();
   }
-
-  console.log('gameState после клика:', gameState);
 }
 
 const selectedPuzzle = puzzles[0];

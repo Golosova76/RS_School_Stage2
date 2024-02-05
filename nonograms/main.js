@@ -48,14 +48,18 @@ document.addEventListener('DOMContentLoaded', function onDOMContentLoaded() {
   // переменная для выбранного puzzles
   let currentPuzzleSolution = selectedPuzzle;
 
-  // массив отражающий состояние игрового поля
+  // функция для очищения gameState
+  function clearGameState() {
+    gameState.length = 0; // очищаем массив
+  }
 
   // пользовательское событие для solution
   document.addEventListener('newGameStarted', function ff(e) {
     currentPuzzleSolution = e.detail;
   });
 
-  initCellInteractive(cells, spanMinutes, spanSeconds, currentPuzzleSolution); // обработка клика по cell закрашивание черным и крестик и таймер
+  // обработка клика по cell закрашивание черным и крестик и таймер и звуки
+  initCellInteractive(cells, spanMinutes, spanSeconds, currentPuzzleSolution);
 
   // установка темы при загрузке страницы:
   const savedTheme = localStorage.getItem('theme');
@@ -65,7 +69,7 @@ document.addEventListener('DOMContentLoaded', function onDOMContentLoaded() {
 
   createToggleTheme();
 
-  // клик на кнопках выбора, clear
+  // клик на кнопках выбора и кнопках управления
   wrapper.addEventListener('click', function wrapperClick(event) {
     // event.target - это элемент, на который непосредственно был сделан клик
     let targetElement = event.target;
@@ -86,6 +90,7 @@ document.addEventListener('DOMContentLoaded', function onDOMContentLoaded() {
     if (targetElement === event.target.closest('.button-new-game')) {
       clearCurrentGame();
       resetTimer(spanMinutes, spanSeconds);
+      clearGameState();
       handleNewGame(currentPuzzleSolution);
       const timerElements = getTimerElements();
       resetTimer(spanMinutes, spanSeconds);
@@ -102,6 +107,7 @@ document.addEventListener('DOMContentLoaded', function onDOMContentLoaded() {
     // кнопка random game
     if (targetElement === event.target.closest('.button-random-game')) {
       const randomPuzzle = selectRandomPuzzle();
+      clearGameState();
       updateGame(randomPuzzle);
       currentPuzzleSolution = randomPuzzle;
       const timerElements = getTimerElements();
@@ -110,7 +116,8 @@ document.addEventListener('DOMContentLoaded', function onDOMContentLoaded() {
       initCellInteractive(
         cells,
         timerElements.spanMinutes,
-        timerElements.spanSeconds
+        timerElements.spanSeconds,
+        currentPuzzleSolution
       );
       createToggleTheme();
     }
@@ -145,10 +152,7 @@ document.addEventListener('DOMContentLoaded', function onDOMContentLoaded() {
             const puzzleName = content.textContent;
             const puzzleNameChoice = findPuzzleByName(puzzleName);
             currentPuzzleSolution = puzzleNameChoice;
-            // gameState(currentPuzzleSolution);
-            console.log('Инициализированное gameState:', gameState);
-            // console.log(currentPuzzleSolution.size);
-            // console.log(gameState);
+            clearGameState();
             updateGame(puzzleNameChoice);
             const timerElements = getTimerElements();
             resetTimer(spanMinutes, spanSeconds);

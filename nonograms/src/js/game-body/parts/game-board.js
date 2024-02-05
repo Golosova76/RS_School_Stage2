@@ -2,11 +2,8 @@ const cells = []; // массив для клеток (обработка)
 const gameState = []; // Создание массива состояний игры
 
 function createGameBoard(size) {
-  console.log('createGameBoard вызвана');
   const gameBoard = document.createElement('div');
   gameBoard.className = 'game__board';
-
-  // const gameState = []; // Создание массива состояний игры
 
   for (let i = 0; i < size.rows; i += 1) {
     const gameRow = document.createElement('div');
