@@ -1,6 +1,7 @@
 const puzzles = [
   {
     name: 'pushchair',
+    level: 'easy',
     size: { rows: 5, columns: 5 },
     solution: [
       [false, true, true, false, false],
@@ -12,6 +13,7 @@ const puzzles = [
   },
   {
     name: 'heart',
+    level: 'easy',
     size: { rows: 5, columns: 5 },
     solution: [
       [false, true, false, true, false],
@@ -23,6 +25,7 @@ const puzzles = [
   },
   {
     name: 'cockerel',
+    level: 'easy',
     size: { rows: 5, columns: 5 },
     solution: [
       [false, true, false, false, false],
@@ -34,6 +37,7 @@ const puzzles = [
   },
   {
     name: 'camel',
+    level: 'easy',
     size: { rows: 5, columns: 5 },
     solution: [
       [false, false, false, true, true],
@@ -45,6 +49,7 @@ const puzzles = [
   },
   {
     name: 'tetris',
+    level: 'easy',
     size: { rows: 5, columns: 5 },
     solution: [
       [false, false, true, false, false],
@@ -56,6 +61,7 @@ const puzzles = [
   },
   {
     name: 'cat',
+    level: 'medium',
     size: { rows: 10, columns: 10 },
     solution: [
       [false, false, false, false, false, false, true, true, true, false],
@@ -72,6 +78,7 @@ const puzzles = [
   },
   {
     name: 'dog',
+    level: 'medium',
     size: { rows: 10, columns: 10 },
     solution: [
       [true, true, false, false, true, true, false, false, false, false],
@@ -88,6 +95,7 @@ const puzzles = [
   },
   {
     name: 'rabbit',
+    level: 'medium',
     size: { rows: 10, columns: 10 },
     solution: [
       [false, false, true, true, false, true, true, true, false, false],
@@ -104,6 +112,7 @@ const puzzles = [
   },
   {
     name: 'duckling',
+    level: 'medium',
     size: { rows: 10, columns: 10 },
     solution: [
       [false, false, false, true, true, true, false, false, false, false],
@@ -120,6 +129,7 @@ const puzzles = [
   },
   {
     name: 'jellyfish',
+    level: 'medium',
     size: { rows: 10, columns: 10 },
     solution: [
       [false, false, false, true, true, true, true, false, false, false],
@@ -136,6 +146,7 @@ const puzzles = [
   },
   {
     name: 'bunny',
+    level: 'hard',
     size: { rows: 15, columns: 15 },
     solution: [
       [
@@ -397,6 +408,7 @@ const puzzles = [
   },
   {
     name: 'umbrella',
+    level: 'hard',
     size: { rows: 15, columns: 15 },
     solution: [
       [
@@ -658,6 +670,7 @@ const puzzles = [
   },
   {
     name: 'puppy',
+    level: 'hard',
     size: { rows: 15, columns: 15 },
     solution: [
       [
@@ -919,6 +932,7 @@ const puzzles = [
   },
   {
     name: 'mermaid',
+    level: 'hard',
     size: { rows: 15, columns: 15 },
     solution: [
       [
@@ -1180,6 +1194,7 @@ const puzzles = [
   },
   {
     name: 'bull',
+    level: 'hard',
     size: { rows: 15, columns: 15 },
     solution: [
       [

@@ -20,6 +20,7 @@ import {
 } from '@js/game-utilities';
 import { resetTimer } from '@js/interactiv/timer';
 import { gameState, cells } from '@js/game-body/parts/game-board';
+import { saveGame, loadGame } from '@js/save-game';
 
 // import { resetTimer } from '@js/interactiv/timer';
 // import createGameChoice from '@js/game-handling/choice';
@@ -51,6 +52,10 @@ document.addEventListener('DOMContentLoaded', function onDOMContentLoaded() {
   // функция для очищения gameState
   function clearGameState() {
     gameState.length = 0; // очищаем массив
+  }
+  // функция для очищения cells
+  function clearGameCells() {
+    cells.length = 0; // очищаем массив
   }
 
   // пользовательское событие для solution
@@ -84,6 +89,73 @@ document.addEventListener('DOMContentLoaded', function onDOMContentLoaded() {
       handleButtonClickSounds();
       const activeSound = targetElement;
       activeSound.classList.toggle('active-sound');
+    }
+
+    // кнопка save
+    if (targetElement === event.target.closest('.button-save')) {
+      const timerElements = getTimerElements();
+      const currentGameName = currentPuzzleSolution.name;
+      const currentLevel = currentPuzzleSolution.level;
+      const currentSize = currentPuzzleSolution.size;
+      const currentSolution = currentPuzzleSolution.solution;
+      const currentTime = `${timerElements.spanMinutes.textContent}:${timerElements.spanSeconds.textContent}`;
+
+      // Вызов функции saveGame
+      saveGame(
+        gameState,
+        currentGameName,
+        currentLevel,
+        currentTime,
+        currentSize,
+        currentSolution
+      );
+    }
+
+    // кнопка load
+    if (targetElement === event.target.closest('.button-load-game')) {
+      const loadedGame = loadGame();
+
+      if (loadedGame) {
+        const {
+          gameLoadState,
+          gameName,
+          gameLevel,
+          gameTime,
+          gameSize,
+          gameSolution,
+        } = loadedGame;
+
+        const currentPuzzleSolutionSave = {
+          name: gameName,
+          level: gameLevel,
+          size: gameSize,
+          solution: gameSolution,
+        };
+
+        clearGameState();
+        clearGameCells();
+        updateGame(currentPuzzleSolutionSave);
+
+        gameLoadState.forEach((row, rowIndex) => {
+          row.forEach((cellState, columnIndex) => {
+            const index = rowIndex * gameLoadState[0].length + columnIndex;
+            const cell = cells[index];
+
+            if (cell) {
+              if (cellState === 1) {
+                cell.style.backgroundColor = 'black';
+              } else if (cellState === 2) {
+                cell.classList.add('cross');
+              } else {
+                cell.style.backgroundColor = '';
+              }
+            }
+          });
+        });
+      } else {
+        // Обработка случая, когда сохраненных данных нет
+        alert('Saved game not found.');
+      }
     }
 
     // кнопка new game
@@ -152,6 +224,7 @@ document.addEventListener('DOMContentLoaded', function onDOMContentLoaded() {
             const puzzleName = content.textContent;
             const puzzleNameChoice = findPuzzleByName(puzzleName);
             currentPuzzleSolution = puzzleNameChoice;
+            // console.log(currentPuzzleSolution);
             clearGameState();
             updateGame(puzzleNameChoice);
             const timerElements = getTimerElements();
