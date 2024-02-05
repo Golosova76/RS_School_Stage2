@@ -12,28 +12,21 @@
         continue;
       }
       for (const node of mutation.addedNodes) {
-        if (node.tagName === "LINK" && node.rel === "modulepreload")
-          processPreload(node);
+        if (node.tagName === "LINK" && node.rel === "modulepreload") processPreload(node);
       }
     }
   }).observe(document, { childList: true, subtree: true });
   function getFetchOpts(link) {
     const fetchOpts = {};
-    if (link.integrity)
-      fetchOpts.integrity = link.integrity;
-    if (link.referrerPolicy)
-      fetchOpts.referrerPolicy = link.referrerPolicy;
-    if (link.crossOrigin === "use-credentials")
-      fetchOpts.credentials = "include";
-    else if (link.crossOrigin === "anonymous")
-      fetchOpts.credentials = "omit";
-    else
-      fetchOpts.credentials = "same-origin";
+    if (link.integrity) fetchOpts.integrity = link.integrity;
+    if (link.referrerPolicy) fetchOpts.referrerPolicy = link.referrerPolicy;
+    if (link.crossOrigin === "use-credentials") fetchOpts.credentials = "include";
+    else if (link.crossOrigin === "anonymous") fetchOpts.credentials = "omit";
+    else fetchOpts.credentials = "same-origin";
     return fetchOpts;
   }
   function processPreload(link) {
-    if (link.ep)
-      return;
+    if (link.ep) return;
     link.ep = true;
     const fetchOpts = getFetchOpts(link);
     fetch(link.href, fetchOpts);
@@ -103,7 +96,7 @@ function createGameColumns() {
     newGameButton: columnButtonsFour.querySelector(".button-new"),
     randomGameButton: columnButtonsFour.querySelector(".button-random"),
     loadGameButton: columnButtonsFour.querySelector(".button-load"),
-    solutionGameButton: columnButtonsFour.querySelector(".button-solution")
+    solutionGameButton: columnButtonsFour.querySelector(".button-solution"),
   };
 }
 function createScoreTable() {
@@ -125,11 +118,11 @@ function createScoreTable() {
   headerTable.appendChild(lineTable);
   const bodyTable = document.createElement("tbody");
   const rowsData = [
-    ["pushchair", "pushchair", "pushchair"],
-    ["heart", "heart", "heart"],
-    ["heart", "heart", "heart"],
-    ["heart", "heart", "heart"],
-    ["heart", "heart", "heart"]
+    ["", "", ""],
+    ["", "", ""],
+    ["", "", ""],
+    ["", "", ""],
+    ["", "", ""],
   ];
   rowsData.forEach((rowData) => {
     const tr = document.createElement("tr");
@@ -151,13 +144,13 @@ function createGameChoice() {
   const levels = [
     {
       level: "easy",
-      items: ["pushchair", "heart", "cockerel", "camel", "tetris"]
+      items: ["pushchair", "heart", "cockerel", "camel", "tetris"],
     },
     {
       level: "medium",
-      items: ["cat", "dog", "rabbit", "duckling", "jellyfish"]
+      items: ["cat", "dog", "rabbit", "duckling", "jellyfish"],
     },
-    { level: "hard", items: ["bunny", "umbrella", "puppy", "mermaid", "bull"] }
+    { level: "hard", items: ["bunny", "umbrella", "puppy", "mermaid", "bull"] },
   ];
   const buttonsChoice = [];
   const listItemsChoice = [];
@@ -187,7 +180,7 @@ function createGameChoice() {
     gameChoiceDiv,
     gameItemDiv,
     buttonsChoice,
-    listItemsChoice
+    listItemsChoice,
   };
 }
 function createGameHandling() {
@@ -275,33 +268,37 @@ function createGameBoard(size) {
 }
 function generateHints(solution) {
   const leftHints = solution.map((row) => {
-    return row.reduce((hints, cell) => {
-      if (cell) {
-        if (!hints.length || hints[hints.length - 1].ended) {
-          hints.push({ count: 1, ended: false });
-        } else {
-          hints[hints.length - 1].count += 1;
+    return row
+      .reduce((hints, cell) => {
+        if (cell) {
+          if (!hints.length || hints[hints.length - 1].ended) {
+            hints.push({ count: 1, ended: false });
+          } else {
+            hints[hints.length - 1].count += 1;
+          }
+        } else if (hints.length && !hints[hints.length - 1].ended) {
+          hints[hints.length - 1].ended = true;
         }
-      } else if (hints.length && !hints[hints.length - 1].ended) {
-        hints[hints.length - 1].ended = true;
-      }
-      return hints;
-    }, []).map((hint) => hint.count);
+        return hints;
+      }, [])
+      .map((hint) => hint.count);
   });
   const topHints = Array.from({ length: solution[0].length }, (_, col) => {
-    return solution.reduce((hints, row) => {
-      const cell = row[col];
-      if (cell) {
-        if (!hints.length || hints[hints.length - 1].ended) {
-          hints.push({ count: 1, ended: false });
-        } else {
-          hints[hints.length - 1].count += 1;
+    return solution
+      .reduce((hints, row) => {
+        const cell = row[col];
+        if (cell) {
+          if (!hints.length || hints[hints.length - 1].ended) {
+            hints.push({ count: 1, ended: false });
+          } else {
+            hints[hints.length - 1].count += 1;
+          }
+        } else if (hints.length && !hints[hints.length - 1].ended) {
+          hints[hints.length - 1].ended = true;
         }
-      } else if (hints.length && !hints[hints.length - 1].ended) {
-        hints[hints.length - 1].ended = true;
-      }
-      return hints;
-    }, []).map((hint) => hint.count);
+        return hints;
+      }, [])
+      .map((hint) => hint.count);
   });
   return { topHints, leftHints };
 }
@@ -328,8 +325,8 @@ const puzzles = [
       [true, true, false, false, true],
       [true, true, true, true, false],
       [false, true, true, false, false],
-      [true, false, false, true, false]
-    ]
+      [true, false, false, true, false],
+    ],
   },
   {
     name: "heart",
@@ -340,8 +337,8 @@ const puzzles = [
       [true, true, true, true, true],
       [true, true, true, true, true],
       [false, true, true, true, false],
-      [false, false, true, false, false]
-    ]
+      [false, false, true, false, false],
+    ],
   },
   {
     name: "cockerel",
@@ -352,8 +349,8 @@ const puzzles = [
       [true, true, false, true, true],
       [false, true, true, true, false],
       [false, true, true, true, false],
-      [false, false, true, false, false]
-    ]
+      [false, false, true, false, false],
+    ],
   },
   {
     name: "camel",
@@ -364,8 +361,8 @@ const puzzles = [
       [true, true, false, true, false],
       [true, true, true, true, false],
       [true, false, true, false, false],
-      [true, false, true, false, false]
-    ]
+      [true, false, true, false, false],
+    ],
   },
   {
     name: "tetris",
@@ -376,8 +373,8 @@ const puzzles = [
       [false, true, true, false, false],
       [true, false, true, false, true],
       [true, false, false, true, true],
-      [true, true, false, true, true]
-    ]
+      [true, true, false, true, true],
+    ],
   },
   {
     name: "cat",
@@ -393,8 +390,8 @@ const puzzles = [
       [false, true, true, true, false, false, true, true, true, true],
       [false, false, true, true, true, true, true, true, true, true],
       [false, false, true, true, true, true, true, true, true, true],
-      [false, false, false, true, true, true, true, false, true, true]
-    ]
+      [false, false, false, true, true, true, true, false, true, true],
+    ],
   },
   {
     name: "dog",
@@ -410,8 +407,8 @@ const puzzles = [
       [true, true, true, true, true, true, true, true, false, true],
       [true, false, true, true, true, true, true, true, true, false],
       [false, false, true, false, false, true, true, true, false, false],
-      [false, true, true, false, true, true, true, false, false, false]
-    ]
+      [false, true, true, false, true, true, true, false, false, false],
+    ],
   },
   {
     name: "rabbit",
@@ -427,8 +424,8 @@ const puzzles = [
       [false, true, true, true, false, false, false, true, true, false],
       [false, false, false, true, true, false, true, true, false, false],
       [false, false, true, false, false, false, true, false, false, false],
-      [false, false, true, true, true, true, true, false, false, false]
-    ]
+      [false, false, true, true, true, true, true, false, false, false],
+    ],
   },
   {
     name: "duckling",
@@ -444,8 +441,8 @@ const puzzles = [
       [false, false, true, false, false, false, true, true, true, true],
       [false, true, false, false, true, false, false, false, false, true],
       [false, true, false, false, true, true, false, false, true, true],
-      [false, true, true, false, false, true, true, true, false, true]
-    ]
+      [false, true, true, false, false, true, true, true, false, true],
+    ],
   },
   {
     name: "jellyfish",
@@ -461,1319 +458,119 @@ const puzzles = [
       [false, false, true, false, true, false, true, false, true, false],
       [false, true, false, false, true, false, false, true, false, true],
       [false, true, false, true, false, false, false, true, false, true],
-      [true, true, false, true, false, false, false, true, false, true]
-    ]
+      [true, true, false, true, false, false, false, true, false, true],
+    ],
   },
   {
     name: "bunny",
     level: "hard",
     size: { rows: 15, columns: 15 },
     solution: [
-      [
-        false,
-        true,
-        true,
-        true,
-        true,
-        true,
-        true,
-        false,
-        false,
-        false,
-        false,
-        false,
-        false,
-        false,
-        false
-      ],
-      [
-        false,
-        true,
-        false,
-        false,
-        false,
-        false,
-        true,
-        true,
-        true,
-        true,
-        true,
-        true,
-        false,
-        false,
-        false
-      ],
-      [
-        false,
-        false,
-        true,
-        true,
-        false,
-        false,
-        false,
-        true,
-        false,
-        false,
-        false,
-        true,
-        true,
-        false,
-        false
-      ],
-      [
-        false,
-        false,
-        false,
-        false,
-        true,
-        true,
-        true,
-        false,
-        false,
-        false,
-        true,
-        false,
-        false,
-        true,
-        false
-      ],
-      [
-        false,
-        false,
-        false,
-        false,
-        false,
-        false,
-        true,
-        true,
-        false,
-        false,
-        false,
-        false,
-        true,
-        true,
-        false
-      ],
-      [
-        false,
-        false,
-        false,
-        false,
-        false,
-        false,
-        false,
-        true,
-        true,
-        false,
-        false,
-        true,
-        true,
-        false,
-        false
-      ],
-      [
-        false,
-        false,
-        false,
-        false,
-        false,
-        false,
-        true,
-        true,
-        false,
-        false,
-        true,
-        false,
-        false,
-        false,
-        false
-      ],
-      [
-        false,
-        false,
-        false,
-        true,
-        true,
-        true,
-        true,
-        false,
-        false,
-        false,
-        true,
-        true,
-        false,
-        false,
-        false
-      ],
-      [
-        false,
-        false,
-        true,
-        true,
-        false,
-        false,
-        false,
-        false,
-        true,
-        false,
-        false,
-        false,
-        true,
-        false,
-        false
-      ],
-      [
-        false,
-        true,
-        true,
-        false,
-        false,
-        false,
-        true,
-        true,
-        false,
-        true,
-        true,
-        false,
-        false,
-        true,
-        false
-      ],
-      [
-        true,
-        false,
-        true,
-        false,
-        false,
-        false,
-        false,
-        true,
-        true,
-        false,
-        false,
-        true,
-        true,
-        true,
-        false
-      ],
-      [
-        true,
-        true,
-        true,
-        false,
-        false,
-        false,
-        false,
-        false,
-        true,
-        false,
-        false,
-        false,
-        false,
-        false,
-        false
-      ],
-      [
-        false,
-        false,
-        true,
-        true,
-        false,
-        false,
-        true,
-        true,
-        true,
-        true,
-        false,
-        false,
-        false,
-        false,
-        false
-      ],
-      [
-        false,
-        false,
-        false,
-        true,
-        true,
-        false,
-        false,
-        false,
-        false,
-        false,
-        true,
-        false,
-        false,
-        false,
-        false
-      ],
-      [
-        true,
-        true,
-        false,
-        true,
-        true,
-        true,
-        true,
-        true,
-        true,
-        true,
-        true,
-        false,
-        true,
-        true,
-        true
-      ]
-    ]
+      [false, true, true, true, true, true, true, false, false, false, false, false, false, false, false],
+      [false, true, false, false, false, false, true, true, true, true, true, true, false, false, false],
+      [false, false, true, true, false, false, false, true, false, false, false, true, true, false, false],
+      [false, false, false, false, true, true, true, false, false, false, true, false, false, true, false],
+      [false, false, false, false, false, false, true, true, false, false, false, false, true, true, false],
+      [false, false, false, false, false, false, false, true, true, false, false, true, true, false, false],
+      [false, false, false, false, false, false, true, true, false, false, true, false, false, false, false],
+      [false, false, false, true, true, true, true, false, false, false, true, true, false, false, false],
+      [false, false, true, true, false, false, false, false, true, false, false, false, true, false, false],
+      [false, true, true, false, false, false, true, true, false, true, true, false, false, true, false],
+      [true, false, true, false, false, false, false, true, true, false, false, true, true, true, false],
+      [true, true, true, false, false, false, false, false, true, false, false, false, false, false, false],
+      [false, false, true, true, false, false, true, true, true, true, false, false, false, false, false],
+      [false, false, false, true, true, false, false, false, false, false, true, false, false, false, false],
+      [true, true, false, true, true, true, true, true, true, true, true, false, true, true, true],
+    ],
   },
   {
     name: "umbrella",
     level: "hard",
     size: { rows: 15, columns: 15 },
     solution: [
-      [
-        false,
-        false,
-        false,
-        false,
-        false,
-        false,
-        false,
-        true,
-        true,
-        false,
-        false,
-        false,
-        false,
-        false,
-        false
-      ],
-      [
-        false,
-        false,
-        false,
-        true,
-        true,
-        true,
-        true,
-        true,
-        true,
-        true,
-        true,
-        false,
-        false,
-        false,
-        false
-      ],
-      [
-        false,
-        true,
-        true,
-        true,
-        false,
-        false,
-        true,
-        true,
-        false,
-        true,
-        true,
-        true,
-        true,
-        false,
-        false
-      ],
-      [
-        true,
-        true,
-        false,
-        false,
-        false,
-        true,
-        true,
-        false,
-        false,
-        true,
-        false,
-        false,
-        true,
-        true,
-        false
-      ],
-      [
-        true,
-        false,
-        false,
-        false,
-        true,
-        true,
-        false,
-        false,
-        false,
-        true,
-        true,
-        false,
-        false,
-        true,
-        false
-      ],
-      [
-        true,
-        true,
-        true,
-        true,
-        true,
-        false,
-        false,
-        false,
-        false,
-        false,
-        true,
-        false,
-        false,
-        true,
-        true
-      ],
-      [
-        false,
-        false,
-        false,
-        true,
-        true,
-        true,
-        true,
-        true,
-        false,
-        false,
-        true,
-        false,
-        false,
-        false,
-        true
-      ],
-      [
-        false,
-        false,
-        false,
-        false,
-        false,
-        false,
-        true,
-        true,
-        true,
-        true,
-        true,
-        true,
-        false,
-        false,
-        true
-      ],
-      [
-        false,
-        false,
-        false,
-        false,
-        false,
-        false,
-        true,
-        false,
-        false,
-        false,
-        true,
-        true,
-        true,
-        true,
-        true
-      ],
-      [
-        false,
-        false,
-        false,
-        false,
-        false,
-        true,
-        true,
-        false,
-        false,
-        false,
-        false,
-        false,
-        false,
-        false,
-        false
-      ],
-      [
-        false,
-        false,
-        false,
-        false,
-        false,
-        true,
-        false,
-        false,
-        false,
-        false,
-        false,
-        false,
-        false,
-        false,
-        false
-      ],
-      [
-        false,
-        false,
-        false,
-        false,
-        true,
-        true,
-        false,
-        false,
-        false,
-        false,
-        false,
-        false,
-        false,
-        false,
-        false
-      ],
-      [
-        false,
-        false,
-        false,
-        false,
-        true,
-        false,
-        false,
-        false,
-        true,
-        false,
-        false,
-        false,
-        false,
-        false,
-        false
-      ],
-      [
-        false,
-        false,
-        false,
-        false,
-        true,
-        true,
-        false,
-        true,
-        true,
-        false,
-        false,
-        false,
-        false,
-        false,
-        false
-      ],
-      [
-        false,
-        true,
-        true,
-        false,
-        false,
-        true,
-        true,
-        true,
-        false,
-        false,
-        true,
-        false,
-        true,
-        true,
-        false
-      ]
-    ]
+      [false, false, false, false, false, false, false, true, true, false, false, false, false, false, false],
+      [false, false, false, true, true, true, true, true, true, true, true, false, false, false, false],
+      [false, true, true, true, false, false, true, true, false, true, true, true, true, false, false],
+      [true, true, false, false, false, true, true, false, false, true, false, false, true, true, false],
+      [true, false, false, false, true, true, false, false, false, true, true, false, false, true, false],
+      [true, true, true, true, true, false, false, false, false, false, true, false, false, true, true],
+      [false, false, false, true, true, true, true, true, false, false, true, false, false, false, true],
+      [false, false, false, false, false, false, true, true, true, true, true, true, false, false, true],
+      [false, false, false, false, false, false, true, false, false, false, true, true, true, true, true],
+      [false, false, false, false, false, true, true, false, false, false, false, false, false, false, false],
+      [false, false, false, false, false, true, false, false, false, false, false, false, false, false, false],
+      [false, false, false, false, true, true, false, false, false, false, false, false, false, false, false],
+      [false, false, false, false, true, false, false, false, true, false, false, false, false, false, false],
+      [false, false, false, false, true, true, false, true, true, false, false, false, false, false, false],
+      [false, true, true, false, false, true, true, true, false, false, true, false, true, true, false],
+    ],
   },
   {
     name: "puppy",
     level: "hard",
     size: { rows: 15, columns: 15 },
     solution: [
-      [
-        false,
-        false,
-        false,
-        true,
-        true,
-        true,
-        true,
-        true,
-        false,
-        false,
-        false,
-        false,
-        false,
-        false,
-        false
-      ],
-      [
-        false,
-        false,
-        true,
-        true,
-        false,
-        false,
-        false,
-        true,
-        true,
-        false,
-        false,
-        false,
-        false,
-        false,
-        false
-      ],
-      [
-        false,
-        true,
-        true,
-        false,
-        false,
-        false,
-        false,
-        false,
-        true,
-        true,
-        false,
-        false,
-        false,
-        true,
-        false
-      ],
-      [
-        true,
-        true,
-        false,
-        true,
-        false,
-        true,
-        false,
-        true,
-        false,
-        true,
-        true,
-        false,
-        true,
-        false,
-        true
-      ],
-      [
-        true,
-        false,
-        true,
-        false,
-        false,
-        false,
-        false,
-        true,
-        false,
-        false,
-        true,
-        false,
-        true,
-        false,
-        true
-      ],
-      [
-        true,
-        false,
-        true,
-        true,
-        true,
-        false,
-        false,
-        true,
-        false,
-        false,
-        true,
-        false,
-        true,
-        false,
-        true
-      ],
-      [
-        true,
-        false,
-        true,
-        false,
-        false,
-        false,
-        true,
-        true,
-        false,
-        false,
-        true,
-        true,
-        false,
-        true,
-        false
-      ],
-      [
-        true,
-        true,
-        false,
-        true,
-        true,
-        true,
-        false,
-        true,
-        false,
-        true,
-        true,
-        false,
-        false,
-        true,
-        true
-      ],
-      [
-        false,
-        false,
-        false,
-        false,
-        true,
-        false,
-        false,
-        false,
-        true,
-        true,
-        false,
-        false,
-        false,
-        false,
-        true
-      ],
-      [
-        false,
-        true,
-        true,
-        true,
-        true,
-        false,
-        true,
-        false,
-        false,
-        false,
-        false,
-        true,
-        false,
-        false,
-        true
-      ],
-      [
-        true,
-        true,
-        false,
-        true,
-        true,
-        true,
-        false,
-        false,
-        true,
-        true,
-        true,
-        false,
-        false,
-        false,
-        true
-      ],
-      [
-        true,
-        false,
-        true,
-        true,
-        true,
-        true,
-        false,
-        true,
-        false,
-        true,
-        true,
-        false,
-        false,
-        true,
-        false
-      ],
-      [
-        true,
-        true,
-        false,
-        false,
-        false,
-        true,
-        false,
-        true,
-        false,
-        false,
-        true,
-        true,
-        false,
-        true,
-        false
-      ],
-      [
-        false,
-        false,
-        false,
-        false,
-        true,
-        false,
-        true,
-        true,
-        false,
-        true,
-        false,
-        false,
-        false,
-        true,
-        false
-      ],
-      [
-        false,
-        false,
-        false,
-        false,
-        true,
-        true,
-        true,
-        false,
-        false,
-        true,
-        true,
-        true,
-        true,
-        true,
-        false
-      ]
-    ]
+      [false, false, false, true, true, true, true, true, false, false, false, false, false, false, false],
+      [false, false, true, true, false, false, false, true, true, false, false, false, false, false, false],
+      [false, true, true, false, false, false, false, false, true, true, false, false, false, true, false],
+      [true, true, false, true, false, true, false, true, false, true, true, false, true, false, true],
+      [true, false, true, false, false, false, false, true, false, false, true, false, true, false, true],
+      [true, false, true, true, true, false, false, true, false, false, true, false, true, false, true],
+      [true, false, true, false, false, false, true, true, false, false, true, true, false, true, false],
+      [true, true, false, true, true, true, false, true, false, true, true, false, false, true, true],
+      [false, false, false, false, true, false, false, false, true, true, false, false, false, false, true],
+      [false, true, true, true, true, false, true, false, false, false, false, true, false, false, true],
+      [true, true, false, true, true, true, false, false, true, true, true, false, false, false, true],
+      [true, false, true, true, true, true, false, true, false, true, true, false, false, true, false],
+      [true, true, false, false, false, true, false, true, false, false, true, true, false, true, false],
+      [false, false, false, false, true, false, true, true, false, true, false, false, false, true, false],
+      [false, false, false, false, true, true, true, false, false, true, true, true, true, true, false],
+    ],
   },
   {
     name: "mermaid",
     level: "hard",
     size: { rows: 15, columns: 15 },
     solution: [
-      [
-        false,
-        true,
-        false,
-        false,
-        false,
-        false,
-        false,
-        true,
-        false,
-        false,
-        false,
-        false,
-        false,
-        false,
-        false
-      ],
-      [
-        false,
-        true,
-        true,
-        false,
-        true,
-        true,
-        true,
-        true,
-        false,
-        false,
-        false,
-        false,
-        false,
-        false,
-        false
-      ],
-      [
-        false,
-        true,
-        false,
-        true,
-        false,
-        false,
-        false,
-        true,
-        false,
-        false,
-        false,
-        false,
-        false,
-        false,
-        false
-      ],
-      [
-        false,
-        false,
-        true,
-        true,
-        true,
-        true,
-        true,
-        false,
-        false,
-        false,
-        false,
-        false,
-        false,
-        false,
-        false
-      ],
-      [
-        false,
-        false,
-        false,
-        true,
-        true,
-        false,
-        false,
-        false,
-        false,
-        false,
-        true,
-        true,
-        true,
-        true,
-        false
-      ],
-      [
-        false,
-        false,
-        true,
-        false,
-        true,
-        false,
-        false,
-        false,
-        false,
-        false,
-        true,
-        true,
-        false,
-        true,
-        false
-      ],
-      [
-        false,
-        true,
-        true,
-        false,
-        true,
-        false,
-        false,
-        false,
-        false,
-        true,
-        true,
-        true,
-        true,
-        false,
-        true
-      ],
-      [
-        true,
-        false,
-        false,
-        true,
-        false,
-        false,
-        false,
-        false,
-        true,
-        true,
-        true,
-        true,
-        false,
-        false,
-        true
-      ],
-      [
-        true,
-        false,
-        false,
-        true,
-        true,
-        false,
-        false,
-        false,
-        true,
-        true,
-        true,
-        true,
-        true,
-        true,
-        false
-      ],
-      [
-        true,
-        false,
-        true,
-        false,
-        true,
-        true,
-        false,
-        false,
-        true,
-        true,
-        false,
-        false,
-        false,
-        true,
-        false
-      ],
-      [
-        true,
-        false,
-        false,
-        true,
-        false,
-        true,
-        true,
-        false,
-        true,
-        false,
-        false,
-        true,
-        false,
-        true,
-        false
-      ],
-      [
-        true,
-        true,
-        false,
-        false,
-        false,
-        false,
-        false,
-        true,
-        false,
-        false,
-        false,
-        true,
-        false,
-        true,
-        false
-      ],
-      [
-        false,
-        true,
-        true,
-        false,
-        true,
-        false,
-        false,
-        true,
-        false,
-        false,
-        true,
-        true,
-        false,
-        true,
-        true
-      ],
-      [
-        false,
-        false,
-        true,
-        true,
-        false,
-        false,
-        false,
-        true,
-        true,
-        true,
-        false,
-        true,
-        false,
-        false,
-        false
-      ],
-      [
-        false,
-        false,
-        false,
-        false,
-        true,
-        true,
-        true,
-        false,
-        false,
-        false,
-        false,
-        false,
-        true,
-        true,
-        true
-      ]
-    ]
+      [false, true, false, false, false, false, false, true, false, false, false, false, false, false, false],
+      [false, true, true, false, true, true, true, true, false, false, false, false, false, false, false],
+      [false, true, false, true, false, false, false, true, false, false, false, false, false, false, false],
+      [false, false, true, true, true, true, true, false, false, false, false, false, false, false, false],
+      [false, false, false, true, true, false, false, false, false, false, true, true, true, true, false],
+      [false, false, true, false, true, false, false, false, false, false, true, true, false, true, false],
+      [false, true, true, false, true, false, false, false, false, true, true, true, true, false, true],
+      [true, false, false, true, false, false, false, false, true, true, true, true, false, false, true],
+      [true, false, false, true, true, false, false, false, true, true, true, true, true, true, false],
+      [true, false, true, false, true, true, false, false, true, true, false, false, false, true, false],
+      [true, false, false, true, false, true, true, false, true, false, false, true, false, true, false],
+      [true, true, false, false, false, false, false, true, false, false, false, true, false, true, false],
+      [false, true, true, false, true, false, false, true, false, false, true, true, false, true, true],
+      [false, false, true, true, false, false, false, true, true, true, false, true, false, false, false],
+      [false, false, false, false, true, true, true, false, false, false, false, false, true, true, true],
+    ],
   },
   {
     name: "bull",
     level: "hard",
     size: { rows: 15, columns: 15 },
     solution: [
-      [
-        false,
-        false,
-        true,
-        true,
-        true,
-        true,
-        true,
-        false,
-        false,
-        true,
-        true,
-        true,
-        true,
-        false,
-        false
-      ],
-      [
-        false,
-        true,
-        true,
-        false,
-        false,
-        true,
-        false,
-        false,
-        false,
-        false,
-        true,
-        false,
-        true,
-        true,
-        false
-      ],
-      [
-        true,
-        true,
-        false,
-        true,
-        true,
-        false,
-        false,
-        false,
-        false,
-        false,
-        false,
-        true,
-        false,
-        true,
-        true
-      ],
-      [
-        true,
-        false,
-        false,
-        true,
-        false,
-        false,
-        true,
-        true,
-        true,
-        false,
-        true,
-        true,
-        false,
-        false,
-        true
-      ],
-      [
-        true,
-        true,
-        false,
-        false,
-        true,
-        true,
-        true,
-        true,
-        false,
-        true,
-        true,
-        false,
-        false,
-        true,
-        true
-      ],
-      [
-        false,
-        true,
-        true,
-        false,
-        true,
-        false,
-        true,
-        false,
-        true,
-        false,
-        true,
-        true,
-        true,
-        true,
-        false
-      ],
-      [
-        false,
-        true,
-        true,
-        true,
-        false,
-        false,
-        false,
-        false,
-        false,
-        false,
-        false,
-        true,
-        true,
-        false,
-        false
-      ],
-      [
-        true,
-        true,
-        true,
-        false,
-        true,
-        true,
-        false,
-        false,
-        false,
-        false,
-        true,
-        false,
-        false,
-        true,
-        false
-      ],
-      [
-        true,
-        false,
-        false,
-        false,
-        true,
-        true,
-        true,
-        false,
-        false,
-        true,
-        true,
-        true,
-        false,
-        false,
-        true
-      ],
-      [
-        false,
-        false,
-        true,
-        false,
-        false,
-        false,
-        true,
-        false,
-        false,
-        true,
-        false,
-        true,
-        true,
-        false,
-        true
-      ],
-      [
-        true,
-        true,
-        true,
-        true,
-        false,
-        false,
-        true,
-        false,
-        false,
-        true,
-        false,
-        true,
-        false,
-        true,
-        true
-      ],
-      [
-        true,
-        true,
-        true,
-        true,
-        false,
-        true,
-        false,
-        true,
-        true,
-        false,
-        true,
-        false,
-        false,
-        false,
-        false
-      ],
-      [
-        true,
-        true,
-        true,
-        false,
-        true,
-        false,
-        true,
-        true,
-        true,
-        true,
-        true,
-        false,
-        false,
-        false,
-        false
-      ],
-      [
-        true,
-        true,
-        true,
-        false,
-        true,
-        true,
-        false,
-        false,
-        false,
-        true,
-        true,
-        false,
-        false,
-        false,
-        false
-      ],
-      [
-        true,
-        true,
-        false,
-        false,
-        false,
-        true,
-        true,
-        true,
-        true,
-        true,
-        false,
-        false,
-        false,
-        false,
-        false
-      ]
-    ]
-  }
+      [false, false, true, true, true, true, true, false, false, true, true, true, true, false, false],
+      [false, true, true, false, false, true, false, false, false, false, true, false, true, true, false],
+      [true, true, false, true, true, false, false, false, false, false, false, true, false, true, true],
+      [true, false, false, true, false, false, true, true, true, false, true, true, false, false, true],
+      [true, true, false, false, true, true, true, true, false, true, true, false, false, true, true],
+      [false, true, true, false, true, false, true, false, true, false, true, true, true, true, false],
+      [false, true, true, true, false, false, false, false, false, false, false, true, true, false, false],
+      [true, true, true, false, true, true, false, false, false, false, true, false, false, true, false],
+      [true, false, false, false, true, true, true, false, false, true, true, true, false, false, true],
+      [false, false, true, false, false, false, true, false, false, true, false, true, true, false, true],
+      [true, true, true, true, false, false, true, false, false, true, false, true, false, true, true],
+      [true, true, true, true, false, true, false, true, true, false, true, false, false, false, false],
+      [true, true, true, false, true, false, true, true, true, true, true, false, false, false, false],
+      [true, true, true, false, true, true, false, false, false, true, true, false, false, false, false],
+      [true, true, false, false, false, true, true, true, true, true, false, false, false, false, false],
+    ],
+  },
 ];
 const selectedPuzzle$1 = puzzles[0];
 function createMain() {
@@ -1850,29 +647,35 @@ function selectRandomPuzzle() {
 function showSolution(puzzle) {
   const { solution } = puzzle;
   const cellsShow = document.querySelectorAll(".game-cell");
-  let cellIndex = 0;
-  solution.forEach((row) => {
-    row.forEach((isFilled) => {
+  let delay = 0;
+  const delayIncrement = 40;
+  solution.forEach((row, rowIndex) => {
+    row.forEach((isFilled, colIndex) => {
+      const cellIndex = rowIndex * row.length + colIndex;
       if (cellIndex < cellsShow.length) {
-        const cell = cellsShow[cellIndex];
-        if (isFilled) {
-          cell.style.backgroundColor = "black";
-          cell.classList.remove("cross");
-        } else {
-          cell.style.backgroundColor = "";
-          cell.classList.remove("cross");
-        }
+        setTimeout(() => {
+          const cell = cellsShow[cellIndex];
+          if (isFilled) {
+            cell.style.backgroundColor = "black";
+            cell.classList.remove("cross");
+          } else {
+            cell.style.backgroundColor = "";
+            cell.classList.remove("cross");
+          }
+        }, delay);
+        delay += delayIncrement;
       }
-      cellIndex += 1;
     });
   });
-  cellsShow.forEach((cell) => {
-    cell.classList.add("blocked");
-  });
-  const saveButton = document.querySelector(".button-save");
-  if (saveButton) {
-    saveButton.disabled = true;
-  }
+  setTimeout(() => {
+    cellsShow.forEach((cell) => {
+      cell.classList.add("blocked");
+    });
+    const saveButton = document.querySelector(".button-save");
+    if (saveButton) {
+      saveButton.disabled = true;
+    }
+  }, delay);
 }
 function checkSolution(gameState2, puzzle) {
   const { solution } = puzzle;
@@ -1896,7 +699,7 @@ function showWinMessage(spanMinutes, spanSeconds) {
   messageElement.className = "win-message";
   const containerWinText = document.querySelector(".game__body");
   containerWinText.appendChild(messageElement);
-  const audio = new Audio("/audio/win.mp3");
+  const audio = new Audio("./audio/win.mp3");
   audio.play();
   const cellsShow = document.querySelectorAll(".game-cell");
   cellsShow.forEach((cell) => {
@@ -1910,11 +713,7 @@ function showWinMessage(spanMinutes, spanSeconds) {
 }
 let isTimerStarted = false;
 let isMusicPlaying = false;
-const soundFiles = [
-  "./audio/background.mp3",
-  "./audio/cross.mp3",
-  "./audio/empty.mp3"
-];
+const soundFiles = ["./audio/knopka-background.mp3", "./audio/knopka-cross.mp3", "./audio/empty.mp3"];
 function handleButtonClickSounds() {
   isMusicPlaying = !isMusicPlaying;
   if (isMusicPlaying) {
@@ -1926,6 +725,47 @@ function handleButtonClickSounds() {
   }
 }
 let audioFile;
+function updateResultsTable(newResult) {
+  let results = JSON.parse(localStorage.getItem("gameResults")) || [];
+  results.unshift(newResult);
+  results = results.filter((result) => result && result.stopWatch);
+  results.forEach((result) => {
+    const [minutes, seconds] = result.stopWatch.split(":").map(Number);
+    result.timeInSeconds = minutes * 60 + seconds;
+  });
+  results.sort((a, b) => a.timeInSeconds - b.timeInSeconds);
+  results = results.map(({ name, level, stopWatch }) => ({
+    name,
+    level,
+    stopWatch,
+  }));
+  results = results.slice(0, 5);
+  localStorage.setItem("gameResults", JSON.stringify(results));
+  const tableBody = document.querySelector(".results-table tbody");
+  results.forEach((result, index) => {
+    let row = tableBody.rows[index];
+    if (!row) {
+      row = tableBody.insertRow();
+    }
+    const values = Object.values(result);
+    values.forEach((value, cellIndex) => {
+      let cell = row.cells[cellIndex];
+      if (!cell) {
+        cell = row.insertCell();
+      }
+      cell.textContent = value;
+    });
+  });
+  while (tableBody.rows.length < 5) {
+    const emptyRow = tableBody.insertRow();
+    for (let i = 0; i < 3; i += 1) {
+      emptyRow.insertCell().textContent = "";
+    }
+  }
+}
+function updateGameResults(result) {
+  updateResultsTable(result);
+}
 function handleLeftClick(event, spanMinutes, spanSeconds, puzzle) {
   event.preventDefault();
   const cell = event.target;
@@ -1956,6 +796,12 @@ function handleLeftClick(event, spanMinutes, spanSeconds, puzzle) {
   }
   if (checkSolution(gameState, puzzle)) {
     showWinMessage(spanMinutes, spanSeconds);
+    const newResult = {
+      name: puzzle.name,
+      level: puzzle.level,
+      stopWatch: `${spanMinutes.textContent}:${spanSeconds.textContent}`,
+    };
+    updateGameResults(newResult);
     stopTimer();
   }
 }
@@ -1989,6 +835,12 @@ function handleRightClick(event, spanMinutes, spanSeconds, puzzle) {
   }
   if (checkSolution(gameState, puzzle)) {
     showWinMessage(spanMinutes, spanSeconds);
+    const newResult = {
+      name: puzzle.name,
+      level: puzzle.level,
+      stopWatch: `${spanMinutes.textContent}:${spanSeconds.textContent}`,
+    };
+    updateGameResults(newResult);
     stopTimer();
   }
 }
@@ -2010,14 +862,8 @@ function resetIsTimerStarted() {
 }
 function initCellInteractive(cells2, spanMinutes, spanSeconds, puzzle) {
   cells2.forEach((cell) => {
-    cell.addEventListener(
-      "click",
-      (event) => handleLeftClick(event, spanMinutes, spanSeconds, puzzle)
-    );
-    cell.addEventListener(
-      "contextmenu",
-      (event) => handleRightClick(event, spanMinutes, spanSeconds, puzzle)
-    );
+    cell.addEventListener("click", (event) => handleLeftClick(event, spanMinutes, spanSeconds, puzzle));
+    cell.addEventListener("contextmenu", (event) => handleRightClick(event, spanMinutes, spanSeconds, puzzle));
   });
 }
 function createToggleTheme() {
@@ -2042,7 +888,7 @@ const gameData = {
   // время игры для таблицы результатов
   gameSize: null,
   // размер поля для загрузки
-  gameSolution: null
+  gameSolution: null,
   // решение для загрузки подсказок
 };
 function setGameData(currentgameLoadState, currentGameName, currentLevel, currentTime, currentSize, currentSolution) {
@@ -2054,14 +900,7 @@ function setGameData(currentgameLoadState, currentGameName, currentLevel, curren
   gameData.gameSolution = currentSolution;
 }
 function saveGame(currentgameLoadState, currentGameName, currentLevel, currentTime, currentSize, currentSolution) {
-  setGameData(
-    currentgameLoadState,
-    currentGameName,
-    currentLevel,
-    currentTime,
-    currentSize,
-    currentSolution
-  );
+  setGameData(currentgameLoadState, currentGameName, currentLevel, currentTime, currentSize, currentSolution);
   localStorage.setItem("savedGame", JSON.stringify(gameData));
 }
 function loadGame() {
@@ -2078,7 +917,7 @@ document.addEventListener("DOMContentLoaded", function onDOMContentLoaded() {
   function getTimerElements() {
     return {
       spanMinutes: document.querySelector(".timer__minutes"),
-      spanSeconds: document.querySelector(".timer__seconds")
+      spanSeconds: document.querySelector(".timer__seconds"),
     };
   }
   const { spanMinutes, spanSeconds } = getTimerElements();
@@ -2093,6 +932,7 @@ document.addEventListener("DOMContentLoaded", function onDOMContentLoaded() {
     currentPuzzleSolution = e.detail;
   });
   initCellInteractive(cells, spanMinutes, spanSeconds, currentPuzzleSolution);
+  updateResultsTable();
   const savedTheme = localStorage.getItem("theme");
   if (savedTheme === "dark") {
     document.body.classList.add("dark");
@@ -2115,35 +955,22 @@ document.addEventListener("DOMContentLoaded", function onDOMContentLoaded() {
       const currentSize = currentPuzzleSolution.size;
       const currentSolution = currentPuzzleSolution.solution;
       const currentTime = `${timerElements.spanMinutes.textContent}:${timerElements.spanSeconds.textContent}`;
-      saveGame(
-        gameState,
-        currentGameName,
-        currentLevel,
-        currentTime,
-        currentSize,
-        currentSolution
-      );
+      saveGame(gameState, currentGameName, currentLevel, currentTime, currentSize, currentSolution);
     }
     if (targetElement === event.target.closest(".button-load-game")) {
       const loadedGame = loadGame();
       if (loadedGame) {
-        const {
-          gameLoadState,
-          gameName,
-          gameLevel,
-          gameTime,
-          gameSize,
-          gameSolution
-        } = loadedGame;
+        const { gameLoadState, gameName, gameLevel, gameTime, gameSize, gameSolution } = loadedGame;
         const currentPuzzleSolutionSave = {
           name: gameName,
           level: gameLevel,
           size: gameSize,
-          solution: gameSolution
+          solution: gameSolution,
         };
         clearGameState();
         clearGameCells();
         updateGame(currentPuzzleSolutionSave);
+        updateResultsTable();
         gameLoadState.forEach((row, rowIndex) => {
           row.forEach((cellState, columnIndex) => {
             const index = rowIndex * gameLoadState[0].length + columnIndex;
@@ -2168,31 +995,23 @@ document.addEventListener("DOMContentLoaded", function onDOMContentLoaded() {
       resetTimer(spanMinutes, spanSeconds);
       clearGameState();
       handleNewGame();
+      updateResultsTable();
       const timerElements = getTimerElements();
       resetTimer(spanMinutes, spanSeconds);
       resetIsTimerStarted();
-      initCellInteractive(
-        cells,
-        timerElements.spanMinutes,
-        timerElements.spanSeconds,
-        currentPuzzleSolution
-      );
+      initCellInteractive(cells, timerElements.spanMinutes, timerElements.spanSeconds, currentPuzzleSolution);
       createToggleTheme();
     }
     if (targetElement === event.target.closest(".button-random-game")) {
       const randomPuzzle = selectRandomPuzzle();
       clearGameState();
       updateGame(randomPuzzle);
+      updateResultsTable();
       currentPuzzleSolution = randomPuzzle;
       const timerElements = getTimerElements();
       resetTimer(spanMinutes, spanSeconds);
       resetIsTimerStarted();
-      initCellInteractive(
-        cells,
-        timerElements.spanMinutes,
-        timerElements.spanSeconds,
-        currentPuzzleSolution
-      );
+      initCellInteractive(cells, timerElements.spanMinutes, timerElements.spanSeconds, currentPuzzleSolution);
       createToggleTheme();
     }
     if (targetElement === event.target.closest(".button-solution")) {
@@ -2216,15 +1035,11 @@ document.addEventListener("DOMContentLoaded", function onDOMContentLoaded() {
             currentPuzzleSolution = puzzleNameChoice;
             clearGameState();
             updateGame(puzzleNameChoice);
+            updateResultsTable();
             const timerElements = getTimerElements();
             resetTimer(spanMinutes, spanSeconds);
             resetIsTimerStarted();
-            initCellInteractive(
-              cells,
-              timerElements.spanMinutes,
-              timerElements.spanSeconds,
-              currentPuzzleSolution
-            );
+            initCellInteractive(cells, timerElements.spanMinutes, timerElements.spanSeconds, currentPuzzleSolution);
             createToggleTheme();
           });
         });
