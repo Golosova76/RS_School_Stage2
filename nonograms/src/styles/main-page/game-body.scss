@@ -2,21 +2,24 @@
   // .game__body
 
   &__body {
+    user-select: none;
     position: relative;
     display: grid;
+
     // Первый столбец для левых подсказок, второй для игрового поля
     grid-template-columns: auto min-content;
+
     // Первая строка для верхних подсказок, вторая для игрового поля
     grid-template-rows: min-content 1fr;
     justify-content: center;
-    user-select: none;
     padding-left: 30px;
     background-color: #f0f0f0;
     border-radius: 10px;
     transition:
       background-color 0.3s,
       color 0.3s;
-    @media (max-width: 499px) {
+
+    @media (width <= 499px) {
       padding-left: 0;
     }
   }
@@ -24,20 +27,21 @@
   // .game__hints
 
   &__hints {
-    //display: flex;
-    border-left: 3px solid black;
     grid-column: 2 / 3;
     grid-row: 1 / 2;
+
+    //display: flex;
+    border-left: 3px solid black;
   }
 
   // .game__board
 
   &__board {
+    cursor: pointer;
     grid-column: 2 / 3;
     grid-row: 2 / 3;
     max-height: 616px;
     border-top: 3px solid black;
-    cursor: pointer;
   }
 
   // .game__row
@@ -45,6 +49,7 @@
   &__row {
     display: flex;
     border-left: 3px solid black;
+
     &:nth-child(5n) {
       .game-cell {
         border-bottom: 3px solid black;
@@ -66,43 +71,49 @@
 
 .game-cell,
 .hint-cell {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   width: 25px;
   height: 25px;
   border: 1px solid black;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  @media (max-width: 670px) {
+
+  &.blocked {
+    pointer-events: none;
+  }
+
+  @media (width <= 670px) {
     width: 20px;
     height: 20px;
   }
-  @media (max-width: 499px) {
+
+  @media (width <= 499px) {
     width: 18px;
     height: 18px;
     font-size: 12px;
   }
-  @media (max-width: 430px) {
+
+  @media (width <= 430px) {
     width: 15px;
     height: 15px;
     font-size: 10px;
   }
-  @media (max-width: 360px) {
+
+  @media (width <= 360px) {
     width: 12px;
     height: 12px;
     font-size: 8px;
-  }
-
-  &.blocked {
-    pointer-events: none;
   }
 }
 
 .game-cell {
   position: relative;
+
   &:nth-child(5n) {
     border-right: 3px solid black;
   }
 }
+
 .top-hint {
   &:nth-child(5n) {
     border-right: 3px solid black;
@@ -115,6 +126,7 @@
 
 .left-hints-row {
   display: flex;
+
   &:nth-child(5n) {
     .left-hint {
       border-bottom: 3px solid black;
@@ -126,12 +138,12 @@
   &::before {
     content: "";
     position: absolute;
-    left: 50%;
     top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(45deg);
     width: 2px; /* Ширина линии крестика */
     height: 100%; /* Высота линии крестика, относительно размера клетки */
     background-color: #333;
-    transform: translate(-50%, -50%) rotate(45deg);
   }
 }
 
@@ -139,49 +151,55 @@
   &::after {
     content: "";
     position: absolute;
-    left: 50%;
     top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(-45deg);
     width: 2px;
     height: 100%;
     background-color: #333;
-    transform: translate(-50%, -50%) rotate(-45deg);
   }
 }
 
 .win-message {
-  z-index: 2;
   position: absolute;
-  bottom: 0;
+  z-index: 2;
   right: 5%;
+  bottom: 0;
   font-size: 28px;
   font-weight: 600;
   line-height: 150%;
-  background: linear-gradient(150deg, red, red); /* Градиент для текста */
-  -webkit-background-clip: text;
-  background-clip: text;
   color: transparent;
+  background: linear-gradient(150deg, red, red); /* Градиент для текста */
+  background-clip: text;
+  background-clip: text;
   animation: rainbow-animation 0.5s ease-in-out infinite;
-  @media (max-width: 1355px) {
+
+  @media (width <= 1355px) {
     font-size: 24px;
   }
-  @media (max-width: 1200px) {
-    font-size: 28px;
-    bottom: -30px;
+
+  @media (width <= 1200px) {
     right: 20%;
-  }
-  @media (max-width: 900px) {
     bottom: -30px;
-    right: 10%;
+    font-size: 28px;
   }
-  @media (max-width: 800px) {
+
+  @media (width <= 900px) {
+    right: 10%;
+    bottom: -30px;
+  }
+
+  @media (width <= 800px) {
     font-size: 24px;
   }
-  @media (max-width: 700px) {
+
+  @media (width <= 700px) {
     font-size: 18px;
   }
-  @media (max-width: 550px) {
-    max-width: 300px;
+
+  @media (width <= 550px) {
     bottom: -55px;
+    max-width: 300px;
     font-size: 16px;
   }
 }
@@ -190,9 +208,11 @@
   0% {
     background-position: 0% 50%;
   }
+
   50% {
     background-position: 100% 50%;
   }
+
   100% {
     background-position: 0% 50%;
   }
