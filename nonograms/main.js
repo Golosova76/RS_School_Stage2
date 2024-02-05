@@ -8,6 +8,7 @@ import {
   handleNewGame,
   resetIsTimerStarted,
   handleButtonClickSounds,
+  updateResultsTable,
 } from '@js/interactiv/cell-interactive';
 // import { cells } from '@js/game-body/parts/game-board'; // массив с клетиками игрового поля
 import createToggleTheme from '@js/toggle'; // смена темы
@@ -65,6 +66,9 @@ document.addEventListener('DOMContentLoaded', function onDOMContentLoaded() {
 
   // обработка клика по cell закрашивание черным и крестик и таймер и звуки
   initCellInteractive(cells, spanMinutes, spanSeconds, currentPuzzleSolution);
+
+  // инициализация при первоначальной загрузке страницы
+  updateResultsTable();
 
   // установка темы при загрузке страницы:
   const savedTheme = localStorage.getItem('theme');
@@ -135,6 +139,7 @@ document.addEventListener('DOMContentLoaded', function onDOMContentLoaded() {
         clearGameState();
         clearGameCells();
         updateGame(currentPuzzleSolutionSave);
+        updateResultsTable();
 
         gameLoadState.forEach((row, rowIndex) => {
           row.forEach((cellState, columnIndex) => {
@@ -164,6 +169,7 @@ document.addEventListener('DOMContentLoaded', function onDOMContentLoaded() {
       resetTimer(spanMinutes, spanSeconds);
       clearGameState();
       handleNewGame(currentPuzzleSolution);
+      updateResultsTable();
       const timerElements = getTimerElements();
       resetTimer(spanMinutes, spanSeconds);
       resetIsTimerStarted();
@@ -181,6 +187,7 @@ document.addEventListener('DOMContentLoaded', function onDOMContentLoaded() {
       const randomPuzzle = selectRandomPuzzle();
       clearGameState();
       updateGame(randomPuzzle);
+      updateResultsTable();
       currentPuzzleSolution = randomPuzzle;
       const timerElements = getTimerElements();
       resetTimer(spanMinutes, spanSeconds);
@@ -224,9 +231,9 @@ document.addEventListener('DOMContentLoaded', function onDOMContentLoaded() {
             const puzzleName = content.textContent;
             const puzzleNameChoice = findPuzzleByName(puzzleName);
             currentPuzzleSolution = puzzleNameChoice;
-            // console.log(currentPuzzleSolution);
             clearGameState();
             updateGame(puzzleNameChoice);
+            updateResultsTable();
             const timerElements = getTimerElements();
             resetTimer(spanMinutes, spanSeconds);
             resetIsTimerStarted();

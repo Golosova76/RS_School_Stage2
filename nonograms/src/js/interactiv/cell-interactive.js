@@ -32,6 +32,73 @@ function handleButtonClickSounds() {
 
 let audioFile; // переменная для деструктуризации
 
+// заполняем таблицу
+function updateResultsTable(newResult) {
+  // получаем данные или пустой массив
+  let results = JSON.parse(localStorage.getItem('gameResults')) || [];
+
+  // Добавляем новый результат в начало массива
+  results.unshift(newResult);
+
+  // каждый результат имеет свойство stopWatch
+  results = results.filter((result) => result && result.stopWatch);
+
+  // Преобразование времени в секунды для сортировки
+  results.forEach((result) => {
+    const [minutes, seconds] = result.stopWatch.split(':').map(Number);
+    // eslint-disable-next-line no-param-reassign
+    result.timeInSeconds = minutes * 60 + seconds;
+  });
+
+  // Сортируем результаты по времени
+  results.sort((a, b) => a.timeInSeconds - b.timeInSeconds);
+
+  // Удаление 'timeInSeconds' перед сохранением
+  results = results.map(({ name, level, stopWatch }) => ({
+    name,
+    level,
+    stopWatch,
+  }));
+
+  // Ограничиваем массив до пяти последних результатов
+  results = results.slice(0, 5);
+
+  // Сохраняем обновлённый массив результатов в localStorage
+  localStorage.setItem('gameResults', JSON.stringify(results));
+
+  // Находим tbody в таблице
+  const tableBody = document.querySelector('.results-table tbody');
+
+  // Обновляем содержимое таблицы
+  results.forEach((result, index) => {
+    let row = tableBody.rows[index];
+    if (!row) {
+      row = tableBody.insertRow();
+    }
+
+    const values = Object.values(result);
+    values.forEach((value, cellIndex) => {
+      let cell = row.cells[cellIndex];
+      if (!cell) {
+        cell = row.insertCell();
+      }
+      cell.textContent = value;
+    });
+  });
+
+  // Добавление пустых строк, если результатов меньше пяти
+  while (tableBody.rows.length < 5) {
+    const emptyRow = tableBody.insertRow();
+    for (let i = 0; i < 3; i += 1) {
+      emptyRow.insertCell().textContent = '';
+    }
+  }
+}
+
+function updateGameResults(result) {
+  updateResultsTable(result);
+}
+
 function handleLeftClick(event, spanMinutes, spanSeconds, puzzle) {
   event.preventDefault();
   const cell = event.target;
@@ -71,6 +138,12 @@ function handleLeftClick(event, spanMinutes, spanSeconds, puzzle) {
 
   if (checkSolution(gameState, puzzle)) {
     showWinMessage(spanMinutes, spanSeconds);
+    const newResult = {
+      name: puzzle.name,
+      level: puzzle.level,
+      stopWatch: `${spanMinutes.textContent}:${spanSeconds.textContent}`,
+    };
+    updateGameResults(newResult);
     stopTimer();
   }
 }
@@ -114,6 +187,12 @@ function handleRightClick(event, spanMinutes, spanSeconds, puzzle) {
 
   if (checkSolution(gameState, puzzle)) {
     showWinMessage(spanMinutes, spanSeconds);
+    const newResult = {
+      name: puzzle.name,
+      level: puzzle.level,
+      stopWatch: `${spanMinutes.textContent}:${spanSeconds.textContent}`,
+    };
+    updateGameResults(newResult);
     stopTimer();
   }
 }
@@ -159,4 +238,5 @@ export {
   handleNewGame,
   resetIsTimerStarted,
   handleButtonClickSounds,
+  updateResultsTable,
 };

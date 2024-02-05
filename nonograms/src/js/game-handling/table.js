@@ -23,11 +23,11 @@ function createScoreTable() {
   const bodyTable = document.createElement('tbody');
 
   const rowsData = [
-    ['pushchair', 'pushchair', 'pushchair'],
-    ['heart', 'heart', 'heart'],
-    ['heart', 'heart', 'heart'],
-    ['heart', 'heart', 'heart'],
-    ['heart', 'heart', 'heart'],
+    ['', '', ''],
+    ['', '', ''],
+    ['', '', ''],
+    ['', '', ''],
+    ['', '', ''],
   ];
 
   rowsData.forEach((rowData) => {
