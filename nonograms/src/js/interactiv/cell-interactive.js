@@ -11,8 +11,8 @@ let isTimerStarted = false;
 let isMusicPlaying = false; // флаг для отслеживания состояния звуков
 
 const soundFiles = [
-  '/audio/background.mp3',
-  '/audio/cross.mp3',
+  '/audio/knopka-background.mp3',
+  '/audio/knopka-cross.mp3',
   '/audio/empty.mp3',
 ];
 

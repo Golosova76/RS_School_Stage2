@@ -159,6 +159,7 @@ document.addEventListener('DOMContentLoaded', function onDOMContentLoaded() {
         });
       } else {
         // Обработка случая, когда сохраненных данных нет
+        // eslint-disable-next-line no-alert
         alert('Saved game not found.');
       }
     }

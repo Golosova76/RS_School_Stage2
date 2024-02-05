@@ -41,66 +41,42 @@ function showSolution(puzzle) {
   const { solution } = puzzle;
   const cellsShow = document.querySelectorAll('.game-cell');
 
-  let cellIndex = 0;
-  solution.forEach((row) => {
-    row.forEach((isFilled) => {
+  let delay = 0;
+  const delayIncrement = 40; // Задержка в миллисекундах между ячейками
+
+  solution.forEach((row, rowIndex) => {
+    row.forEach((isFilled, colIndex) => {
+      const cellIndex = rowIndex * row.length + colIndex;
       if (cellIndex < cellsShow.length) {
-        const cell = cellsShow[cellIndex];
+        setTimeout(() => {
+          const cell = cellsShow[cellIndex];
 
-        if (isFilled) {
-          cell.style.backgroundColor = 'black'; // Закрашиваем ячейку
-          cell.classList.remove('cross'); // Убираем крестик, если он есть
-        } else {
-          cell.style.backgroundColor = ''; // Убираем закрашивание
-          cell.classList.remove('cross'); // Убираем крестик
-        }
+          if (isFilled) {
+            cell.style.backgroundColor = 'black'; // Закрашиваем ячейку
+            cell.classList.remove('cross'); // Убираем крестик, если он есть
+          } else {
+            cell.style.backgroundColor = ''; // Убираем закрашивание
+            cell.classList.remove('cross'); // Убираем крестик
+          }
+        }, delay);
+
+        delay += delayIncrement;
       }
-
-      cellIndex += 1; // к следующей cell
     });
   });
 
-  // Блокируем все ячейки после показа решения
-  cellsShow.forEach((cell) => {
-    cell.classList.add('blocked');
-  });
+  // Блокируем все ячейки и кнопку save после завершения анимации
+  setTimeout(() => {
+    cellsShow.forEach((cell) => {
+      cell.classList.add('blocked');
+    });
 
-  // блокируем кнопку save
-  const saveButton = document.querySelector('.button-save');
-  if (saveButton) {
-    saveButton.disabled = true;
-  }
-}
-
-// функция проверки решения с решением игрока
-/*
-function checkSolution(gameState, puzzle) {
-  if (!puzzle || !puzzle.solution) {
-    console.error('Отсутствует решение в переданном пазле.');
-    return false;
-  }
-
-  const { solution } = puzzle;
-  if (gameState.length !== solution.length) {
-    console.error('Размеры gameState и solution не совпадают.');
-    return false;
-  }
-
-  for (let i = 0; i < gameState.length; i++) {
-    if (gameState[i].length !== solution[i].length) {
-      console.error('Размеры строки gameState и solution не совпадают.');
-      return false;
+    const saveButton = document.querySelector('.button-save');
+    if (saveButton) {
+      saveButton.disabled = true;
     }
-    for (let j = 0; j < gameState[i].length; j++) {
-      const cellIsFilled = gameState[i][j] === 1;
-      if (cellIsFilled !== solution[i][j]) {
-        return false;
-      }
-    }
-  }
-  return true;
+  }, delay);
 }
-*/
 
 function checkSolution(gameState, puzzle) {
   const { solution } = puzzle;
