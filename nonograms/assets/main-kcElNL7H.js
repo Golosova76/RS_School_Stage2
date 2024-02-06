@@ -955,6 +955,7 @@ document.addEventListener("DOMContentLoaded", function onDOMContentLoaded() {
       const currentSize = currentPuzzleSolution.size;
       const currentSolution = currentPuzzleSolution.solution;
       const currentTime = `${timerElements.spanMinutes.textContent}:${timerElements.spanSeconds.textContent}`;
+      resetTimer(spanMinutes, spanSeconds);
       saveGame(gameState, currentGameName, currentLevel, currentTime, currentSize, currentSolution);
     }
     if (targetElement === event.target.closest(".button-load-game")) {
@@ -964,6 +965,7 @@ document.addEventListener("DOMContentLoaded", function onDOMContentLoaded() {
         const currentPuzzleSolutionSave = {
           name: gameName,
           level: gameLevel,
+          time: gameTime,
           size: gameSize,
           solution: gameSolution,
         };
@@ -971,6 +973,10 @@ document.addEventListener("DOMContentLoaded", function onDOMContentLoaded() {
         clearGameCells();
         updateGame(currentPuzzleSolutionSave);
         updateResultsTable();
+        const timerElements = getTimerElements();
+        const [savedMinutes, savedSeconds] = gameTime.split(":");
+        timerElements.spanMinutes.textContent = savedMinutes;
+        timerElements.spanSeconds.textContent = savedSeconds;
         gameLoadState.forEach((row, rowIndex) => {
           row.forEach((cellState, columnIndex) => {
             const index = rowIndex * gameLoadState[0].length + columnIndex;
