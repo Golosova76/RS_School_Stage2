@@ -38,7 +38,7 @@ function updateResultsTable(newResult) {
   let results = JSON.parse(localStorage.getItem('gameResults')) || [];
 
   // Добавляем новый результат в начало массива
-  results.unshift(newResult);
+  results.push(newResult);
 
   // каждый результат имеет свойство stopWatch
   results = results.filter((result) => result && result.stopWatch);

@@ -19,7 +19,7 @@ import {
   selectRandomPuzzle,
   showSolution,
 } from '@js/game-utilities';
-import { resetTimer } from '@js/interactiv/timer';
+import { resetTimer, continueTimer } from '@js/interactiv/timer';
 import { gameState, cells } from '@js/game-body/parts/game-board';
 import { saveGame, loadGame } from '@js/save-game';
 
@@ -141,13 +141,21 @@ document.addEventListener('DOMContentLoaded', function onDOMContentLoaded() {
         clearGameState();
         clearGameCells();
         updateGame(currentPuzzleSolutionSave);
-        updateResultsTable();
+        // updateResultsTable();
 
         const timerElements = getTimerElements();
 
-        const [savedMinutes, savedSeconds] = gameTime.split(':');
-        timerElements.spanMinutes.textContent = savedMinutes;
-        timerElements.spanSeconds.textContent = savedSeconds;
+        const [savedMinutes, savedSeconds] = loadedGame.gameTime
+          .split(':')
+          .map(Number);
+        const initialSeconds = savedMinutes * 60 + savedSeconds;
+
+        // Продолжаем таймер с сохраненного времени
+        continueTimer(
+          timerElements.spanMinutes,
+          timerElements.spanSeconds,
+          initialSeconds
+        );
 
         gameLoadState.forEach((row, rowIndex) => {
           row.forEach((cellState, columnIndex) => {
@@ -163,8 +171,17 @@ document.addEventListener('DOMContentLoaded', function onDOMContentLoaded() {
                 cell.style.backgroundColor = '';
               }
             }
+            gameState[rowIndex][columnIndex] = cellState;
           });
         });
+        initCellInteractive(
+          cells,
+          timerElements.spanMinutes,
+          timerElements.spanSeconds,
+          currentPuzzleSolutionSave
+        );
+        createToggleTheme();
+        updateResultsTable();
       } else {
         // Обработка случая, когда сохраненных данных нет
         // eslint-disable-next-line no-alert
