@@ -622,6 +622,17 @@ function resetTimer(spanMinutes, spanSeconds) {
   spanMinutes.textContent = "00";
   spanSeconds.textContent = "00";
 }
+function continueTimer(spanMinutes, spanSeconds, initialSeconds) {
+  stopTimer();
+  timerSeconds = initialSeconds;
+  timerInterval = setInterval(() => {
+    timerSeconds += 1;
+    const minutes = Math.floor(timerSeconds / 60);
+    const seconds = timerSeconds % 60;
+    spanMinutes.textContent = minutes.toString().padStart(2, "0");
+    spanSeconds.textContent = seconds.toString().padStart(2, "0");
+  }, 1e3);
+}
 function findPuzzleByName(name) {
   return puzzles.find((puzzle) => puzzle.name === name);
 }
@@ -727,7 +738,7 @@ function handleButtonClickSounds() {
 let audioFile;
 function updateResultsTable(newResult) {
   let results = JSON.parse(localStorage.getItem("gameResults")) || [];
-  results.unshift(newResult);
+  results.push(newResult);
   results = results.filter((result) => result && result.stopWatch);
   results.forEach((result) => {
     const [minutes, seconds] = result.stopWatch.split(":").map(Number);
@@ -972,11 +983,10 @@ document.addEventListener("DOMContentLoaded", function onDOMContentLoaded() {
         clearGameState();
         clearGameCells();
         updateGame(currentPuzzleSolutionSave);
-        updateResultsTable();
         const timerElements = getTimerElements();
-        const [savedMinutes, savedSeconds] = gameTime.split(":");
-        timerElements.spanMinutes.textContent = savedMinutes;
-        timerElements.spanSeconds.textContent = savedSeconds;
+        const [savedMinutes, savedSeconds] = loadedGame.gameTime.split(":").map(Number);
+        const initialSeconds = savedMinutes * 60 + savedSeconds;
+        continueTimer(timerElements.spanMinutes, timerElements.spanSeconds, initialSeconds);
         gameLoadState.forEach((row, rowIndex) => {
           row.forEach((cellState, columnIndex) => {
             const index = rowIndex * gameLoadState[0].length + columnIndex;
@@ -990,8 +1000,12 @@ document.addEventListener("DOMContentLoaded", function onDOMContentLoaded() {
                 cell.style.backgroundColor = "";
               }
             }
+            gameState[rowIndex][columnIndex] = cellState;
           });
         });
+        initCellInteractive(cells, timerElements.spanMinutes, timerElements.spanSeconds, currentPuzzleSolutionSave);
+        createToggleTheme();
+        updateResultsTable();
       } else {
         alert("Saved game not found.");
       }
