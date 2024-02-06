@@ -103,6 +103,7 @@ document.addEventListener('DOMContentLoaded', function onDOMContentLoaded() {
       const currentSize = currentPuzzleSolution.size;
       const currentSolution = currentPuzzleSolution.solution;
       const currentTime = `${timerElements.spanMinutes.textContent}:${timerElements.spanSeconds.textContent}`;
+      resetTimer(spanMinutes, spanSeconds);
 
       // Вызов функции saveGame
       saveGame(
@@ -132,6 +133,7 @@ document.addEventListener('DOMContentLoaded', function onDOMContentLoaded() {
         const currentPuzzleSolutionSave = {
           name: gameName,
           level: gameLevel,
+          time: gameTime,
           size: gameSize,
           solution: gameSolution,
         };
@@ -140,6 +142,12 @@ document.addEventListener('DOMContentLoaded', function onDOMContentLoaded() {
         clearGameCells();
         updateGame(currentPuzzleSolutionSave);
         updateResultsTable();
+
+        const timerElements = getTimerElements();
+
+        const [savedMinutes, savedSeconds] = gameTime.split(':');
+        timerElements.spanMinutes.textContent = savedMinutes;
+        timerElements.spanSeconds.textContent = savedSeconds;
 
         gameLoadState.forEach((row, rowIndex) => {
           row.forEach((cellState, columnIndex) => {
