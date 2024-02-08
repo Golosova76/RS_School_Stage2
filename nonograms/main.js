@@ -103,7 +103,7 @@ document.addEventListener('DOMContentLoaded', function onDOMContentLoaded() {
       const currentSize = currentPuzzleSolution.size;
       const currentSolution = currentPuzzleSolution.solution;
       const currentTime = `${timerElements.spanMinutes.textContent}:${timerElements.spanSeconds.textContent}`;
-      resetTimer(spanMinutes, spanSeconds);
+      // resetTimer(spanMinutes, spanSeconds);
 
       // Вызов функции saveGame
       saveGame(
