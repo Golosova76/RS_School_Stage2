@@ -966,7 +966,6 @@ document.addEventListener("DOMContentLoaded", function onDOMContentLoaded() {
       const currentSize = currentPuzzleSolution.size;
       const currentSolution = currentPuzzleSolution.solution;
       const currentTime = `${timerElements.spanMinutes.textContent}:${timerElements.spanSeconds.textContent}`;
-      resetTimer(spanMinutes, spanSeconds);
       saveGame(gameState, currentGameName, currentLevel, currentTime, currentSize, currentSolution);
     }
     if (targetElement === event.target.closest(".button-load-game")) {
