@@ -33,3 +33,48 @@ footer .copyright a:hover {
 footer .copyright:before {
     content: '©';
 }
+
+.footer__items {
+    display: flex;
+    gap: 50px;
+    justify-content: center;
+    align-items: center;
+
+    margin: 0 auto;
+}
+
+.footer__items a {
+    transition: all 0.5s ease 0s;
+    text-decoration: none;
+}
+
+.footer__svg:hover {
+    transform: scale(1.1);
+}
+
+.footer__item {
+    width: 100px;
+    height: 60px;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 10%;
+    transition: all 0.5s ease 0s;
+}
+
+.footer__link {
+    transition: all 0.5s ease 0s;
+    color: white;
+}
+
+.footer__link:hover {
+    transition: all 0.5s ease 0s;
+    color: rgb(91, 197, 59);
+    text-decoration: underline;
+}
+
+svg {
+    width: 100px;
+    height: 100px;
+}
