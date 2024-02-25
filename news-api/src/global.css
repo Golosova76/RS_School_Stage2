@@ -4,6 +4,27 @@ body {
     font-family: sans-serif;
 }
 
+@keyframes gradient-back {
+    0% {
+        background-position: 0% 50%;
+    }
+
+    50% {
+        background-position: 100% 50%;
+    }
+
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+body {
+    background: linear-gradient(-32deg, #4a3961, #000808, #2f429c);
+    background: linear-gradient(135deg, rgb(24, 19, 104) 0%, rgb(194 71 135 / 100%) 39%, rgb(#2f429c / 100%) 100%);
+    background-size: 400% 400%;
+    animation: gradient-back 15s ease infinite;
+}
+
 header {
     padding: 10px 30px;
 }
@@ -21,11 +42,11 @@ footer {
 }
 footer .copyright {
     font-size: 14px;
-    color: #333;
+    color: #30c5ff;
     text-align: center;
 }
 footer .copyright a {
-    color: #444;
+    color: #30c5ff;
 }
 footer .copyright a:hover {
     color: #555;
@@ -39,8 +60,6 @@ footer .copyright:before {
     gap: 50px;
     justify-content: center;
     align-items: center;
-
-    margin: 0 auto;
 }
 
 .footer__items a {
@@ -70,7 +89,7 @@ footer .copyright:before {
 
 .footer__link:hover {
     transition: all 0.5s ease 0s;
-    color: rgb(91, 197, 59);
+    color: #3fcc59;
     text-decoration: underline;
 }
 
