@@ -1,21 +1,45 @@
 import './sources.css';
+import { NewsApiSource } from '../../../types/index';
 
 class Sources {
-    draw(data) {
-        const fragment = document.createDocumentFragment();
-        const sourceItemTemp = document.querySelector('#sourceItemTemp');
+  draw(sources: NewsApiSource[]) {
+    const fragment = document.createDocumentFragment();
+    const sourceItemTemp = document.querySelector('#sourceItemTemp') as HTMLTemplateElement;
 
-        data.forEach((item) => {
-            const sourceClone = sourceItemTemp.content.cloneNode(true);
-
-            sourceClone.querySelector('.source__item-name').textContent = item.name;
-            sourceClone.querySelector('.source__item').setAttribute('data-source-id', item.id);
-
-            fragment.append(sourceClone);
-        });
-
-        document.querySelector('.sources').append(fragment);
+    if (!sourceItemTemp) {
+      console.error('Template element #sourceItemTemp not found');
+      return; // Прерываем выполнение, если элемент не найден
     }
+
+    sources.forEach((item) => {
+      const sourceClone = sourceItemTemp.content.cloneNode(true) as HTMLElement;
+
+      const itemName = sourceClone.querySelector('.source__item-name');
+      const itemElement = sourceClone.querySelector('.source__item');
+
+      if (itemName) {
+        itemName.textContent = item.name;
+      } else {
+        console.error('.source__item-name not found in the template');
+      }
+
+      if (itemElement) {
+        itemElement.setAttribute('data-source-id', item.id || '');
+      } else {
+        console.error('.source__item not found in the template');
+      }
+
+      fragment.append(sourceClone);
+    });
+
+    const sourcesContainer = document.querySelector('.sources');
+    if (!sourcesContainer) {
+      console.error('Container element .sources not found');
+      return; // Прерываем выполнение, если контейнер не найден
+    }
+
+    sourcesContainer.append(fragment);
+  }
 }
 
 export default Sources;
