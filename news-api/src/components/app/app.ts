@@ -17,12 +17,14 @@ class App {
       throw new Error('The .sources element was not found in the DOM');
     }
 
-    sourcesElement.addEventListener('click', () => {
-      this.controller.getSources((data) => {
+    sourcesElement.addEventListener('click', (e) => {
+      this.controller.getNews(e, (data) => {
         console.log('Data received from getSources:', data);
-        this.view.drawSources(data);
+        this.view.drawNews(data);
       });
     });
+
+    this.controller.getSources((data) => this.view.drawSources(data));
   }
 }
 
