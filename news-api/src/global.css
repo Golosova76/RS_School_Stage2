@@ -23,7 +23,6 @@ ul {
 }
 
 body {
-  background: linear-gradient(-32deg, #4a3961, #000808, #2f429c);
   background: linear-gradient(135deg, rgb(24, 19, 104) 0%, rgb(194 71 135 / 100%) 39%, rgb(#2f429c / 100%) 100%);
   background-size: 400% 400%;
   animation: gradient-back 15s ease infinite;
@@ -117,13 +116,14 @@ footer .copyright:before {
   text-decoration: underline;
 }
 
-svg {
+.footer__image {
   width: 100px;
   height: 100px;
+  filter: brightness(150%);
 }
 
 @media (max-width: 620px) {
-  svg {
+  .footer__image {
     width: 80px;
     height: 80px;
   }

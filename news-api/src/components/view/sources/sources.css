@@ -11,6 +11,22 @@
     sans-serif;
 }
 
+.sources::-webkit-scrollbar {
+  width: 0.8rem;
+  border-radius: 10px;
+  background: #f1f1f1;
+}
+
+/* Стилизация ползунка скроллбара */
+.sources::-webkit-scrollbar-thumb {
+  background: linear-gradient(90deg, rgb(24, 19, 104), rgb(45, 191, 248), rgb(47, 66, 156));
+}
+
+.sources::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(90deg, rgb(45, 191, 248), rgb(29, 51, 162));
+  border-radius: 10px;
+}
+
 .source__item {
   background: none;
   border: 2px solid #30c5ff;
