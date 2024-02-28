@@ -2,13 +2,13 @@ import './sources.css';
 import { NewsApiSource } from '../../../types/index';
 
 class Sources {
-  draw(sources: NewsApiSource[]) {
+  public draw(sources: NewsApiSource[]) {
     const fragment = document.createDocumentFragment();
     const sourceItemTemp = document.querySelector('#sourceItemTemp') as HTMLTemplateElement;
 
     if (!sourceItemTemp) {
       console.error('Template element #sourceItemTemp not found');
-      return; // Прерываем выполнение, если элемент не найден
+      return;
     }
 
     sources.forEach((item) => {

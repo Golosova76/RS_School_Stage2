@@ -8,13 +8,18 @@ export interface NewsApiSource {
   country: string;
 }
 
+enum APIResponseStatus {
+  Ok = 'ok',
+  Error = 'error',
+}
+
 export interface NewsApiSourcesResponse {
-  status: 'ok' | 'error';
+  status: APIResponseStatus;
   sources: NewsApiSource[];
 }
 
 export interface EverythingApiResponse {
-  status: 'ok' | 'error';
+  status: APIResponseStatus;
   totalResults: number;
   articles: Article[];
 }

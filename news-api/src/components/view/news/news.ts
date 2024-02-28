@@ -8,7 +8,7 @@ function assertElementExists(elem: Element | null, selector: string): asserts el
 }
 
 class News {
-  draw(articles: Article[]) {
+  public draw(articles: Article[]) {
     const news = articles.length >= 10 ? articles.filter((_item, idx) => idx < 10) : articles;
 
     const fragment = document.createDocumentFragment();
