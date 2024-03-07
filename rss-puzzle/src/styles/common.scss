@@ -1,0 +1,19 @@
+html {
+  scroll-behavior: smooth;
+}
+
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+
+  > main {
+    flex: 1 1 auto;
+  }
+}
+
+[class*="__container"] {
+  max-width: 1360px; // контейнер 1360 стал 1440 изза padding 40px
+  margin: 0 auto;
+  padding: 0 20px;
+}
