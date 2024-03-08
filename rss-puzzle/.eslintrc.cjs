@@ -11,6 +11,7 @@ module.exports = {
   parser: '@typescript-eslint/parser',
   extends: [
     'airbnb-base',
+    'airbnb-typescript/base',
     'plugin:prettier/recommended',
     'plugin:@typescript-eslint/recommended',
     'plugin:prettier/recommended',
@@ -29,6 +30,8 @@ module.exports = {
   parserOptions: {
     ecmaVersion: 'latest',
     sourceType: 'module',
+    project: './tsconfig.json',
+    tsconfigRootDir: __dirname,
   },
   rules: {
     'prettier/prettier': [
@@ -43,9 +46,14 @@ module.exports = {
         devDependencies: true,
       },
     ],
+    '@typescript-eslint/dot-notation': 'error',
   },
   settings: {
+    'import/parsers': {
+      '@typescript-eslint/parser': ['.ts', '.tsx'],
+    },
     'import/resolver': {
+      typescript: { alwaysTryTypes: true },
       alias: {
         map: [
           ['@', path.resolve(__dirname, 'src')],
