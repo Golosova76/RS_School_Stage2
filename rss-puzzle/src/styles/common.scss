@@ -17,3 +17,8 @@ html {
   margin: 0 auto;
   padding: 0 20px;
 }
+
+body {
+  font: $font-weight $font-size $font-family;
+  color: $color-text-dark;
+}

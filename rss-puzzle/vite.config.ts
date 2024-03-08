@@ -3,6 +3,7 @@ import path from 'path';
 // import { resolve } from 'path'; убрать path отсюда path.resolve(__dirname, 'src'),
 
 export default {
+  base: './',
   build: {
     minify: false,
     rollupOptions: {
