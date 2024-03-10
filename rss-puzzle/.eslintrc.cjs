@@ -8,6 +8,7 @@ module.exports = {
     node: true,
     // es6: true,
   },
+  ignorePatterns: ['.eslintrc.cjs'],
   parser: '@typescript-eslint/parser',
   extends: [
     'airbnb-base',

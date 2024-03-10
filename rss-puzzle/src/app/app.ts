@@ -2,6 +2,8 @@ import FooterComponent from './components/footer/footer';
 
 import HeaderComponent from './components/header/header';
 
+import ComponentAssemblerAccess from './components/assembly-main/main-access';
+
 type AppState = 'access' | 'welcome' | 'game' | 'statistics';
 
 class App {
@@ -11,13 +13,18 @@ class App {
 
   constructor() {
     document.body.classList.add('body');
-    this.appContainer = document.querySelector('.body') as HTMLElement;
+    const wrapper = document.createElement('div');
+    wrapper.classList.add('wrapper');
+    // Добавление wrapper в body
+    document.body.appendChild(wrapper);
+    this.appContainer = wrapper;
+    // this.appContainer = document.querySelector('.body') as HTMLElement;
     this.init();
   }
 
   init(): void {
     this.renderHeader();
-    // this.updateMain();
+    this.renderMain();
     this.renderFooter();
   }
 
@@ -26,7 +33,10 @@ class App {
     this.appContainer.appendChild(header.getNode());
   }
 
-  // updateMain(): void {}
+  renderMain(): void {
+    const mainContent = ComponentAssemblerAccess.assembleMainContent();
+    this.appContainer.appendChild(mainContent.getNode());
+  }
 
   renderFooter(): void {
     const footer = new FooterComponent();

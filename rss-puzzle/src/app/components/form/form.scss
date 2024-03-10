@@ -1,0 +1,56 @@
+.form {
+  // padding: 2rem;
+  border-radius: 10px;
+  background-color: #ffffff;
+  outline: #fff double 5px;
+  box-shadow:
+    0 3px 10px 4px rgb(227 216 216 / 40%),
+    0 4px 15px 6px rgb(0 0 0 / 50%),
+    0 5px 20px 10px rgb(120 114 114 / 60%);
+  padding: 2vw;
+  width: 80vw; /* ширина формы будет 80% от ширины вьюпорта */
+  max-width: 28rem;
+  transition: width 0.5s ease;
+}
+
+.fieldset {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  background-color: #ffffff; /* белый фон для формы */
+  width: 100%;
+  padding: 2.5rem;
+  padding-top: 1.2rem;
+  border-radius: 8px;
+  box-shadow: 2px 4px 6px rgba(0, 0, 0, 0.2);
+}
+
+.legend {
+  @include margin-bottom40;
+  &::before {
+    content: "*";
+    color: red;
+  }
+}
+
+.required {
+  display: block;
+  margin-bottom: 5px;
+  &::after {
+    content: "*";
+    color: red;
+  }
+}
+.input-name {
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0;
+  border: 1px solid #bdbcbc;
+  border-radius: 4px;
+  margin-bottom: 2rem;
+  font: $font-weight $font-size $font-family;
+  cursor: pointer;
+  &:focus {
+    border-color: #a7cbd9;
+  }
+}

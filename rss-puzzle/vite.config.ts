@@ -1,4 +1,3 @@
-import Inspect from 'vite-plugin-inspect';
 import path from 'path';
 // import { resolve } from 'path'; убрать path отсюда path.resolve(__dirname, 'src'),
 
@@ -24,5 +23,4 @@ export default {
       '@js': path.resolve(__dirname, 'src/js'),
     },
   },
-  plugins: [Inspect()],
 };
