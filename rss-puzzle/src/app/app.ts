@@ -1,46 +1,30 @@
-import FooterComponent from './components/footer/footer';
-
-import HeaderComponent from './components/header/header';
-
-import ComponentAssemblerAccess from './components/assembly-main/main-access';
+import AccessScreen from './components/assembly-main/screen-access';
 
 type AppState = 'access' | 'welcome' | 'game' | 'statistics';
 
 class App {
   private currentState: AppState = 'access';
 
-  private appContainer: HTMLElement;
-
   constructor() {
-    document.body.classList.add('body');
-    const wrapper = document.createElement('div');
-    wrapper.classList.add('wrapper');
-    // Добавление wrapper в body
-    document.body.appendChild(wrapper);
-    this.appContainer = wrapper;
-    // this.appContainer = document.querySelector('.body') as HTMLElement;
     this.init();
   }
 
   init(): void {
-    this.renderHeader();
-    this.renderMain();
-    this.renderFooter();
+    let accessScreen: AccessScreen;
+    switch (this.currentState) {
+      case 'access':
+        accessScreen = new AccessScreen(() => this.switchState('welcome'));
+        document.body.appendChild(accessScreen.render());
+        break;
+      // Предполагаем добавление других состояний по аналогии
+      default:
+    }
   }
 
-  renderHeader(): void {
-    const header = new HeaderComponent();
-    this.appContainer.appendChild(header.getNode());
-  }
-
-  renderMain(): void {
-    const mainContent = ComponentAssemblerAccess.assembleMainContent();
-    this.appContainer.appendChild(mainContent.getNode());
-  }
-
-  renderFooter(): void {
-    const footer = new FooterComponent();
-    this.appContainer.appendChild(footer.getNode());
+  switchState(newState: AppState): void {
+    this.currentState = newState;
+    document.body.innerHTML = '';
+    this.init();
   }
 }
 

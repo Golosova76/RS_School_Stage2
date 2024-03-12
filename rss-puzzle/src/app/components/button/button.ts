@@ -7,15 +7,14 @@ type ButtonOptions = {
   type?: string; // 'submit', 'button', 'reset'
   id?: string;
   disabled?: boolean;
-  // еще параметры
 };
 
 class ButtonComponent extends Component<InterComponent> {
   constructor(options: ButtonOptions) {
     super({
       tag: 'button',
-      className: options.className || '', // Установка класса, если он передан
-      text: options.text || '', // Установка текста кнопки, если он передан
+      className: options.className || '',
+      text: options.text || '',
     });
 
     // Установка типа кнопки, если он передан
@@ -34,8 +33,6 @@ class ButtonComponent extends Component<InterComponent> {
     } else {
       this.removeAttribute('disabled');
     }
-
-    // добавить другие атрибуты и их обработку
   }
 }
 

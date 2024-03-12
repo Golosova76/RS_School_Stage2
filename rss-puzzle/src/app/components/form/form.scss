@@ -45,12 +45,21 @@
   width: 100%;
   padding: 10px;
   margin: 10px 0;
-  border: 1px solid #bdbcbc;
+  border-width: 1px;
+  border-style: solid;
+  border-color: #bdbcbc;
   border-radius: 4px;
-  margin-bottom: 2rem;
+  // margin-bottom: 2rem;
   font: $font-weight $font-size $font-family;
   cursor: pointer;
-  &:focus {
-    border-color: #a7cbd9;
-  }
+}
+
+.error-message {
+  font-size: 0.8rem;
+  color: red;
+  margin-bottom: 2rem;
+}
+
+input:focus {
+  border-color: red;
 }
