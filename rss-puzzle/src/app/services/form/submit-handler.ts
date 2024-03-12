@@ -2,6 +2,7 @@ import FormValidator from '../../utils/form-validation';
 import FormErrorManager from './form-error';
 import FormComponent from '../../components/form/form';
 import ButtonComponent from '../../components/button/button';
+import GameUser from '../user/local-storage';
 
 class FormSubmitHandler {
   private errorManager: FormErrorManager;
@@ -12,16 +13,20 @@ class FormSubmitHandler {
 
   private submitButton: ButtonComponent;
 
+  private gameUser: GameUser;
+
   constructor(
     errorManager: FormErrorManager,
     onValidSubmit: () => void,
     form: FormComponent,
-    submitButton: ButtonComponent
+    submitButton: ButtonComponent,
+    gameUser: GameUser
   ) {
     this.errorManager = errorManager;
     this.onValidSubmit = onValidSubmit;
     this.form = form;
     this.submitButton = submitButton;
+    this.gameUser = gameUser;
     this.setupInputValidationListeners();
   }
 
@@ -106,6 +111,12 @@ class FormSubmitHandler {
     event.preventDefault();
     // Используем validateFormData для проверки валидности формы
     if (this.validateFormData()) {
+      const formData = new FormData(this.form.getNode() as HTMLFormElement);
+      const name = formData.get('label-name') as string;
+      const surname = formData.get('label-surname') as string;
+      this.gameUser.gameName = name;
+      this.gameUser.gameSurname = surname;
+      this.gameUser.saveToLocalStorage();
       this.onValidSubmit();
     }
   }

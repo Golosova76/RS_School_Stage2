@@ -3,6 +3,7 @@ import FooterComponent from '../footer/footer';
 import HeaderComponent from '../header/header';
 import FormErrorManager from '../../services/form/form-error';
 import FormSubmitHandler from '../../services/form/submit-handler';
+import GameUser from '../../services/user/local-storage';
 
 class AccessScreen {
   private onLoginSuccess: () => void;
@@ -28,18 +29,20 @@ class AccessScreen {
 
     // Инициализация FormSubmitHandler и привязка его к форме
     const errorManager = new FormErrorManager(form);
+    const gameUser = new GameUser();
     const formSubmitHandler = new FormSubmitHandler(
       errorManager,
       this.onLoginSuccess,
       form,
-      submitButton
+      submitButton,
+      gameUser
     );
 
     // Получаем элемент формы и добавляем слушатель события
     const formElement: HTMLFormElement = form.getNode() as HTMLFormElement;
-    formElement.addEventListener('submit', (event) =>
-      formSubmitHandler.handle(event)
-    );
+    formElement.addEventListener('submit', (event) => {
+      formSubmitHandler.handle(event);
+    });
 
     const footer = new FooterComponent();
     this.wrapper.appendChild(footer.getNode());
