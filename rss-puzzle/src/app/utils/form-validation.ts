@@ -1,12 +1,24 @@
 class FormValidator {
-  static validateName(name: string): boolean {
-    const nameRegex = /^[A-Za-z-]{3,}$/;
-    return nameRegex.test(name);
+  // Проверка на допустимые символы (английский алфавит и дефис)
+  static isValidCharacters(value: string): boolean {
+    const regex = /^[A-Za-z-]+$/;
+    return regex.test(value);
   }
 
-  static validateSurname(surname: string): boolean {
-    const surnameRegex = /^[A-Za-z-]{4,}$/;
-    return surnameRegex.test(surname);
+  // Проверка на заглавную первую букву
+  static isInitialCapitalized(value: string): boolean {
+    const regex = /^[A-Z]/;
+    return regex.test(value);
+  }
+
+  // Проверка минимальной длины для имени
+  static isNameLengthValid(name: string): boolean {
+    return name.length >= 3;
+  }
+
+  // Проверка минимальной длины для фамилии
+  static isSurnameLengthValid(surname: string): boolean {
+    return surname.length >= 4;
   }
 }
 

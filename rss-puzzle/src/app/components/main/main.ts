@@ -15,8 +15,8 @@ class MainComponent extends Component<InterComponent> {
   }
 
   // Метод для добавления компонентов в main__container
-  appendToContainer(child: InterComponent): void {
-    this.mainContainer.append(child);
+  appendToContainer(child: HTMLElement): void {
+    this.mainContainer.getNode().prepend(child);
   }
 }
 

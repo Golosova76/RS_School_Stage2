@@ -3,7 +3,10 @@ import { Component, InterComponent } from '../base-component';
 class HeaderComponent extends Component<InterComponent> {
   constructor() {
     super({ tag: 'header', className: 'header' });
+    this.init();
+  }
 
+  private init(): void {
     // Создание контейнера списка
     const headerContainer = new Component<InterComponent>({
       tag: 'div',
@@ -16,9 +19,9 @@ class HeaderComponent extends Component<InterComponent> {
       className: 'header__title',
       text: 'English Puzzle',
     });
-    headerContainer.append(headerTitle);
 
-    // Добавление в header
+    // Сборка и добавление элементов
+    headerContainer.append(headerTitle);
     this.append(headerContainer);
   }
 }

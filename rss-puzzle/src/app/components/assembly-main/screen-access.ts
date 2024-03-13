@@ -1,6 +1,5 @@
-import ComponentAssemblerAccess from './main-access';
-import FooterComponent from '../footer/footer';
-import HeaderComponent from '../header/header';
+import FormComponent from '../form/form';
+import ButtonComponent from '../button/button';
 import FormErrorManager from '../../services/form/form-error';
 import FormSubmitHandler from '../../services/form/submit-handler';
 import GameUser from '../../services/user/local-storage';
@@ -8,24 +7,22 @@ import GameUser from '../../services/user/local-storage';
 class AccessScreen {
   private onLoginSuccess: () => void;
 
-  private wrapper: HTMLElement;
-
   constructor(onLoginSuccess: () => void) {
     this.onLoginSuccess = onLoginSuccess;
-    document.body.classList.add('body');
-    this.wrapper = document.createElement('div'); // Инициализация wrapper
-    this.wrapper.classList.add('wrapper'); // Добавление класса
   }
 
   render(): HTMLElement {
-    this.wrapper.classList.add('wrapper');
+    const submitButton = new ButtonComponent({
+      className: 'login-button',
+      text: 'Login',
+      type: 'submit',
+      disabled: true,
+    });
 
-    const header = new HeaderComponent();
-    this.wrapper.appendChild(header.getNode());
+    // Создание экземпляра формы и добавление его в mainComponent
+    const form = new FormComponent();
 
-    const { mainComponent, form, submitButton } =
-      ComponentAssemblerAccess.assembleMainContent();
-    this.wrapper.appendChild(mainComponent.getNode());
+    form.appendToFormDirectly(submitButton);
 
     // Инициализация FormSubmitHandler и привязка его к форме
     const errorManager = new FormErrorManager(form);
@@ -44,10 +41,7 @@ class AccessScreen {
       formSubmitHandler.handle(event);
     });
 
-    const footer = new FooterComponent();
-    this.wrapper.appendChild(footer.getNode());
-
-    return this.wrapper;
+    return formElement;
   }
 }
 

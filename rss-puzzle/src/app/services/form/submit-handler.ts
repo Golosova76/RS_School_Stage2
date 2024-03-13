@@ -1,8 +1,9 @@
-import FormValidator from '../../utils/form-validation';
+// import FormValidator from '../../utils/form-validation';
 import FormErrorManager from './form-error';
 import FormComponent from '../../components/form/form';
 import ButtonComponent from '../../components/button/button';
 import GameUser from '../user/local-storage';
+import FormFieldValidator from './field-validation';
 
 class FormSubmitHandler {
   private errorManager: FormErrorManager;
@@ -30,59 +31,34 @@ class FormSubmitHandler {
     this.setupInputValidationListeners();
   }
 
-  private validateFormData(): boolean {
+  private validateFormData(changedFieldName: string | null = null): boolean {
     const formData = new FormData(this.form.getNode() as HTMLFormElement);
     const name = formData.get('label-name') as string;
     const surname = formData.get('label-surname') as string;
 
     let isValid = true;
 
-    if (!FormValidator.validateName(name)) {
-      isValid = false;
-      this.errorManager.showError(
-        'label-name',
-        'Invalid name. Please make sure it starts with a capital letter, contains only English alphabet letters, the hyphen (-) symbol and at least 3 characters.'
-      );
-    } else {
-      this.errorManager.clearError('label-name');
+    // Используем методы из FormFieldValidator
+    if (changedFieldName === 'label-name' || changedFieldName === null) {
+      // const name = formData.get('label-name') as string;
+      const nameError = FormFieldValidator.validateName(name);
+      if (nameError) {
+        isValid = false;
+        this.errorManager.showError('label-name', nameError);
+      } else {
+        this.errorManager.clearError('label-name');
+      }
     }
 
-    if (!FormValidator.validateSurname(surname)) {
-      isValid = false;
-      this.errorManager.showError(
-        'label-surname',
-        'Invalid surname. Please make sure it starts with a capital letter, contains only English alphabet letters, the hyphen (-) symbol and at least 4 characters.'
-      );
-    } else {
-      this.errorManager.clearError('label-surname'); // Очищаем ошибку для поля фамилии
-    }
-
-    return isValid;
-  }
-
-  private validateField(fieldName: string, value: string): boolean {
-    let isValid = true;
-    switch (fieldName) {
-      case 'label-name':
-        if (!FormValidator.validateName(value)) {
-          isValid = false;
-          this.errorManager.showError(
-            'label-name',
-            'Invalid name. Please make sure it starts with a capital letter, contains only English alphabet letters, the hyphen (-) symbol and at least 3 characters.'
-          );
-        }
-        break;
-      case 'label-surname':
-        if (!FormValidator.validateSurname(value)) {
-          isValid = false;
-          this.errorManager.showError(
-            'label-surname',
-            'Invalid surname. Please make sure it starts with a capital letter, contains only English alphabet letters, the hyphen (-) symbol and at least 4 characters.'
-          );
-        }
-        break;
-      default:
-        break;
+    if (changedFieldName === 'label-surname' || changedFieldName === null) {
+      // const surname = formData.get('label-surname') as string;
+      const surnameError = FormFieldValidator.validateSurname(surname);
+      if (surnameError) {
+        isValid = false;
+        this.errorManager.showError('label-surname', surnameError);
+      } else {
+        this.errorManager.clearError('label-surname');
+      }
     }
     return isValid;
   }
@@ -91,15 +67,15 @@ class FormSubmitHandler {
     const inputs = this.form.getNode().querySelectorAll('input');
     inputs.forEach((input) => {
       input.addEventListener('input', () => {
-        // Валидируем только измененное поле
-        const isValidField = this.validateField(input.name, input.value);
-        // Если это последнее измененное поле было валидно, проверяем всю форму
-        if (isValidField) {
-          if (this.validateFormData()) {
-            this.submitButton.removeAttribute('disabled');
-          } else {
-            this.submitButton.setAttribute('disabled', '');
-          }
+        // Получаем имя поля, которое было изменено
+        const changedFieldName = input.getAttribute('name');
+
+        // Передаем имя измененного поля в метод validateFormData
+        const isFormValid = this.validateFormData(changedFieldName);
+
+        // Обновляем состояние кнопки отправки на основе результатов валидации
+        if (isFormValid) {
+          this.submitButton.removeAttribute('disabled');
         } else {
           this.submitButton.setAttribute('disabled', '');
         }

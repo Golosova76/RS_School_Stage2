@@ -3,7 +3,10 @@ import { Component, InterComponent } from '../base-component';
 class FooterComponent extends Component<InterComponent> {
   constructor() {
     super({ tag: 'footer', className: 'footer' });
+    this.init();
+  }
 
+  private init(): void {
     // Создание контейнера списка
     const listContainer = new Component<InterComponent>({
       tag: 'ul',
