@@ -1,12 +1,14 @@
 import { Component, InterComponent } from '../base-component';
 
 class ArticleWelcomeComponent extends Component<InterComponent> {
+  private spanGreeting: Component<InterComponent>;
+
   constructor() {
     super({ tag: 'article', className: 'article-welcome' });
-    this.createArticleWComponents();
+    this.spanGreeting = this.createArticleWComponents();
   }
 
-  private createArticleWComponents() {
+  private createArticleWComponents(): Component<InterComponent> {
     const divDescription = new Component<InterComponent>({
       tag: 'div',
       className: 'article-welcome__text',
@@ -36,12 +38,23 @@ class ArticleWelcomeComponent extends Component<InterComponent> {
     const spanGreeting = new Component<InterComponent>({
       tag: 'span',
       className: 'article-welcome__span',
-      // text: '2024',
+      // text: '',
     });
     divGreetingContainer.append(spanGreeting);
 
     this.append(divDescription);
     this.append(divGreetingContainer);
+
+    return spanGreeting;
+  }
+
+  public setUserGreeting(name?: string, surname?: string): void {
+    // Установка текста приветствия с использованием метода setTextContent
+    const greetingText = `Welcome to the game, ${name || 'Гость'} ${
+      surname || ''
+    }!`;
+    this.spanGreeting.setTextContent(greetingText);
+    this.spanGreeting.getNode().classList.add('zoom-in');
   }
 
   public appendToArticleWDirectly(child: Component<InterComponent>): void {
