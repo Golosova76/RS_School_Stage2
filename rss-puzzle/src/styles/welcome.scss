@@ -45,6 +45,7 @@
   & .article-welcome__greeting {
     display: flex;
     justify-content: center;
+    @include margin-bottom40;
     span {
       font-size: 3.5rem;
       font-weight: 800;
@@ -64,6 +65,34 @@
 
   & .zoom-in {
     animation: zoomInAnimation 1s ease-out forwards;
+  }
+
+  & .start-button {
+    display: block;
+    margin: 0 auto;
+    padding: 1rem 5rem 1rem 5rem;
+    text-align: center;
+    border: none;
+    border-radius: 6px;
+    background-color: #8caab5;
+    color: #ffffff;
+    cursor: pointer;
+    font-weight: 800;
+    transition:
+      background-color 0.4s ease,
+      transform 0.2s ease,
+      box-shadow 0.2s ease;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.6);
+    @media (any-hover: hover) {
+      &:hover {
+        background-color: #5f8794;
+        color: black;
+      }
+    }
+    &:active {
+      transform: translateY(2px);
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    }
   }
 }
 
