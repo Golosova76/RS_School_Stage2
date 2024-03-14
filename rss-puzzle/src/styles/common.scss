@@ -10,7 +10,7 @@ html {
   > main {
     flex: 1 1 auto;
   }
-  background-color: #f4f4f4;
+  // background-color: #f4f4f4;
 }
 
 [class*="__container"] {
@@ -22,4 +22,5 @@ html {
 body {
   font: $font-weight $font-size $font-family;
   color: $color-text-dark;
+  background-color: #f4f4f4;
 }

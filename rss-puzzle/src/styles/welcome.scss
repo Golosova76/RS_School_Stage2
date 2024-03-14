@@ -1,0 +1,31 @@
+.welcome-body {
+  background-image: url("../assets/image/back7.webp");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+
+  & .header__title {
+    color: black;
+  }
+
+  & .article-welcome__text {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: black;
+    line-height: 1.5;
+    letter-spacing: 0.2rem;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+    background-image: linear-gradient(
+      to bottom,
+      rgba(255, 255, 255, 0.2) 0%,
+      rgba(255, 255, 255, 0.4) 100%
+    );
+    box-shadow: 1px 1px 2px #5c504a55;
+    border-radius: 50px;
+    p {
+      width: 70%;
+      @include margin-bottom20;
+    }
+  }
+}

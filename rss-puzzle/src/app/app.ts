@@ -2,6 +2,7 @@ import HeaderComponent from './components/header/header';
 import MainComponent from './components/main/main';
 import FooterComponent from './components/footer/footer';
 import AccessScreen from './components/assembly-main/screen-access';
+import WelcomeScreen from './components/assembly-main/screen-welcome';
 
 type AppState = 'access' | 'welcome' | 'game' | 'statistics';
 
@@ -13,10 +14,12 @@ class App {
   private mainComponent!: MainComponent;
 
   constructor() {
-    document.body.classList.add('body');
+    // document.body.classList.add('body');
     this.wrapper = document.createElement('div'); // Инициализация wrapper
     this.wrapper.classList.add('wrapper'); // Добавление класса
     document.body.appendChild(this.wrapper);
+    const savedState = localStorage.getItem('currentState') as AppState | null;
+    this.currentState = savedState || 'access'; // Если сохраненного состояния нет, то 'access'
     this.initHeader();
     this.initMainComponent();
     this.initFooter();
@@ -40,10 +43,16 @@ class App {
 
   init(): void {
     let accessScreen: AccessScreen;
+    let welcomeScreen: WelcomeScreen;
     switch (this.currentState) {
       case 'access':
         accessScreen = new AccessScreen(() => this.switchState('welcome'));
         this.mainComponent.appendToContainer(accessScreen.render());
+        break;
+      case 'welcome':
+        welcomeScreen = new WelcomeScreen(() => this.switchState('game'));
+        this.mainComponent.appendToContainer(welcomeScreen.render());
+        document.body.classList.add('welcome-body');
         break;
       // Предполагаем добавление других состояний по аналогии
       default:
@@ -52,6 +61,7 @@ class App {
 
   switchState(newState: AppState): void {
     this.currentState = newState;
+    localStorage.setItem('currentState', newState); // Сохранение в localStorage
     this.wrapper.innerHTML = '';
     this.initHeader(); // Переинициализация хедера, мейна и футера после очистки
     this.initMainComponent();

@@ -19,7 +19,7 @@ class AccessScreen {
       disabled: true,
     });
 
-    // Создание экземпляра формы и добавление его в mainComponent
+    // Создание экземпляра формы
     const form = new FormComponent();
 
     form.appendToFormDirectly(submitButton);
