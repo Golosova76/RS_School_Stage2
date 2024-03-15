@@ -13,7 +13,7 @@
 // общий div для 10 предложений блок результатов
 .game__results {
   height: 480px;
-  border-radius: 10px;
+  border-radius: 4px;
   background-color: #ffffff;
   outline: #fff double 5px;
   box-shadow:
@@ -45,7 +45,7 @@
 }
 // div для слов предложения
 .game__words {
-  padding: 0.3rem;
+  padding: 2px;
   display: flex;
   justify-content: space-around;
   width: 100%;
@@ -56,12 +56,12 @@
 }
 // div для 1 предложения исходный блок
 .game__puzzles {
-  padding: 0.3rem;
+  padding: 2px;
   display: flex;
-  justify-content: space-around; /* Распределяет дочерние элементы равномерно с пространством вокруг них */
+  justify-content: space-between; /* Распределяет дочерние элементы равномерно с пространством вокруг них */
   align-items: center;
   height: 3rem;
-  border-radius: 10px;
+  border-radius: 4px;
   background-color: #ffffff;
   outline: #fff double 5px;
   box-shadow:
@@ -72,8 +72,13 @@
 }
 
 .game__puzzle {
-  flex: 1; /* Заставляет спаны занимать равные части пространства внутри контейнера */
+  //flex: 1; /* Заставляет спаны занимать равные части пространства внутри контейнера */
   text-align: center; /* Выравнивание текста внутри спанов по центру */
-  padding: 0 0.5rem;
+  //padding: 0 2px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   outline: #911919 solid 2px;
+  align-self: center;
+  height: 100%;
 }

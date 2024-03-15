@@ -82,19 +82,6 @@ class ArticleGameComponent extends Component<InterComponent> {
     const containerComponent = this.gameBlockPuzzles.gameWords[0];
     return containerComponent?.getNode() as HTMLElement;
   }
-
-  /*
-  private findEmptyWordContainer(): HTMLElement | undefined {
-    const containerComponent = this.gameBlockPuzzles.gameWords.find(
-      (wordContainer) => {
-        return wordContainer.getNode().children.length === 0;
-      }
-    );
-
-    // Возвращаем HTMLElement, если компонент найден
-    return containerComponent?.getNode() as HTMLElement;
-  }
-  */
 }
 
 export default ArticleGameComponent;

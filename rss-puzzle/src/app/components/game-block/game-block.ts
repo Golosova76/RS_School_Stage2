@@ -1,4 +1,5 @@
 import { Component, InterComponent } from '../base-component';
+import DynamicSizeManager from '../../services/words/dinamic-width';
 
 class GameBlockPuzzles extends Component<InterComponent> {
   public gamePuzzles!: Component<InterComponent>;
@@ -66,6 +67,13 @@ class GameBlockPuzzles extends Component<InterComponent> {
         className: 'game__puzzle',
         text: word,
       });
+
+      // Получаем DOM-элемент спана
+      const node = wordSpan.getNode(); // Предполагая, что getNode() возвращает HTMLElement
+      if (node instanceof HTMLElement) {
+        DynamicSizeManager.applyStyles(node, word, words.length); // Применяем стили
+      }
+
       gamePuzzles.append(wordSpan); // Добавляем спан в контейнер
     });
   }
