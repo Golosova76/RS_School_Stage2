@@ -3,6 +3,7 @@ import MainComponent from './components/main/main';
 import FooterComponent from './components/footer/footer';
 import AccessScreen from './components/assembly-main/screen-access';
 import WelcomeScreen from './components/assembly-main/screen-welcome';
+import GameScreen from './components/assembly-main/screen-game';
 
 type AppState = 'access' | 'welcome' | 'game' | 'statistics';
 
@@ -44,6 +45,7 @@ class App {
   init(): void {
     let accessScreen: AccessScreen;
     let welcomeScreen: WelcomeScreen;
+    let gameScreen: GameScreen;
     switch (this.currentState) {
       case 'access':
         accessScreen = new AccessScreen(() => this.switchState('welcome'));
@@ -53,6 +55,11 @@ class App {
         welcomeScreen = new WelcomeScreen(() => this.switchState('game'));
         this.mainComponent.appendToContainer(welcomeScreen.render());
         document.body.classList.add('welcome-body');
+        break;
+      case 'game':
+        gameScreen = new GameScreen(() => this.switchState('statistics'));
+        this.mainComponent.appendToContainer(gameScreen.render());
+        document.body.classList.add('game-body');
         break;
       // Предполагаем добавление других состояний по аналогии
       default:

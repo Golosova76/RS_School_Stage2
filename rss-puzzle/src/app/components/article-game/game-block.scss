@@ -1,0 +1,79 @@
+.article-game {
+  max-width: 58rem;
+  width: 100%;
+}
+
+// общий div обоих блоков
+.game__block {
+  display: flex;
+  flex-direction: column;
+  max-width: 58rem;
+  width: 100%;
+}
+// общий div для 10 предложений блок результатов
+.game__results {
+  height: 480px;
+  border-radius: 10px;
+  background-color: #ffffff;
+  outline: #fff double 5px;
+  box-shadow:
+    0 3px 10px 4px rgb(227 216 216 / 40%),
+    0 4px 15px 6px rgb(0 0 0 / 50%),
+    0 5px 20px 10px rgb(120 114 114 / 60%);
+  @include margin-bottom40;
+}
+// div для одного предложения и цифры
+.game__result {
+  display: flex;
+  justify-content: space-between;
+  height: 3rem;
+  &:not(:last-child) {
+    margin-bottom: 2px;
+  }
+}
+// span для цифры
+.game__number {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 40px;
+  height: 40px;
+  margin-left: -80px;
+  text-align: center;
+  border-radius: 50%;
+  border: 1px solid blueviolet;
+}
+// div для слов предложения
+.game__words {
+  padding: 0.3rem;
+  display: flex;
+  justify-content: space-around;
+  width: 100%;
+  align-items: center;
+  height: 3rem;
+
+  cursor: pointer;
+}
+// div для 1 предложения исходный блок
+.game__puzzles {
+  padding: 0.3rem;
+  display: flex;
+  justify-content: space-around; /* Распределяет дочерние элементы равномерно с пространством вокруг них */
+  align-items: center;
+  height: 3rem;
+  border-radius: 10px;
+  background-color: #ffffff;
+  outline: #fff double 5px;
+  box-shadow:
+    0 3px 10px 4px rgb(227 216 216 / 40%),
+    0 4px 15px 6px rgb(0 0 0 / 50%),
+    0 5px 20px 10px rgb(120 114 114 / 60%);
+  cursor: pointer;
+}
+
+.game__puzzle {
+  flex: 1; /* Заставляет спаны занимать равные части пространства внутри контейнера */
+  text-align: center; /* Выравнивание текста внутри спанов по центру */
+  padding: 0 0.5rem;
+  outline: #911919 solid 2px;
+}
