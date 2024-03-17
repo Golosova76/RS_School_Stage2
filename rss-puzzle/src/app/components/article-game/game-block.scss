@@ -1,0 +1,150 @@
+.article-game {
+  max-width: 58rem;
+  width: 100%;
+}
+
+// общий div обоих блоков
+.game__block {
+  display: flex;
+  flex-direction: column;
+}
+// общий div для 10 предложений блок результатов
+.game__results {
+  height: 480px;
+  border-radius: 4px;
+  background-color: #ffffff;
+  outline: #fff double 5px;
+  box-shadow:
+    0 3px 10px 4px rgb(227 216 216 / 40%),
+    0 4px 15px 6px rgb(0 0 0 / 50%),
+    0 5px 20px 10px rgb(120 114 114 / 60%);
+  @include margin-bottom40;
+}
+// div для одного предложения и цифры
+.game__result {
+  display: flex;
+  justify-content: space-between;
+  height: 3rem;
+  &:not(:last-child) {
+    margin-bottom: 2px;
+  }
+}
+// span для цифры
+.game__number {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 40px;
+  height: 40px;
+  margin-left: -80px;
+  text-align: center;
+  border-radius: 50%;
+  border: 1px solid blueviolet;
+}
+// div для слов предложения
+.game__words {
+  padding: 2px;
+  display: flex;
+  width: 100%;
+  align-items: center;
+  height: 3rem;
+
+  cursor: pointer;
+}
+// div для 1 предложения исходный блок
+.game__puzzles {
+  padding: 2px;
+  display: flex;
+  align-items: center;
+  height: 3rem;
+  border-radius: 4px;
+  background-color: #ffffff;
+  outline: #fff double 5px;
+  box-shadow:
+    0 3px 10px 4px rgb(227 216 216 / 40%),
+    0 4px 15px 6px rgb(0 0 0 / 50%),
+    0 5px 20px 10px rgb(120 114 114 / 60%);
+  cursor: pointer;
+  @include margin-bottom40;
+}
+
+.game__puzzle {
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  outline: #911919 solid 2px;
+  transition:
+    box-shadow 0.3s ease 0s,
+    scale 0.3s ease 0s;
+
+  @media (any-hover: hover) {
+    &:hover {
+      color: black;
+      box-shadow: 0 0 40px rgba(189, 188, 188);
+      scale: (1.03);
+    }
+  }
+}
+
+/* Определение анимации "приземления" */
+@keyframes landingAnimation {
+  from {
+    transform: scale(1.1);
+    opacity: 0.5;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.game__puzzle.landing {
+  animation: landingAnimation 0.5s ease forwards;
+}
+
+.continue-button {
+  display: block;
+  margin: 0 auto;
+  padding: 0.5rem 2rem 0.5rem 2rem;
+  text-align: center;
+  border: none;
+  border-radius: 6px;
+  background-color: #8caab5;
+  color: #ffffff;
+  cursor: pointer;
+  font-weight: 800;
+  transition:
+    background-color 0.4s ease,
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.6);
+  @media (any-hover: hover) {
+    &:hover {
+      background-color: #5f8794;
+      color: black;
+    }
+  }
+  &:active {
+    transform: translateY(2px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  }
+  & .continue-effect {
+    animation: colorChangeAnimation 5s;
+  }
+}
+
+button:disabled {
+  pointer-events: none;
+}
+
+.continue-effect {
+  animation: colorChangeAnimation 3s;
+}
+
+@keyframes colorChangeAnimation {
+  100% {
+    background-color: blueviolet;
+    color: black;
+  }
+}

@@ -1,0 +1,12 @@
+.header__container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 6rem;
+}
+
+.header__title {
+  font-size: 3rem;
+  font-weight: 900;
+  letter-spacing: 0.1em;
+}
