@@ -1,8 +1,12 @@
 import { Component, InterComponent } from '../base-component';
 import DynamicSizeManager from '../../services/words/dinamic-width';
+import GameBlockButtons from './game-buttons';
+import ButtonComponent from '../button/button';
 
 class GameBlockPuzzles extends Component<InterComponent> {
   public gamePuzzles!: Component<InterComponent>;
+
+  public gameBlockButtons!: Component<InterComponent>;
 
   public gameWords: Component<InterComponent>[];
 
@@ -11,6 +15,7 @@ class GameBlockPuzzles extends Component<InterComponent> {
     this.gameWords = [];
     // Вызов метода для создания и добавления элементов формы
     this.createGameBlockComponents();
+    this.getGameButtonContinue();
   }
 
   private createGameBlockComponents() {
@@ -53,6 +58,10 @@ class GameBlockPuzzles extends Component<InterComponent> {
       className: 'game__puzzles',
     });
     this.append(this.gamePuzzles);
+
+    // добавление блока с кнопками
+    this.gameBlockButtons = new GameBlockButtons();
+    this.append(this.gameBlockButtons);
 
     // audio
     const audioGame = new Component<InterComponent>({
@@ -102,6 +111,11 @@ class GameBlockPuzzles extends Component<InterComponent> {
     targetContainer: HTMLElement
   ): void {
     targetContainer.appendChild(wordElement);
+  }
+
+  public getGameButtonContinue(): ButtonComponent | null {
+    const gameBlockButtons = this.gameBlockButtons as GameBlockButtons;
+    return gameBlockButtons.getGameButtonContinue();
   }
 }
 

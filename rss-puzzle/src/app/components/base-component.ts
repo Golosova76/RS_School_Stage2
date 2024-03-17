@@ -60,6 +60,10 @@ export class Component<T extends InterComponent> {
     this.node.textContent = content;
   }
 
+  getTextContent(): string {
+    return this.node.textContent || '';
+  }
+
   setAttribute(attribute: string, value: string): void {
     this.node.setAttribute(attribute, value);
   }

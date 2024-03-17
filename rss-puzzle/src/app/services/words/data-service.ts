@@ -41,6 +41,21 @@ class WordDataService {
     }
     return arrayCopy;
   }
+
+  // метод получения неперемешенного предложения
+  public getOriginalSentenceForRound(
+    roundIndex: number,
+    sentenceIndex: number
+  ): string {
+    if (roundIndex < this.data.rounds.length) {
+      const round = this.data.rounds[roundIndex];
+      if (sentenceIndex < round.words.length) {
+        const sentence = round.words[sentenceIndex].textExample;
+        return sentence;
+      }
+    }
+    return '';
+  }
 }
 
 export default WordDataService;

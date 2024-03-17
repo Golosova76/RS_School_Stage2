@@ -2,9 +2,12 @@ import { Component, InterComponent } from '../base-component';
 import GameBlockPuzzles from '../game-block/game-block';
 import WordDataService from '../../services/words/data-service';
 import AnimationHelper from '../../utils/animation-helper';
+// import ButtonComponent from '../button/button';
 
 class ArticleGameComponent extends Component<InterComponent> {
   private gameBlockPuzzles: GameBlockPuzzles;
+
+  // private gameButtonContinue: ButtonComponent | null = null;
 
   private wordDataService: WordDataService;
 
@@ -19,7 +22,7 @@ class ArticleGameComponent extends Component<InterComponent> {
   constructor(
     wordDataService: WordDataService,
     level: number = 1,
-    roundIndex: number = 1,
+    roundIndex: number = 2,
     sentenceIndex: number = 0
   ) {
     super({ tag: 'article', className: 'article-game' });
@@ -81,6 +84,7 @@ class ArticleGameComponent extends Component<InterComponent> {
                       puzzleNode,
                       targetContainer
                     );
+                    this.checkSentenceCompletion();
                     puzzleNode.classList.add('landing');
 
                     setTimeout(() => {
@@ -162,6 +166,50 @@ class ArticleGameComponent extends Component<InterComponent> {
     return this.gameBlockPuzzles.gameWords[
       this.currentContainerIndex
     ]?.getNode();
+  }
+
+  // убрать disabled у кнопки continue
+  public enableContinueButton(): void {
+    const gameButtonContinue = this.gameBlockPuzzles.getGameButtonContinue();
+    if (gameButtonContinue) {
+      const buttonElement = gameButtonContinue.getNode() as HTMLButtonElement; // Приведение типа
+      if (buttonElement) {
+        buttonElement.removeAttribute('disabled');
+        buttonElement.classList.add('continue-effect');
+      }
+    }
+  }
+
+  // проверяем предложение
+  private checkSentenceCompletion(): void {
+    const originalSentence = this.wordDataService
+      .getOriginalSentenceForRound(this.roundIndex, this.sentenceIndex)
+      .split(' '); // Получаем оригинальное предложение как массив слов
+
+    // Находим заполненный верхний контейнер
+    const filledTopContainer = this.gameBlockPuzzles.gameWords.find(
+      (wordComponent) => {
+        return (
+          wordComponent.getNode().childNodes.length === originalSentence.length
+        );
+      }
+    );
+    // Если такой контейнер найден, проверяем соответствие предложения
+    if (filledTopContainer) {
+      const currentSentence = Array.from(
+        filledTopContainer.getNode().childNodes
+      ).map((node) => {
+        // Предполагаем, что childNodes содержат <span> с нужными словами
+        return node.textContent?.trim() || '';
+      });
+
+      // Сравниваем оригинальное предложение с текущим
+      if (
+        JSON.stringify(originalSentence) === JSON.stringify(currentSentence)
+      ) {
+        this.enableContinueButton();
+      }
+    }
   }
 
   // eslint-disable-next-line class-methods-use-this
