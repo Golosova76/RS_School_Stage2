@@ -53,6 +53,23 @@ class GameBlockPuzzles extends Component<InterComponent> {
       className: 'game__puzzles',
     });
     this.append(this.gamePuzzles);
+
+    // audio
+    const audioGame = new Component<InterComponent>({
+      tag: 'audio',
+      className: 'game__audio',
+    });
+    this.append(audioGame);
+
+    // audio
+    const sourceGame = new Component<InterComponent>({
+      tag: 'source',
+      className: 'game__source',
+      type: 'audio/mpeg',
+    });
+    sourceGame.setAttribute('src', '../../../../public/zvonkiy-schelchok.mp3');
+    sourceGame.setAttribute('type', 'audio/mpeg');
+    audioGame.append(sourceGame);
   }
 
   // eslint-disable-next-line class-methods-use-this
@@ -69,7 +86,7 @@ class GameBlockPuzzles extends Component<InterComponent> {
       });
 
       // Получаем DOM-элемент спана
-      const node = wordSpan.getNode(); // Предполагая, что getNode() возвращает HTMLElement
+      const node = wordSpan.getNode(); // если getNode() возвращает HTMLElement
       if (node instanceof HTMLElement) {
         DynamicSizeManager.applyStyles(node, word, words.length); // Применяем стили
       }

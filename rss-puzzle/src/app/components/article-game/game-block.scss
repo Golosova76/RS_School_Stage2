@@ -7,8 +7,6 @@
 .game__block {
   display: flex;
   flex-direction: column;
-  max-width: 58rem;
-  width: 100%;
 }
 // общий div для 10 предложений блок результатов
 .game__results {
@@ -47,7 +45,6 @@
 .game__words {
   padding: 2px;
   display: flex;
-  justify-content: space-around;
   width: 100%;
   align-items: center;
   height: 3rem;
@@ -58,7 +55,6 @@
 .game__puzzles {
   padding: 2px;
   display: flex;
-  justify-content: space-between; /* Распределяет дочерние элементы равномерно с пространством вокруг них */
   align-items: center;
   height: 3rem;
   border-radius: 4px;
@@ -72,13 +68,36 @@
 }
 
 .game__puzzle {
-  //flex: 1; /* Заставляет спаны занимать равные части пространства внутри контейнера */
-  text-align: center; /* Выравнивание текста внутри спанов по центру */
-  //padding: 0 2px;
+  text-align: center;
   display: flex;
   justify-content: center;
   align-items: center;
   outline: #911919 solid 2px;
-  align-self: center;
-  height: 100%;
+  transition:
+    box-shadow 0.3s ease 0s,
+    scale 0.3s ease 0s;
+
+  @media (any-hover: hover) {
+    &:hover {
+      color: black;
+      box-shadow: 0 0 40px rgba(189, 188, 188);
+      scale: (1.03);
+    }
+  }
+}
+
+/* Определение анимации "приземления" */
+@keyframes landingAnimation {
+  from {
+    transform: scale(1.1);
+    opacity: 0.5;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.game__puzzle.landing {
+  animation: landingAnimation 0.5s ease forwards;
 }

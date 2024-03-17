@@ -3,25 +3,29 @@ class DynamicSizeManager {
 
   static calculateCardWidth(word: string, totalWords: number): string {
     const baseWidthPerChar = 12; // Базовая ширина на символ
-    const paddingPerSide = 10; // Отступ с каждой стороны карточки
     const outlineWidth = 2; // Толщина рамки
-    const wordLength = word.length;
+    const margin = 4; // Отступ между карточками
+    const totalMargins = margin * (totalWords - 1); // Общий размер всех отступов
 
-    // Рассчитываем ширину карточки на основе слова и добавляем ширину рамки
-    let cardWidth =
-      baseWidthPerChar * wordLength + paddingPerSide * 2 + outlineWidth * 2;
+    // Рассчитываем базовую ширину одной карточки
+    const baseCardWidth = baseWidthPerChar * word.length + outlineWidth * 2;
 
-    // Рассчитываем идеальную ширину одной карточки
+    // Рассчитываем общую базовую ширину всех карточек
+    const totalBaseWidth = baseCardWidth * totalWords;
+
+    // Рассчитываем доступное пространство с учетом отступов
     const availableSpace =
-      DynamicSizeManager.containerWidth -
-      (paddingPerSide * 2 + outlineWidth * 2) * totalWords;
-    const idealCardWidth = availableSpace / totalWords;
+      DynamicSizeManager.containerWidth - totalBaseWidth - totalMargins;
 
-    // Убедимся, что ширина карточки не превышает максимально возможную идеальную ширину
-    cardWidth = Math.min(cardWidth, idealCardWidth);
+    // Добавляем к каждой карточке равную долю доступного пространства
+    let cardWidth = baseCardWidth + availableSpace / totalWords;
 
     // Устанавливаем минимальную ширину карточки для читаемости
-    cardWidth = Math.max(cardWidth, 50); // Минимальная ширина карточки
+    const minWidth = baseWidthPerChar * word.length + outlineWidth * 2;
+    cardWidth = Math.max(cardWidth, minWidth);
+
+    // Округляем ширину карточки до целого числа пикселей
+    cardWidth = Math.floor(cardWidth);
 
     return `${cardWidth}px`;
   }
@@ -50,10 +54,7 @@ class DynamicSizeManager {
       width: cardWidth,
       height: '44px',
       fontSize,
-      // display: 'inline-flex',
-      // justifyContent: 'center',
-      // alignItems: 'center',
-      margin: '4px',
+      margin: '0 4px',
       textAlign: 'center',
     };
 

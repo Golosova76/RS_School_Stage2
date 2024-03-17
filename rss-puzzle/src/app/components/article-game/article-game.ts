@@ -1,6 +1,7 @@
 import { Component, InterComponent } from '../base-component';
 import GameBlockPuzzles from '../game-block/game-block';
 import WordDataService from '../../services/words/data-service';
+import AnimationHelper from '../../utils/animation-helper';
 
 class ArticleGameComponent extends Component<InterComponent> {
   private gameBlockPuzzles: GameBlockPuzzles;
@@ -13,10 +14,12 @@ class ArticleGameComponent extends Component<InterComponent> {
 
   private sentenceIndex: number;
 
+  currentContainerIndex: number = 0;
+
   constructor(
     wordDataService: WordDataService,
     level: number = 1,
-    roundIndex: number = 0,
+    roundIndex: number = 1,
     sentenceIndex: number = 0
   ) {
     super({ tag: 'article', className: 'article-game' });
@@ -56,6 +59,7 @@ class ArticleGameComponent extends Component<InterComponent> {
     }
   }
 
+  // Логика добавления из нижнего в верхний
   private initPuzzleClickEvents(): void {
     this.gameBlockPuzzles.gamePuzzles
       .getChildren()
@@ -66,10 +70,27 @@ class ArticleGameComponent extends Component<InterComponent> {
             puzzleNode.addEventListener('click', () => {
               const targetContainer = this.findEmptyWordContainer();
               if (targetContainer instanceof HTMLElement) {
-                this.gameBlockPuzzles.moveWordToContainer(
+                const targetRect = targetContainer.getBoundingClientRect();
+
+                // Используем AnimationHelper для анимации
+                AnimationHelper.animateElementMovement(
                   puzzleNode,
-                  targetContainer
+                  targetRect,
+                  () => {
+                    this.gameBlockPuzzles.moveWordToContainer(
+                      puzzleNode,
+                      targetContainer
+                    );
+                    puzzleNode.classList.add('landing');
+
+                    setTimeout(() => {
+                      puzzleNode.classList.remove('landing');
+                    }, 500); // Длительность анимации "приземления"
+                  }
                 );
+
+                this.initTopBlockClickEvents();
+                this.playClickSound();
               }
             });
           }
@@ -77,10 +98,79 @@ class ArticleGameComponent extends Component<InterComponent> {
       });
   }
 
+  private initTopBlockClickEvents(): void {
+    this.gameBlockPuzzles.gameWords.forEach((wordComponent) => {
+      const spanNode = wordComponent.getNode() as HTMLElement;
+      // Важно: убедитесь, что обработчики клика удаляются перед их повторной инициализацией
+      spanNode.removeEventListener('click', this.handleTopBlockSpanClick);
+      spanNode.addEventListener('click', this.handleTopBlockSpanClick);
+    });
+  }
+
+  // Обработчик клика в отдельном методе для возможности его удаления
+  private handleTopBlockSpanClick = (event: Event): void => {
+    // Убедимся, что клик был сделан именно по спану, а не по пустому месту в контейнере
+    if ((event.target as HTMLElement).nodeName === 'SPAN') {
+      const spanNode = event.target as HTMLElement;
+      this.returnSpanToLowerBlock(spanNode);
+      this.playClickSound();
+    }
+  };
+
+  // Логика добавления из верхнего в нижний
+  private returnSpanToLowerBlock(spanNode: HTMLElement): void {
+    const containerGamePuzzles = this.gameBlockPuzzles.gamePuzzles.getNode();
+    // Получите прямоугольник контейнера для вычисления смещения.
+    const targetRect = containerGamePuzzles.getBoundingClientRect();
+    // Перед тем как добавить spanNode обратно, применяем к нему анимацию.
+    AnimationHelper.animateElementMovement(spanNode, targetRect, () => {
+      containerGamePuzzles.append(spanNode);
+    });
+  }
+
+  // Логика опредения в какой верхний контейнер добавлять
   private findEmptyWordContainer(): HTMLElement | undefined {
-    // Предполагаем, что первый div в массиве gameWords всегда должен быть целевым контейнером
-    const containerComponent = this.gameBlockPuzzles.gameWords[0];
-    return containerComponent?.getNode() as HTMLElement;
+    // Получаем количество слов в нижнем блоке
+    const lowerBlockWordCount =
+      this.gameBlockPuzzles.gamePuzzles.getNode().childNodes.length;
+
+    // Получаем количество слов в верхних контейнерах
+    const upperBlockWordCount = this.gameBlockPuzzles.gameWords.reduce(
+      (count, wordComponent) => {
+        return count + wordComponent.getNode().childNodes.length;
+      },
+      0
+    );
+
+    // Если количество слов в нижнем блоке равно количеству слов в верхних контейнерах,
+    // то все верхние контейнеры заполнены и нужно найти следующий пустой контейнер,
+    // иначе возвращаем текущий контейнер
+    if (lowerBlockWordCount === upperBlockWordCount) {
+      // Найдем первый контейнер, который еще пустой
+      const nextEmptyContainer = this.gameBlockPuzzles.gameWords.find(
+        (wordComponent) => {
+          return wordComponent.getNode().childNodes.length === 0;
+        }
+      );
+
+      if (nextEmptyContainer) {
+        return nextEmptyContainer.getNode();
+      }
+    }
+
+    // Если верхние контейнеры еще не заполнены полностью, вернем текущий контейнер для заполнения
+    return this.gameBlockPuzzles.gameWords[
+      this.currentContainerIndex
+    ]?.getNode();
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  public playClickSound(): void {
+    // Получаем аудио-элемент по его ID и воспроизводим звук
+    const clickSound = document.querySelector(
+      '.game__audio'
+    ) as HTMLAudioElement;
+    clickSound.play();
   }
 }
 
