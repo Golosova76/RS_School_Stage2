@@ -4,6 +4,7 @@ import WordDataService from '../../services/words/data-service';
 import AnimationHelper from '../../utils/animation-helper';
 import SoundManager from '../../services/sound-manager';
 import ButtonsGameManager from '../../services/puzzles/button-manager';
+import SentenceCompletionChecker from '../../services/puzzles/sentence';
 // import ButtonComponent from '../button/button';
 
 class ArticleGameComponent extends Component<InterComponent> {
@@ -12,6 +13,8 @@ class ArticleGameComponent extends Component<InterComponent> {
   buttonsGameManager: ButtonsGameManager;
 
   private wordDataService: WordDataService;
+
+  private sentenceCompletionChecker: SentenceCompletionChecker;
 
   private level: number;
 
@@ -24,7 +27,7 @@ class ArticleGameComponent extends Component<InterComponent> {
   constructor(
     wordDataService: WordDataService,
     level: number = 1,
-    roundIndex: number = 2,
+    roundIndex: number = 0,
     sentenceIndex: number = 0
   ) {
     super({ tag: 'article', className: 'article-game' });
@@ -36,6 +39,12 @@ class ArticleGameComponent extends Component<InterComponent> {
     this.initGameBlockPuzzles();
     this.loadAndDisplayWords();
     this.buttonsGameManager = new ButtonsGameManager(this.gameBlockPuzzles);
+    this.sentenceCompletionChecker = new SentenceCompletionChecker(
+      this.gameBlockPuzzles,
+      wordDataService,
+      roundIndex,
+      sentenceIndex
+    );
   }
 
   initGameBlockPuzzles() {
@@ -171,98 +180,20 @@ class ArticleGameComponent extends Component<InterComponent> {
     ]?.getNode();
   }
 
-  /*
-  // убрать disabled у кнопки continue
-  public enableContinueButton(): void {
-    const gameButtonContinue = this.gameBlockPuzzles.getGameButtonContinue();
-    if (gameButtonContinue) {
-      const buttonElement = gameButtonContinue.getNode() as HTMLButtonElement; // Приведение типа
-      if (buttonElement) {
-        buttonElement.removeAttribute('disabled');
-        buttonElement.classList.add('continue-effect');
-      }
-    }
-  }
-
-
-  // убрать disabled у кнопки check
-  public enableCheckButton(): void {
-    const gameButtonCheck = this.gameBlockPuzzles.getGameButtonCheck();
-    if (gameButtonCheck) {
-      const buttonElement = gameButtonCheck.getNode() as HTMLButtonElement; // Приведение типа
-      if (buttonElement) {
-        buttonElement.removeAttribute('disabled');
-        buttonElement.classList.add('continue-effect');
-      }
-    }
-  }
-
-
-  // проверяем предложение
   private checkSentenceCompletion(): void {
-    const originalSentence = this.wordDataService
-      .getOriginalSentenceForRound(this.roundIndex, this.sentenceIndex)
-      .split(' '); // Получаем оригинальное предложение как массив слов
+    // Получаем состояние предложения от SentenceCompletionChecker
+    const { isComplete, isCorrect } =
+      this.sentenceCompletionChecker.checkSentenceCompletion();
 
-    // Находим заполненный верхний контейнер
-    const filledTopContainer = this.gameBlockPuzzles.gameWords.find(
-      (wordComponent) => {
-        return (
-          wordComponent.getNode().childNodes.length === originalSentence.length
-        );
-      }
-    );
-    // Если такой контейнер найден, проверяем соответствие предложения
-    if (filledTopContainer) {
-      const currentSentence = Array.from(
-        filledTopContainer.getNode().childNodes
-      ).map((node) => {
-        // Предполагаем, что childNodes содержат <span> с нужными словами
-        return node.textContent?.trim() || '';
-      });
-
-      // Сравниваем оригинальное предложение с текущим
-      if (
-        JSON.stringify(originalSentence) === JSON.stringify(currentSentence)
-      ) {
-        this.buttonsGameManager.enableContinueButton();
-      }
+    // Действия в зависимости от состояния предложения
+    if (isComplete) {
+      // Тут логика для активации кнопки "Проверить"
+      this.buttonsGameManager.enableCheckButton();
     }
-  }
-*/
-  private checkSentenceCompletion(): void {
-    const originalSentence = this.wordDataService
-      .getOriginalSentenceForRound(this.roundIndex, this.sentenceIndex)
-      .split(' '); // Получаем оригинальное предложение как массив слов
 
-    // Находим заполненный верхний контейнер
-    const filledTopContainer = this.gameBlockPuzzles.gameWords.find(
-      (wordComponent) => {
-        return (
-          wordComponent.getNode().childNodes.length === originalSentence.length
-        );
-      }
-    );
-
-    if (filledTopContainer) {
-      const currentSentence = Array.from(
-        filledTopContainer.getNode().childNodes
-      ).map((node) => node.textContent?.trim() || '');
-
-      // Если количество спанов в верхнем контейнере соответствует количеству слов в оригинальном предложении
-      if (
-        filledTopContainer.getNode().childNodes.length ===
-        originalSentence.length
-      ) {
-        this.buttonsGameManager.enableCheckButton(); // Активируем кнопку "Проверить"
-      }
-
-      // Если предложение собрано правильно
-      if (
-        JSON.stringify(originalSentence) === JSON.stringify(currentSentence)
-      ) {
-        this.buttonsGameManager.enableContinueButton(); // Активируем кнопку "Продолжить"
-      }
+    if (isCorrect) {
+      // Тут логика для активации кнопки "Продолжить"
+      this.buttonsGameManager.enableContinueButton();
     }
   }
 }

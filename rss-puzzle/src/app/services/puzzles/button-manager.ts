@@ -1,15 +1,17 @@
 import ButtonComponent from '../../components/button/button';
+import { Component, InterComponent } from '../../components/base-component';
 
 // Определяем интерфейс, описывающий необходимые методы
-interface IGameBlockPuzzles {
+export interface InterGameBlockPuzzles {
   getGameButtonContinue(): ButtonComponent | null;
   getGameButtonCheck(): ButtonComponent | null;
+  gameWords: Component<InterComponent>[];
 }
 
 class ButtonsGameManager {
-  private gameBlockPuzzles: IGameBlockPuzzles;
+  private gameBlockPuzzles: InterGameBlockPuzzles;
 
-  constructor(gameBlockPuzzles: IGameBlockPuzzles) {
+  constructor(gameBlockPuzzles: InterGameBlockPuzzles) {
     this.gameBlockPuzzles = gameBlockPuzzles;
   }
 
