@@ -103,9 +103,15 @@
   animation: landingAnimation 0.5s ease forwards;
 }
 
+.game__buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 2rem;
+}
+
 .continue-button {
   display: block;
-  margin: 0 auto;
+  //margin: 0 auto;
   padding: 0.5rem 2rem 0.5rem 2rem;
   text-align: center;
   border: none;
@@ -134,7 +140,42 @@
   }
 }
 
-button:disabled {
+button.continue-button:disabled {
+  pointer-events: none;
+}
+
+.check-button {
+  display: block;
+  //margin: 0 auto;
+  padding: 0.5rem 2rem 0.5rem 2rem;
+  text-align: center;
+  border: none;
+  border-radius: 6px;
+  background-color: #8caab5;
+  color: #ffffff;
+  cursor: pointer;
+  font-weight: 800;
+  transition:
+    background-color 0.4s ease,
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.6);
+  @media (any-hover: hover) {
+    &:hover {
+      background-color: #5f8794;
+      color: black;
+    }
+  }
+  &:active {
+    transform: translateY(2px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  }
+  & .continue-effect {
+    animation: colorChangeAnimation 5s;
+  }
+}
+
+button.check-button:disabled {
   pointer-events: none;
 }
 

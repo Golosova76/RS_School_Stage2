@@ -2,12 +2,14 @@ import { Component, InterComponent } from '../base-component';
 import GameBlockPuzzles from '../game-block/game-block';
 import WordDataService from '../../services/words/data-service';
 import AnimationHelper from '../../utils/animation-helper';
+import SoundManager from '../../services/sound-manager';
+import ButtonsGameManager from '../../services/puzzles/button-manager';
 // import ButtonComponent from '../button/button';
 
 class ArticleGameComponent extends Component<InterComponent> {
   private gameBlockPuzzles: GameBlockPuzzles;
 
-  // private gameButtonContinue: ButtonComponent | null = null;
+  buttonsGameManager: ButtonsGameManager;
 
   private wordDataService: WordDataService;
 
@@ -33,6 +35,7 @@ class ArticleGameComponent extends Component<InterComponent> {
     this.sentenceIndex = sentenceIndex;
     this.initGameBlockPuzzles();
     this.loadAndDisplayWords();
+    this.buttonsGameManager = new ButtonsGameManager(this.gameBlockPuzzles);
   }
 
   initGameBlockPuzzles() {
@@ -94,7 +97,7 @@ class ArticleGameComponent extends Component<InterComponent> {
                 );
 
                 this.initTopBlockClickEvents();
-                this.playClickSound();
+                SoundManager.playClickSound();
               }
             });
           }
@@ -117,7 +120,7 @@ class ArticleGameComponent extends Component<InterComponent> {
     if ((event.target as HTMLElement).nodeName === 'SPAN') {
       const spanNode = event.target as HTMLElement;
       this.returnSpanToLowerBlock(spanNode);
-      this.playClickSound();
+      SoundManager.playClickSound();
     }
   };
 
@@ -168,6 +171,7 @@ class ArticleGameComponent extends Component<InterComponent> {
     ]?.getNode();
   }
 
+  /*
   // убрать disabled у кнопки continue
   public enableContinueButton(): void {
     const gameButtonContinue = this.gameBlockPuzzles.getGameButtonContinue();
@@ -179,6 +183,20 @@ class ArticleGameComponent extends Component<InterComponent> {
       }
     }
   }
+
+
+  // убрать disabled у кнопки check
+  public enableCheckButton(): void {
+    const gameButtonCheck = this.gameBlockPuzzles.getGameButtonCheck();
+    if (gameButtonCheck) {
+      const buttonElement = gameButtonCheck.getNode() as HTMLButtonElement; // Приведение типа
+      if (buttonElement) {
+        buttonElement.removeAttribute('disabled');
+        buttonElement.classList.add('continue-effect');
+      }
+    }
+  }
+
 
   // проверяем предложение
   private checkSentenceCompletion(): void {
@@ -207,18 +225,45 @@ class ArticleGameComponent extends Component<InterComponent> {
       if (
         JSON.stringify(originalSentence) === JSON.stringify(currentSentence)
       ) {
-        this.enableContinueButton();
+        this.buttonsGameManager.enableContinueButton();
       }
     }
   }
+*/
+  private checkSentenceCompletion(): void {
+    const originalSentence = this.wordDataService
+      .getOriginalSentenceForRound(this.roundIndex, this.sentenceIndex)
+      .split(' '); // Получаем оригинальное предложение как массив слов
 
-  // eslint-disable-next-line class-methods-use-this
-  public playClickSound(): void {
-    // Получаем аудио-элемент по его ID и воспроизводим звук
-    const clickSound = document.querySelector(
-      '.game__audio'
-    ) as HTMLAudioElement;
-    clickSound.play();
+    // Находим заполненный верхний контейнер
+    const filledTopContainer = this.gameBlockPuzzles.gameWords.find(
+      (wordComponent) => {
+        return (
+          wordComponent.getNode().childNodes.length === originalSentence.length
+        );
+      }
+    );
+
+    if (filledTopContainer) {
+      const currentSentence = Array.from(
+        filledTopContainer.getNode().childNodes
+      ).map((node) => node.textContent?.trim() || '');
+
+      // Если количество спанов в верхнем контейнере соответствует количеству слов в оригинальном предложении
+      if (
+        filledTopContainer.getNode().childNodes.length ===
+        originalSentence.length
+      ) {
+        this.buttonsGameManager.enableCheckButton(); // Активируем кнопку "Проверить"
+      }
+
+      // Если предложение собрано правильно
+      if (
+        JSON.stringify(originalSentence) === JSON.stringify(currentSentence)
+      ) {
+        this.buttonsGameManager.enableContinueButton(); // Активируем кнопку "Продолжить"
+      }
+    }
   }
 }
 
