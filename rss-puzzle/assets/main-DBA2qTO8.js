@@ -761,12 +761,43 @@ class ButtonsGameManager {
     }
   }
 }
+class SentenceCompletionChecker {
+  constructor(gameBlockPuzzles, wordDataService, roundIndex, sentenceIndex) {
+    __publicField(this, "gameBlockPuzzles");
+    __publicField(this, "wordDataService");
+    __publicField(this, "roundIndex");
+    __publicField(this, "sentenceIndex");
+    this.gameBlockPuzzles = gameBlockPuzzles;
+    this.wordDataService = wordDataService;
+    this.roundIndex = roundIndex;
+    this.sentenceIndex = sentenceIndex;
+  }
+  checkSentenceCompletion() {
+    const originalSentence = this.wordDataService.getOriginalSentenceForRound(this.roundIndex, this.sentenceIndex).split(" ");
+    const filledTopContainer = this.gameBlockPuzzles.gameWords.find(
+      (wordComponent) => wordComponent.getNode().childNodes.length === originalSentence.length
+    );
+    if (!filledTopContainer) {
+      return { isComplete: false, isCorrect: false };
+    }
+    const currentSentence = Array.from(
+      filledTopContainer.getNode().childNodes
+    ).map((node) => {
+      var _a;
+      return ((_a = node.textContent) == null ? void 0 : _a.trim()) || "";
+    });
+    const isComplete = filledTopContainer.getNode().childNodes.length === originalSentence.length;
+    const isCorrect = JSON.stringify(originalSentence) === JSON.stringify(currentSentence);
+    return { isComplete, isCorrect };
+  }
+}
 class ArticleGameComponent extends Component {
-  constructor(wordDataService, level = 1, roundIndex = 2, sentenceIndex = 0) {
+  constructor(wordDataService, level = 1, roundIndex = 0, sentenceIndex = 0) {
     super({ tag: "article", className: "article-game" });
     __publicField(this, "gameBlockPuzzles");
     __publicField(this, "buttonsGameManager");
     __publicField(this, "wordDataService");
+    __publicField(this, "sentenceCompletionChecker");
     __publicField(this, "level");
     __publicField(this, "roundIndex");
     __publicField(this, "sentenceIndex");
@@ -787,6 +818,12 @@ class ArticleGameComponent extends Component {
     this.initGameBlockPuzzles();
     this.loadAndDisplayWords();
     this.buttonsGameManager = new ButtonsGameManager(this.gameBlockPuzzles);
+    this.sentenceCompletionChecker = new SentenceCompletionChecker(
+      this.gameBlockPuzzles,
+      wordDataService,
+      roundIndex,
+      sentenceIndex
+    );
   }
   initGameBlockPuzzles() {
     this.append(this.gameBlockPuzzles);
@@ -879,85 +916,13 @@ class ArticleGameComponent extends Component {
     }
     return (_a = this.gameBlockPuzzles.gameWords[this.currentContainerIndex]) == null ? void 0 : _a.getNode();
   }
-  /*
-    // убрать disabled у кнопки continue
-    public enableContinueButton(): void {
-      const gameButtonContinue = this.gameBlockPuzzles.getGameButtonContinue();
-      if (gameButtonContinue) {
-        const buttonElement = gameButtonContinue.getNode() as HTMLButtonElement; // Приведение типа
-        if (buttonElement) {
-          buttonElement.removeAttribute('disabled');
-          buttonElement.classList.add('continue-effect');
-        }
-      }
-    }
-  
-  
-    // убрать disabled у кнопки check
-    public enableCheckButton(): void {
-      const gameButtonCheck = this.gameBlockPuzzles.getGameButtonCheck();
-      if (gameButtonCheck) {
-        const buttonElement = gameButtonCheck.getNode() as HTMLButtonElement; // Приведение типа
-        if (buttonElement) {
-          buttonElement.removeAttribute('disabled');
-          buttonElement.classList.add('continue-effect');
-        }
-      }
-    }
-  
-  
-    // проверяем предложение
-    private checkSentenceCompletion(): void {
-      const originalSentence = this.wordDataService
-        .getOriginalSentenceForRound(this.roundIndex, this.sentenceIndex)
-        .split(' '); // Получаем оригинальное предложение как массив слов
-  
-      // Находим заполненный верхний контейнер
-      const filledTopContainer = this.gameBlockPuzzles.gameWords.find(
-        (wordComponent) => {
-          return (
-            wordComponent.getNode().childNodes.length === originalSentence.length
-          );
-        }
-      );
-      // Если такой контейнер найден, проверяем соответствие предложения
-      if (filledTopContainer) {
-        const currentSentence = Array.from(
-          filledTopContainer.getNode().childNodes
-        ).map((node) => {
-          // Предполагаем, что childNodes содержат <span> с нужными словами
-          return node.textContent?.trim() || '';
-        });
-  
-        // Сравниваем оригинальное предложение с текущим
-        if (
-          JSON.stringify(originalSentence) === JSON.stringify(currentSentence)
-        ) {
-          this.buttonsGameManager.enableContinueButton();
-        }
-      }
-    }
-  */
   checkSentenceCompletion() {
-    const originalSentence = this.wordDataService.getOriginalSentenceForRound(this.roundIndex, this.sentenceIndex).split(" ");
-    const filledTopContainer = this.gameBlockPuzzles.gameWords.find(
-      (wordComponent) => {
-        return wordComponent.getNode().childNodes.length === originalSentence.length;
-      }
-    );
-    if (filledTopContainer) {
-      const currentSentence = Array.from(
-        filledTopContainer.getNode().childNodes
-      ).map((node) => {
-        var _a;
-        return ((_a = node.textContent) == null ? void 0 : _a.trim()) || "";
-      });
-      if (filledTopContainer.getNode().childNodes.length === originalSentence.length) {
-        this.buttonsGameManager.enableCheckButton();
-      }
-      if (JSON.stringify(originalSentence) === JSON.stringify(currentSentence)) {
-        this.buttonsGameManager.enableContinueButton();
-      }
+    const { isComplete, isCorrect } = this.sentenceCompletionChecker.checkSentenceCompletion();
+    if (isComplete) {
+      this.buttonsGameManager.enableCheckButton();
+    }
+    if (isCorrect) {
+      this.buttonsGameManager.enableContinueButton();
     }
   }
 }
