@@ -73,7 +73,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  outline: #911919 solid 2px;
+  outline: blueviolet solid 2px;
   transition:
     box-shadow 0.3s ease 0s,
     scale 0.3s ease 0s;
@@ -111,7 +111,6 @@
 
 .continue-button {
   display: block;
-  //margin: 0 auto;
   padding: 0.5rem 2rem 0.5rem 2rem;
   text-align: center;
   border: none;
@@ -119,6 +118,8 @@
   background-color: #8caab5;
   color: #ffffff;
   cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.5s ease;
   font-weight: 800;
   transition:
     background-color 0.4s ease,
@@ -188,4 +189,19 @@ button.check-button:disabled {
     background-color: blueviolet;
     color: black;
   }
+}
+
+.check-visible {
+  opacity: 1;
+  transition: opacity 0.5s ease;
+}
+
+.check-hidden {
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+.highlight-incorrect {
+  outline: red solid 2px;
+  color: red;
 }

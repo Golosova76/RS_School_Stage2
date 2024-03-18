@@ -16,6 +16,10 @@ class ArticleGameComponent extends Component<InterComponent> {
 
   private sentenceCompletionChecker: SentenceCompletionChecker;
 
+
+  private currentWordContainer: HTMLElement | undefined = undefined;
+
+
   private level: number;
 
   private roundIndex: number;
@@ -146,38 +150,27 @@ class ArticleGameComponent extends Component<InterComponent> {
 
   // Логика опредения в какой верхний контейнер добавлять
   private findEmptyWordContainer(): HTMLElement | undefined {
-    // Получаем количество слов в нижнем блоке
-    const lowerBlockWordCount =
-      this.gameBlockPuzzles.gamePuzzles.getNode().childNodes.length;
 
-    // Получаем количество слов в верхних контейнерах
-    const upperBlockWordCount = this.gameBlockPuzzles.gameWords.reduce(
-      (count, wordComponent) => {
-        return count + wordComponent.getNode().childNodes.length;
-      },
-      0
-    );
-
-    // Если количество слов в нижнем блоке равно количеству слов в верхних контейнерах,
-    // то все верхние контейнеры заполнены и нужно найти следующий пустой контейнер,
-    // иначе возвращаем текущий контейнер
-    if (lowerBlockWordCount === upperBlockWordCount) {
-      // Найдем первый контейнер, который еще пустой
-      const nextEmptyContainer = this.gameBlockPuzzles.gameWords.find(
-        (wordComponent) => {
-          return wordComponent.getNode().childNodes.length === 0;
-        }
-      );
-
-      if (nextEmptyContainer) {
-        return nextEmptyContainer.getNode();
-      }
+    // Если текущий контейнер уже выбран и не пустой (имеет спаны), используем его
+    if (
+      this.currentWordContainer &&
+      this.currentWordContainer.childNodes.length > 0
+    ) {
+      return this.currentWordContainer;
     }
+    // Находим первый пустой контейнер 'game__words'
+    const nextEmptyContainer = this.gameBlockPuzzles.gameWords.find(
+      (wordComponent) => wordComponent.getNode().childNodes.length === 0
+    );
+    // Если нашли пустой контейнер, обновляем текущий контейнер и возвращаем его
+    if (nextEmptyContainer) {
+      this.currentWordContainer = nextEmptyContainer.getNode();
+      return this.currentWordContainer;
+    }
+    // Если не нашли пустой контейнер, пытаемся вернуть текущий
+    // В противном случае, возвращаем undefined, означающий, что нет доступных контейнеров
+    return this.currentWordContainer;
 
-    // Если верхние контейнеры еще не заполнены полностью, вернем текущий контейнер для заполнения
-    return this.gameBlockPuzzles.gameWords[
-      this.currentContainerIndex
-    ]?.getNode();
   }
 
   private checkSentenceCompletion(): void {
@@ -187,13 +180,38 @@ class ArticleGameComponent extends Component<InterComponent> {
 
     // Действия в зависимости от состояния предложения
     if (isComplete) {
-      // Тут логика для активации кнопки "Проверить"
+
+      // Тут логика для активации кнопки "Check"
+      const gameButtonCheck = this.gameBlockPuzzles.getGameButtonCheck();
+      if (gameButtonCheck) {
+        const buttonElementCheck =
+          gameButtonCheck.getNode() as HTMLButtonElement;
+        buttonElementCheck.classList.remove('check-hidden');
+        buttonElementCheck.addEventListener('click', () => {
+          this.sentenceCompletionChecker.handleCheckButtonClick();
+        });
+      }
+
       this.buttonsGameManager.enableCheckButton();
     }
 
     if (isCorrect) {
-      // Тут логика для активации кнопки "Продолжить"
+
+      // Тут логика для активации кнопки "Continue"
+      const gameButtonContinue = this.gameBlockPuzzles.getGameButtonContinue();
+      if (gameButtonContinue) {
+        const buttonElementCheck =
+          gameButtonContinue.getNode() as HTMLButtonElement;
+        buttonElementCheck.classList.add('check-visible');
+      }
       this.buttonsGameManager.enableContinueButton();
+      const gameButtonCheck = this.gameBlockPuzzles.getGameButtonCheck();
+      if (gameButtonCheck) {
+        const buttonElementCheck =
+          gameButtonCheck.getNode() as HTMLButtonElement;
+        buttonElementCheck.classList.add('check-hidden');
+      }
+
     }
   }
 }
