@@ -4,6 +4,8 @@ import FooterComponent from './components/footer/footer';
 import AccessScreen from './components/assembly-main/screen-access';
 import WelcomeScreen from './components/assembly-main/screen-welcome';
 import GameScreen from './components/assembly-main/screen-game';
+import EventEmitter from './utils/event-emitter';
+// import LogoutHandler from './services/user/logout';
 
 type AppState = 'access' | 'welcome' | 'game' | 'statistics';
 
@@ -25,6 +27,13 @@ class App {
     this.initMainComponent();
     this.initFooter();
     this.init();
+    // подписка на событие logout
+    EventEmitter.on('logout', this.handleLogout.bind(this));
+  }
+
+  private handleLogout() {
+    // Обработчик выхода из системы
+    this.switchState('access');
   }
 
   private initHeader(): void {

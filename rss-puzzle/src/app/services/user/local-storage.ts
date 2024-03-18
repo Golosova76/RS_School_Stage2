@@ -1,9 +1,11 @@
 import User from './user-date';
+import eventEmitter from '../../utils/event-emitter';
 
 class GameUser extends User {
   constructor() {
     super();
     this.loadFromLocalStorage();
+    eventEmitter.on('logout', this.clearUserData.bind(this));
   }
 
   private loadFromLocalStorage(): void {

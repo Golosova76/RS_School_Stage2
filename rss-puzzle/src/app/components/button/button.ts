@@ -7,6 +7,7 @@ type ButtonOptions = {
   type?: string; // 'submit', 'button', 'reset'
   id?: string;
   disabled?: boolean;
+  onClick?: () => void;
 };
 
 class ButtonComponent extends Component<InterComponent> {
@@ -16,6 +17,8 @@ class ButtonComponent extends Component<InterComponent> {
       className: options.className || '',
       text: options.text || '',
     });
+
+    this.getNode().addEventListener('click', () => options.onClick?.());
 
     // Установка типа кнопки, если он передан
     if (options.type) {

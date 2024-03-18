@@ -1,5 +1,6 @@
 import { Component, InterComponent } from '../base-component';
 import ButtonComponent from '../button/button';
+import EventEmitter from '../../utils/event-emitter';
 
 class GameBlockButtons extends Component<InterComponent> {
   public gameButtonContinue: ButtonComponent | null = null;
@@ -7,6 +8,8 @@ class GameBlockButtons extends Component<InterComponent> {
   public gameButtonCheck: ButtonComponent | null = null;
 
   public gameButtonAuto: ButtonComponent | null = null;
+
+  public gameButtonLogout: ButtonComponent | null = null;
 
   constructor() {
     super({ tag: 'div', className: 'game__buttons' });
@@ -42,6 +45,18 @@ class GameBlockButtons extends Component<InterComponent> {
     });
     this.append(gameButtonCheck);
     this.gameButtonCheck = gameButtonCheck;
+
+    // кнопка Continue
+    const gameButtonLogout = new ButtonComponent({
+      className: 'logout-button button',
+      text: 'Logout',
+      type: 'button',
+      onClick: () => {
+        EventEmitter.emit('logout');
+      },
+    });
+    this.append(gameButtonLogout);
+    this.gameButtonLogout = gameButtonLogout;
   }
 
   public getGameButtonContinue(): ButtonComponent | null {
@@ -54,6 +69,10 @@ class GameBlockButtons extends Component<InterComponent> {
 
   public getGameButtonAuto(): ButtonComponent | null {
     return this.gameButtonAuto;
+  }
+
+  public getGameButtonLogout(): ButtonComponent | null {
+    return this.gameButtonLogout;
   }
 }
 

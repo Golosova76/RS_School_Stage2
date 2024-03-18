@@ -1,0 +1,43 @@
+.game-body {
+  & .wrapper {
+    position: relative;
+  }
+
+  & .logout-button {
+    position: absolute;
+    top: 4%;
+    right: 5%;
+    padding: 0.5rem 1rem 0.5rem 1rem;
+    border-radius: 50%;
+    @media (any-hover: hover) {
+      &:hover {
+        background-color: #5f8794;
+        color: red;
+      }
+    }
+  }
+
+  & .article-welcome__greeting {
+    @media (max-width: 992px) {
+      font-size: clamp(1rem, -0.19rem + 5.95vw, 3.5rem);
+    }
+  }
+
+  & .zoom-in {
+    animation: zoomInAnimation 1s ease-out forwards;
+  }
+}
+
+@keyframes zoomInAnimation {
+  0% {
+    transform: scale(0.1);
+    opacity: 0;
+  }
+  50% {
+    opacity: 0.5;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
