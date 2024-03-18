@@ -6,15 +6,26 @@ class GameBlockButtons extends Component<InterComponent> {
 
   public gameButtonCheck: ButtonComponent | null = null;
 
+  public gameButtonAuto: ButtonComponent | null = null;
+
   constructor() {
     super({ tag: 'div', className: 'game__buttons' });
     this.createGameBlockButtonsComponents();
   }
 
   private createGameBlockButtonsComponents() {
+    // кнопка Auto-Complete
+    const gameButtonAuto = new ButtonComponent({
+      className: 'auto-button button',
+      text: 'Auto-Complete',
+      type: 'button',
+    });
+    this.append(gameButtonAuto);
+    this.gameButtonAuto = gameButtonAuto;
+
     // кнопка Continue
     const gameButtonContinue = new ButtonComponent({
-      className: 'continue-button',
+      className: 'continue-button button',
       text: 'Continue',
       type: 'button',
       disabled: true,
@@ -24,7 +35,7 @@ class GameBlockButtons extends Component<InterComponent> {
 
     // кнопка Continue
     const gameButtonCheck = new ButtonComponent({
-      className: 'check-button',
+      className: 'check-button button',
       text: 'Check',
       type: 'button',
       disabled: true,
@@ -39,6 +50,10 @@ class GameBlockButtons extends Component<InterComponent> {
 
   public getGameButtonCheck(): ButtonComponent | null {
     return this.gameButtonCheck;
+  }
+
+  public getGameButtonAuto(): ButtonComponent | null {
+    return this.gameButtonAuto;
   }
 }
 

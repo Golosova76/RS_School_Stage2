@@ -122,6 +122,11 @@ class GameBlockPuzzles extends Component<InterComponent> {
     const gameBlockButtons = this.gameBlockButtons as GameBlockButtons;
     return gameBlockButtons.getGameButtonCheck();
   }
+
+  public getGameButtonAuto(): ButtonComponent | null {
+    const gameBlockButtons = this.gameBlockButtons as GameBlockButtons;
+    return gameBlockButtons.getGameButtonAuto();
+  }
 }
 
 export default GameBlockPuzzles;

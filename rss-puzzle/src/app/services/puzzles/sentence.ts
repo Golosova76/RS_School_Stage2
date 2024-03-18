@@ -10,11 +10,9 @@ class SentenceCompletionChecker {
 
   private sentenceIndex: number;
 
-
   private currentSentenceNodes: ChildNode[] = [];
 
   private originalSentence: string[] = [];
-
 
   constructor(
     gameBlockPuzzles: InterGameBlockPuzzles,
@@ -29,18 +27,14 @@ class SentenceCompletionChecker {
   }
 
   checkSentenceCompletion(): { isComplete: boolean; isCorrect: boolean } {
-
     this.originalSentence = this.wordDataService
-
       .getOriginalSentenceForRound(this.roundIndex, this.sentenceIndex)
       .split(' ');
 
     const filledTopContainer = this.gameBlockPuzzles.gameWords.find(
       (wordComponent) =>
-
         wordComponent.getNode().childNodes.length ===
         this.originalSentence.length
-
     );
 
     if (!filledTopContainer) {
@@ -50,7 +44,6 @@ class SentenceCompletionChecker {
     const currentSentence = Array.from(
       filledTopContainer.getNode().childNodes
     ).map((node) => node.textContent?.trim() || '');
-
 
     // нужно вытащить DOM элементы для добавления класса
     this.currentSentenceNodes = Array.from(
@@ -108,6 +101,21 @@ class SentenceCompletionChecker {
     });
   }
 
+  autoCorrectSentence() {
+    const { isComplete, isCorrect } = this.checkSentenceCompletion();
+    if (isComplete && !isCorrect) {
+      // Переставляем DOM элементы в правильном порядке
+      this.currentSentenceNodes.forEach((node, index) => {
+        const element = node;
+        if (element instanceof HTMLElement) {
+          setTimeout(() => {
+            element.textContent = this.originalSentence[index];
+            element.classList.add('fade-move');
+          }, 1000);
+        }
+      });
+    }
+  }
 }
 
 export default SentenceCompletionChecker;

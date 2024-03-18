@@ -109,7 +109,7 @@
   gap: 2rem;
 }
 
-.continue-button {
+.button {
   display: block;
   padding: 0.5rem 2rem 0.5rem 2rem;
   text-align: center;
@@ -118,8 +118,6 @@
   background-color: #8caab5;
   color: #ffffff;
   cursor: pointer;
-  opacity: 0;
-  transition: opacity 0.5s ease;
   font-weight: 800;
   transition:
     background-color 0.4s ease,
@@ -139,6 +137,11 @@
   & .continue-effect {
     animation: colorChangeAnimation 5s;
   }
+}
+
+.continue-button {
+  opacity: 0;
+  transition: opacity 0.5s ease;
 }
 
 button.continue-button:disabled {
@@ -146,33 +149,17 @@ button.continue-button:disabled {
 }
 
 .check-button {
-  display: block;
-  //margin: 0 auto;
-  padding: 0.5rem 2rem 0.5rem 2rem;
-  text-align: center;
-  border: none;
-  border-radius: 6px;
-  background-color: #8caab5;
-  color: #ffffff;
-  cursor: pointer;
-  font-weight: 800;
-  transition:
-    background-color 0.4s ease,
-    transform 0.2s ease,
-    box-shadow 0.2s ease;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.6);
+}
+
+.auto-button {
+  padding: 0.5rem 1rem 0.5rem 1rem;
+  background-color: rgba(137, 43, 226, 0.8);
+  margin-right: auto;
   @media (any-hover: hover) {
     &:hover {
-      background-color: #5f8794;
+      background-color: #8caab5;
       color: black;
     }
-  }
-  &:active {
-    transform: translateY(2px);
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-  }
-  & .continue-effect {
-    animation: colorChangeAnimation 5s;
   }
 }
 
@@ -204,4 +191,31 @@ button.check-button:disabled {
 .highlight-incorrect {
   outline: red solid 2px;
   color: red;
+}
+
+.fade-move {
+  animation: fadeMove 0.5s ease-in-out forwards;
+  outline: #911919 solid 2px;
+}
+
+@keyframes fadeMove {
+  0% {
+    opacity: 1;
+    outline: blueviolet solid 2px;
+  }
+  40% {
+    opacity: 0.4;
+    outline: #ff4500 solid 2px;
+    color: #f0e68c;
+  }
+  80% {
+    opacity: 0.8;
+    outline: #ff4500 solid 2px;
+    color: #f0e68c;
+  }
+  100% {
+    opacity: 1;
+    outline: #800080 solid 2px;
+    color: #004a7c;
+  }
 }

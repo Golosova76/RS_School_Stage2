@@ -16,9 +16,7 @@ class ArticleGameComponent extends Component<InterComponent> {
 
   private sentenceCompletionChecker: SentenceCompletionChecker;
 
-
   private currentWordContainer: HTMLElement | undefined = undefined;
-
 
   private level: number;
 
@@ -31,7 +29,7 @@ class ArticleGameComponent extends Component<InterComponent> {
   constructor(
     wordDataService: WordDataService,
     level: number = 1,
-    roundIndex: number = 0,
+    roundIndex: number = 2,
     sentenceIndex: number = 0
   ) {
     super({ tag: 'article', className: 'article-game' });
@@ -78,7 +76,7 @@ class ArticleGameComponent extends Component<InterComponent> {
     }
   }
 
-  // Логика добавления из нижнего в верхний
+  // Логика добавления из нижнего блока в верхний блок
   private initPuzzleClickEvents(): void {
     this.gameBlockPuzzles.gamePuzzles
       .getChildren()
@@ -137,20 +135,20 @@ class ArticleGameComponent extends Component<InterComponent> {
     }
   };
 
-  // Логика добавления из верхнего в нижний
+  // Логика добавления из верхнего блока в нижний блок
   private returnSpanToLowerBlock(spanNode: HTMLElement): void {
     const containerGamePuzzles = this.gameBlockPuzzles.gamePuzzles.getNode();
     // Получите прямоугольник контейнера для вычисления смещения.
     const targetRect = containerGamePuzzles.getBoundingClientRect();
     // Перед тем как добавить spanNode обратно, применяем к нему анимацию.
     AnimationHelper.animateElementMovement(spanNode, targetRect, () => {
+      this.sentenceCompletionChecker.removeHighlightIncorrectWords();
       containerGamePuzzles.append(spanNode);
     });
   }
 
   // Логика опредения в какой верхний контейнер добавлять
   private findEmptyWordContainer(): HTMLElement | undefined {
-
     // Если текущий контейнер уже выбран и не пустой (имеет спаны), используем его
     if (
       this.currentWordContainer &&
@@ -170,7 +168,6 @@ class ArticleGameComponent extends Component<InterComponent> {
     // Если не нашли пустой контейнер, пытаемся вернуть текущий
     // В противном случае, возвращаем undefined, означающий, что нет доступных контейнеров
     return this.currentWordContainer;
-
   }
 
   private checkSentenceCompletion(): void {
@@ -180,7 +177,6 @@ class ArticleGameComponent extends Component<InterComponent> {
 
     // Действия в зависимости от состояния предложения
     if (isComplete) {
-
       // Тут логика для активации кнопки "Check"
       const gameButtonCheck = this.gameBlockPuzzles.getGameButtonCheck();
       if (gameButtonCheck) {
@@ -191,12 +187,18 @@ class ArticleGameComponent extends Component<InterComponent> {
           this.sentenceCompletionChecker.handleCheckButtonClick();
         });
       }
-
       this.buttonsGameManager.enableCheckButton();
+      const gameButtonAuto = this.gameBlockPuzzles.getGameButtonAuto();
+      if (gameButtonAuto) {
+        const buttonElementCheck =
+          gameButtonAuto.getNode() as HTMLButtonElement;
+        buttonElementCheck.addEventListener('click', () => {
+          this.sentenceCompletionChecker.autoCorrectSentence();
+        });
+      }
     }
 
     if (isCorrect) {
-
       // Тут логика для активации кнопки "Continue"
       const gameButtonContinue = this.gameBlockPuzzles.getGameButtonContinue();
       if (gameButtonContinue) {
@@ -211,7 +213,6 @@ class ArticleGameComponent extends Component<InterComponent> {
           gameButtonCheck.getNode() as HTMLButtonElement;
         buttonElementCheck.classList.add('check-hidden');
       }
-
     }
   }
 }
