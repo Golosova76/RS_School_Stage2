@@ -46,7 +46,7 @@ class GameBlockPuzzles extends Component<InterComponent> {
       // div для слов предложения
       const gameDivWords = new Component<InterComponent>({
         tag: 'div',
-        className: 'game__words',
+        className: 'game__words dropzone',
       });
       gameResult.append(gameDivWords);
       this.gameWords.push(gameDivWords); // Сохраняем gameDivWords в массив для доступа
@@ -55,7 +55,7 @@ class GameBlockPuzzles extends Component<InterComponent> {
     // div для 1 предложения
     this.gamePuzzles = new Component<InterComponent>({
       tag: 'div',
-      className: 'game__puzzles',
+      className: 'game__puzzles dropzone',
     });
     this.append(this.gamePuzzles);
 
@@ -81,6 +81,7 @@ class GameBlockPuzzles extends Component<InterComponent> {
     audioGame.append(sourceGame);
   }
 
+  // создание спанов и добавление в них слов
   // eslint-disable-next-line class-methods-use-this
   public addWordsToContainer(
     words: string[],
@@ -93,6 +94,7 @@ class GameBlockPuzzles extends Component<InterComponent> {
         className: 'game__puzzle',
         text: word,
       });
+      wordSpan.setAttribute('draggable', 'true');
 
       // Получаем DOM-элемент спана
       const node = wordSpan.getNode(); // если getNode() возвращает HTMLElement

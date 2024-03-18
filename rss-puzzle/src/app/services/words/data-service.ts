@@ -33,6 +33,7 @@ class WordDataService {
     return [];
   }
 
+  // метод получения перемешенного предложения
   private static shuffleArray(array: string[]): string[] {
     const arrayCopy = array.slice(); // Создаем копию входного массива
     for (let i = arrayCopy.length - 1; i > 0; i -= 1) {

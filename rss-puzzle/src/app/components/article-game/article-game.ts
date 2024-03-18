@@ -5,7 +5,7 @@ import AnimationHelper from '../../utils/animation-helper';
 import SoundManager from '../../services/sound-manager';
 import ButtonsGameManager from '../../services/puzzles/button-manager';
 import SentenceCompletionChecker from '../../services/puzzles/sentence';
-// import ButtonComponent from '../button/button';
+import Draggable from '../../utils/draggable';
 
 class ArticleGameComponent extends Component<InterComponent> {
   private gameBlockPuzzles: GameBlockPuzzles;
@@ -24,12 +24,14 @@ class ArticleGameComponent extends Component<InterComponent> {
 
   private sentenceIndex: number;
 
+  private draggable?: Draggable;
+
   currentContainerIndex: number = 0;
 
   constructor(
     wordDataService: WordDataService,
     level: number = 1,
-    roundIndex: number = 2,
+    roundIndex: number = 0,
     sentenceIndex: number = 0
   ) {
     super({ tag: 'article', className: 'article-game' });
@@ -47,6 +49,7 @@ class ArticleGameComponent extends Component<InterComponent> {
       roundIndex,
       sentenceIndex
     );
+    this.initDraggable();
   }
 
   initGameBlockPuzzles() {
@@ -55,6 +58,22 @@ class ArticleGameComponent extends Component<InterComponent> {
     return this.gameBlockPuzzles.getNode();
   }
 
+  // Метод инициализации Draggable
+  private initDraggable(): void {
+    const sourceContainer = this.gameBlockPuzzles.gamePuzzles.getNode();
+    const dropZones = this.gameBlockPuzzles.gameWords.map((wordComponent) =>
+      wordComponent.getNode()
+    );
+
+    // Передаем массив элементов dropZone в конструктор Draggable
+    this.draggable = new Draggable(
+      sourceContainer,
+      dropZones,
+      this.checkSentenceCompletion.bind(this)
+    );
+  }
+
+  // добавление слов в нижний блок
   async loadAndDisplayWords() {
     try {
       await this.wordDataService.loadData(this.level); // Используем свойство класса this.level
@@ -188,12 +207,25 @@ class ArticleGameComponent extends Component<InterComponent> {
         });
       }
       this.buttonsGameManager.enableCheckButton();
+      // Добавляем функциональность кнопку auto
       const gameButtonAuto = this.gameBlockPuzzles.getGameButtonAuto();
       if (gameButtonAuto) {
-        const buttonElementCheck =
-          gameButtonAuto.getNode() as HTMLButtonElement;
-        buttonElementCheck.addEventListener('click', () => {
+        const buttonElementAuto = gameButtonAuto.getNode() as HTMLButtonElement;
+        buttonElementAuto.addEventListener('click', () => {
           this.sentenceCompletionChecker.autoCorrectSentence();
+          const gameButtonContinue =
+            this.gameBlockPuzzles.getGameButtonContinue();
+          if (gameButtonContinue) {
+            const buttonElementContinue =
+              gameButtonContinue.getNode() as HTMLButtonElement;
+            buttonElementContinue.classList.add('check-visible');
+          }
+          this.buttonsGameManager.enableContinueButton();
+          if (gameButtonCheck) {
+            const buttonElementCheck =
+              gameButtonCheck.getNode() as HTMLButtonElement;
+            buttonElementCheck.classList.add('check-hidden');
+          }
         });
       }
     }
@@ -202,9 +234,9 @@ class ArticleGameComponent extends Component<InterComponent> {
       // Тут логика для активации кнопки "Continue"
       const gameButtonContinue = this.gameBlockPuzzles.getGameButtonContinue();
       if (gameButtonContinue) {
-        const buttonElementCheck =
+        const buttonElementContinue =
           gameButtonContinue.getNode() as HTMLButtonElement;
-        buttonElementCheck.classList.add('check-visible');
+        buttonElementContinue.classList.add('check-visible');
       }
       this.buttonsGameManager.enableContinueButton();
       const gameButtonCheck = this.gameBlockPuzzles.getGameButtonCheck();
