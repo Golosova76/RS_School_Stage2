@@ -590,11 +590,19 @@ class GameBlockButtons extends Component {
     super({ tag: "div", className: "game__buttons" });
     __publicField(this, "gameButtonContinue", null);
     __publicField(this, "gameButtonCheck", null);
+    __publicField(this, "gameButtonAuto", null);
     this.createGameBlockButtonsComponents();
   }
   createGameBlockButtonsComponents() {
+    const gameButtonAuto = new ButtonComponent({
+      className: "auto-button button",
+      text: "Auto-Complete",
+      type: "button"
+    });
+    this.append(gameButtonAuto);
+    this.gameButtonAuto = gameButtonAuto;
     const gameButtonContinue = new ButtonComponent({
-      className: "continue-button",
+      className: "continue-button button",
       text: "Continue",
       type: "button",
       disabled: true
@@ -602,7 +610,7 @@ class GameBlockButtons extends Component {
     this.append(gameButtonContinue);
     this.gameButtonContinue = gameButtonContinue;
     const gameButtonCheck = new ButtonComponent({
-      className: "check-button",
+      className: "check-button button",
       text: "Check",
       type: "button",
       disabled: true
@@ -615,6 +623,9 @@ class GameBlockButtons extends Component {
   }
   getGameButtonCheck() {
     return this.gameButtonCheck;
+  }
+  getGameButtonAuto() {
+    return this.gameButtonAuto;
   }
 }
 class GameBlockPuzzles extends Component {
@@ -703,6 +714,10 @@ class GameBlockPuzzles extends Component {
     const gameBlockButtons = this.gameBlockButtons;
     return gameBlockButtons.getGameButtonCheck();
   }
+  getGameButtonAuto() {
+    const gameBlockButtons = this.gameBlockButtons;
+    return gameBlockButtons.getGameButtonAuto();
+  }
 }
 class AnimationHelper {
   static applyStyles(element, styles) {
@@ -767,15 +782,17 @@ class SentenceCompletionChecker {
     __publicField(this, "wordDataService");
     __publicField(this, "roundIndex");
     __publicField(this, "sentenceIndex");
+    __publicField(this, "currentSentenceNodes", []);
+    __publicField(this, "originalSentence", []);
     this.gameBlockPuzzles = gameBlockPuzzles;
     this.wordDataService = wordDataService;
     this.roundIndex = roundIndex;
     this.sentenceIndex = sentenceIndex;
   }
   checkSentenceCompletion() {
-    const originalSentence = this.wordDataService.getOriginalSentenceForRound(this.roundIndex, this.sentenceIndex).split(" ");
+    this.originalSentence = this.wordDataService.getOriginalSentenceForRound(this.roundIndex, this.sentenceIndex).split(" ");
     const filledTopContainer = this.gameBlockPuzzles.gameWords.find(
-      (wordComponent) => wordComponent.getNode().childNodes.length === originalSentence.length
+      (wordComponent) => wordComponent.getNode().childNodes.length === this.originalSentence.length
     );
     if (!filledTopContainer) {
       return { isComplete: false, isCorrect: false };
@@ -786,18 +803,68 @@ class SentenceCompletionChecker {
       var _a;
       return ((_a = node.textContent) == null ? void 0 : _a.trim()) || "";
     });
-    const isComplete = filledTopContainer.getNode().childNodes.length === originalSentence.length;
-    const isCorrect = JSON.stringify(originalSentence) === JSON.stringify(currentSentence);
+    this.currentSentenceNodes = Array.from(
+      filledTopContainer.getNode().childNodes
+    );
+    const isComplete = filledTopContainer.getNode().childNodes.length === this.originalSentence.length;
+    const isCorrect = JSON.stringify(this.originalSentence) === JSON.stringify(currentSentence);
     return { isComplete, isCorrect };
+  }
+  // eslint-disable-next-line class-methods-use-this
+  highlightIncorrectWords() {
+    this.currentSentenceNodes.forEach((node, index) => {
+      var _a;
+      if (node instanceof Element) {
+        const word = (_a = node.textContent) == null ? void 0 : _a.trim();
+        if (word !== this.originalSentence[index]) {
+          node.classList.add("highlight-incorrect");
+        } else {
+          node.classList.remove("highlight-incorrect");
+        }
+      }
+    });
+  }
+  handleCheckButtonClick() {
+    const { isComplete, isCorrect } = this.checkSentenceCompletion();
+    if (isComplete && !isCorrect) {
+      this.highlightIncorrectWords();
+      setTimeout(() => {
+        this.removeHighlightIncorrectWords();
+      }, 7e3);
+    }
+  }
+  // Метод для снятия подсветки с неправильных слов
+  // eslint-disable-next-line class-methods-use-this
+  removeHighlightIncorrectWords() {
+    this.currentSentenceNodes.forEach((node) => {
+      if (node instanceof Element) {
+        node.classList.remove("highlight-incorrect");
+      }
+    });
+  }
+  autoCorrectSentence() {
+    const { isComplete, isCorrect } = this.checkSentenceCompletion();
+    if (isComplete && !isCorrect) {
+      this.currentSentenceNodes.forEach((node, index) => {
+        const element = node;
+        if (element instanceof HTMLElement) {
+          setTimeout(() => {
+            element.textContent = this.originalSentence[index];
+            element.classList.add("fade-move");
+          }, 1e3);
+        }
+      });
+    }
   }
 }
 class ArticleGameComponent extends Component {
-  constructor(wordDataService, level = 1, roundIndex = 0, sentenceIndex = 0) {
+  constructor(wordDataService, level = 1, roundIndex = 2, sentenceIndex = 0) {
     super({ tag: "article", className: "article-game" });
     __publicField(this, "gameBlockPuzzles");
     __publicField(this, "buttonsGameManager");
     __publicField(this, "wordDataService");
     __publicField(this, "sentenceCompletionChecker");
+    __publicField(this, "currentWordContainer");
     __publicField(this, "level");
     __publicField(this, "roundIndex");
     __publicField(this, "sentenceIndex");
@@ -846,7 +913,7 @@ class ArticleGameComponent extends Component {
     } catch (error) {
     }
   }
-  // Логика добавления из нижнего в верхний
+  // Логика добавления из нижнего блока в верхний блок
   initPuzzleClickEvents() {
     this.gameBlockPuzzles.gamePuzzles.getChildren().forEach((puzzleComponent) => {
       if (puzzleComponent.getNode) {
@@ -886,43 +953,61 @@ class ArticleGameComponent extends Component {
       spanNode.addEventListener("click", this.handleTopBlockSpanClick);
     });
   }
-  // Логика добавления из верхнего в нижний
+  // Логика добавления из верхнего блока в нижний блок
   returnSpanToLowerBlock(spanNode) {
     const containerGamePuzzles = this.gameBlockPuzzles.gamePuzzles.getNode();
     const targetRect = containerGamePuzzles.getBoundingClientRect();
     AnimationHelper.animateElementMovement(spanNode, targetRect, () => {
+      this.sentenceCompletionChecker.removeHighlightIncorrectWords();
       containerGamePuzzles.append(spanNode);
     });
   }
   // Логика опредения в какой верхний контейнер добавлять
   findEmptyWordContainer() {
-    var _a;
-    const lowerBlockWordCount = this.gameBlockPuzzles.gamePuzzles.getNode().childNodes.length;
-    const upperBlockWordCount = this.gameBlockPuzzles.gameWords.reduce(
-      (count, wordComponent) => {
-        return count + wordComponent.getNode().childNodes.length;
-      },
-      0
-    );
-    if (lowerBlockWordCount === upperBlockWordCount) {
-      const nextEmptyContainer = this.gameBlockPuzzles.gameWords.find(
-        (wordComponent) => {
-          return wordComponent.getNode().childNodes.length === 0;
-        }
-      );
-      if (nextEmptyContainer) {
-        return nextEmptyContainer.getNode();
-      }
+    if (this.currentWordContainer && this.currentWordContainer.childNodes.length > 0) {
+      return this.currentWordContainer;
     }
-    return (_a = this.gameBlockPuzzles.gameWords[this.currentContainerIndex]) == null ? void 0 : _a.getNode();
+    const nextEmptyContainer = this.gameBlockPuzzles.gameWords.find(
+      (wordComponent) => wordComponent.getNode().childNodes.length === 0
+    );
+    if (nextEmptyContainer) {
+      this.currentWordContainer = nextEmptyContainer.getNode();
+      return this.currentWordContainer;
+    }
+    return this.currentWordContainer;
   }
   checkSentenceCompletion() {
     const { isComplete, isCorrect } = this.sentenceCompletionChecker.checkSentenceCompletion();
     if (isComplete) {
+      const gameButtonCheck = this.gameBlockPuzzles.getGameButtonCheck();
+      if (gameButtonCheck) {
+        const buttonElementCheck = gameButtonCheck.getNode();
+        buttonElementCheck.classList.remove("check-hidden");
+        buttonElementCheck.addEventListener("click", () => {
+          this.sentenceCompletionChecker.handleCheckButtonClick();
+        });
+      }
       this.buttonsGameManager.enableCheckButton();
+      const gameButtonAuto = this.gameBlockPuzzles.getGameButtonAuto();
+      if (gameButtonAuto) {
+        const buttonElementCheck = gameButtonAuto.getNode();
+        buttonElementCheck.addEventListener("click", () => {
+          this.sentenceCompletionChecker.autoCorrectSentence();
+        });
+      }
     }
     if (isCorrect) {
+      const gameButtonContinue = this.gameBlockPuzzles.getGameButtonContinue();
+      if (gameButtonContinue) {
+        const buttonElementCheck = gameButtonContinue.getNode();
+        buttonElementCheck.classList.add("check-visible");
+      }
       this.buttonsGameManager.enableContinueButton();
+      const gameButtonCheck = this.gameBlockPuzzles.getGameButtonCheck();
+      if (gameButtonCheck) {
+        const buttonElementCheck = gameButtonCheck.getNode();
+        buttonElementCheck.classList.add("check-hidden");
+      }
     }
   }
 }
