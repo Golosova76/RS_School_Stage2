@@ -174,6 +174,7 @@ body {
   border-style: solid;
   border-color: #bdbcbc;
   border-radius: 4px;
+  outline-style: none;
   font: 600 20px "NunitoSans10ptCondensed", sans-serif;
   cursor: pointer;
 }
@@ -371,6 +372,7 @@ button.login-button:disabled {
   margin-bottom: 40px;
 }
 .game__puzzle {
+  cursor: grab;
   text-align: center;
   display: flex;
   justify-content: center;
@@ -495,5 +497,42 @@ button.check-button:disabled {
     opacity: 1;
     outline: #800080 solid 2px;
     color: #004a7c;
+  }
+}
+.game-body .wrapper {
+  position: relative;
+}
+.game-body .logout-button {
+  position: absolute;
+  top: 4%;
+  right: 5%;
+  padding: 0.5rem 1rem 0.5rem 1rem;
+  border-radius: 50%;
+}
+@media (any-hover: hover) {
+  .game-body .logout-button:hover {
+    background-color: #5f8794;
+    color: red;
+  }
+}
+@media (max-width: 992px) {
+  .game-body .article-welcome__greeting {
+    font-size: clamp(1rem, -0.19rem + 5.95vw, 3.5rem);
+  }
+}
+.game-body .zoom-in {
+  animation: zoomInAnimation 1s ease-out forwards;
+}
+@keyframes zoomInAnimation {
+  0% {
+    transform: scale(0.1);
+    opacity: 0;
+  }
+  50% {
+    opacity: 0.5;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
   }
 }

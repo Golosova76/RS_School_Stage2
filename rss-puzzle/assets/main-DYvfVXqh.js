@@ -241,6 +241,10 @@ class ButtonComponent extends Component {
       className: options.className || "",
       text: options.text || ""
     });
+    this.getNode().addEventListener("click", () => {
+      var _a;
+      return (_a = options.onClick) == null ? void 0 : _a.call(options);
+    });
     if (options.type) {
       this.setAttribute("type", options.type);
     }
@@ -414,10 +418,31 @@ class User {
     this.gameSurname = null;
   }
 }
+class EventEmitter {
+  constructor() {
+    __publicField(this, "events", {});
+  }
+  on(eventName, fn) {
+    if (!this.events[eventName]) {
+      this.events[eventName] = [];
+    }
+    this.events[eventName].push(fn);
+  }
+  emit(eventName, ...args) {
+    const listeners = this.events[eventName];
+    if (listeners) {
+      listeners.forEach((fn) => {
+        fn(...args);
+      });
+    }
+  }
+}
+const EventEmitter$1 = new EventEmitter();
 class GameUser extends User {
   constructor() {
     super();
     this.loadFromLocalStorage();
+    EventEmitter$1.on("logout", this.clearUserData.bind(this));
   }
   loadFromLocalStorage() {
     const data = localStorage.getItem("gameUser");
@@ -591,6 +616,7 @@ class GameBlockButtons extends Component {
     __publicField(this, "gameButtonContinue", null);
     __publicField(this, "gameButtonCheck", null);
     __publicField(this, "gameButtonAuto", null);
+    __publicField(this, "gameButtonLogout", null);
     this.createGameBlockButtonsComponents();
   }
   createGameBlockButtonsComponents() {
@@ -617,6 +643,16 @@ class GameBlockButtons extends Component {
     });
     this.append(gameButtonCheck);
     this.gameButtonCheck = gameButtonCheck;
+    const gameButtonLogout = new ButtonComponent({
+      className: "logout-button button",
+      text: "Logout",
+      type: "button",
+      onClick: () => {
+        EventEmitter$1.emit("logout");
+      }
+    });
+    this.append(gameButtonLogout);
+    this.gameButtonLogout = gameButtonLogout;
   }
   getGameButtonContinue() {
     return this.gameButtonContinue;
@@ -626,6 +662,9 @@ class GameBlockButtons extends Component {
   }
   getGameButtonAuto() {
     return this.gameButtonAuto;
+  }
+  getGameButtonLogout() {
+    return this.gameButtonLogout;
   }
 }
 class GameBlockPuzzles extends Component {
@@ -659,14 +698,14 @@ class GameBlockPuzzles extends Component {
       gameResult.append(gameSpanNumber);
       const gameDivWords = new Component({
         tag: "div",
-        className: "game__words"
+        className: "game__words dropzone"
       });
       gameResult.append(gameDivWords);
       this.gameWords.push(gameDivWords);
     }
     this.gamePuzzles = new Component({
       tag: "div",
-      className: "game__puzzles"
+      className: "game__puzzles dropzone"
     });
     this.append(this.gamePuzzles);
     this.gameBlockButtons = new GameBlockButtons();
@@ -685,6 +724,7 @@ class GameBlockPuzzles extends Component {
     sourceGame.setAttribute("type", "audio/mpeg");
     audioGame.append(sourceGame);
   }
+  // создание спанов и добавление в них слов
   // eslint-disable-next-line class-methods-use-this
   addWordsToContainer(words, gamePuzzles) {
     console.log("Добавление слов в контейнер:", words);
@@ -694,6 +734,7 @@ class GameBlockPuzzles extends Component {
         className: "game__puzzle",
         text: word
       });
+      wordSpan.setAttribute("draggable", "true");
       const node = wordSpan.getNode();
       if (node instanceof HTMLElement) {
         DynamicSizeManager.applyStyles(node, word, words.length);
@@ -717,6 +758,10 @@ class GameBlockPuzzles extends Component {
   getGameButtonAuto() {
     const gameBlockButtons = this.gameBlockButtons;
     return gameBlockButtons.getGameButtonAuto();
+  }
+  getGameButtonLogout() {
+    const gameBlockButtons = this.gameBlockButtons;
+    return gameBlockButtons.getGameButtonLogout();
   }
 }
 class AnimationHelper {
@@ -857,8 +902,68 @@ class SentenceCompletionChecker {
     }
   }
 }
+class Draggable {
+  constructor(sourceContainer, dropZones, onDropComplete) {
+    __publicField(this, "draggedElement", null);
+    __publicField(this, "sourceContainer");
+    // Контейнер-источник
+    __publicField(this, "dropZones");
+    // Контейнер-приемник
+    __publicField(this, "onDropComplete");
+    this.sourceContainer = sourceContainer;
+    this.dropZones = dropZones;
+    this.dragStart = this.dragStart.bind(this);
+    this.dragEnd = this.dragEnd.bind(this);
+    this.dragOver = this.dragOver.bind(this);
+    this.dragDrop = this.dragDrop.bind(this);
+    this.onDropComplete = onDropComplete;
+    this.initEvents();
+  }
+  resetDraggedElement() {
+    if (this.draggedElement) {
+      this.draggedElement.style.opacity = "1";
+      this.draggedElement = null;
+    }
+  }
+  initEvents() {
+    document.addEventListener("dragstart", this.dragStart.bind(this), false);
+    document.addEventListener("dragend", this.dragEnd.bind(this), false);
+    [...this.dropZones, this.sourceContainer].forEach((container) => {
+      container.addEventListener("dragover", this.dragOver.bind(this), false);
+      container.addEventListener("drop", this.dragDrop.bind(this), false);
+    });
+  }
+  dragStart(event) {
+    if (event.target instanceof HTMLElement && event.target.getAttribute("draggable")) {
+      this.draggedElement = event.target;
+      event.target.style.opacity = "0.5";
+    }
+  }
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  dragEnd(event) {
+    if (this.draggedElement) {
+      this.draggedElement.style.opacity = "1";
+      this.draggedElement = null;
+    }
+  }
+  // eslint-disable-next-line class-methods-use-this
+  dragOver(event) {
+    event.preventDefault();
+  }
+  dragDrop(event) {
+    event.preventDefault();
+    if (event.target instanceof HTMLElement && this.draggedElement) {
+      const target = this.dropZones.includes(event.target) ? event.target : event.target.closest(".dropzone");
+      if (target) {
+        target.appendChild(this.draggedElement);
+        this.resetDraggedElement();
+        this.onDropComplete();
+      }
+    }
+  }
+}
 class ArticleGameComponent extends Component {
-  constructor(wordDataService, level = 1, roundIndex = 2, sentenceIndex = 0) {
+  constructor(wordDataService, level = 1, roundIndex = 0, sentenceIndex = 0) {
     super({ tag: "article", className: "article-game" });
     __publicField(this, "gameBlockPuzzles");
     __publicField(this, "buttonsGameManager");
@@ -868,6 +973,7 @@ class ArticleGameComponent extends Component {
     __publicField(this, "level");
     __publicField(this, "roundIndex");
     __publicField(this, "sentenceIndex");
+    __publicField(this, "draggable");
     __publicField(this, "currentContainerIndex", 0);
     // Обработчик клика в отдельном методе для возможности его удаления
     __publicField(this, "handleTopBlockSpanClick", (event) => {
@@ -891,11 +997,25 @@ class ArticleGameComponent extends Component {
       roundIndex,
       sentenceIndex
     );
+    this.initDraggable();
   }
   initGameBlockPuzzles() {
     this.append(this.gameBlockPuzzles);
     return this.gameBlockPuzzles.getNode();
   }
+  // Метод инициализации Draggable
+  initDraggable() {
+    const sourceContainer = this.gameBlockPuzzles.gamePuzzles.getNode();
+    const dropZones = this.gameBlockPuzzles.gameWords.map(
+      (wordComponent) => wordComponent.getNode()
+    );
+    this.draggable = new Draggable(
+      sourceContainer,
+      dropZones,
+      this.checkSentenceCompletion.bind(this)
+    );
+  }
+  // добавление слов в нижний блок
   async loadAndDisplayWords() {
     try {
       await this.wordDataService.loadData(this.level);
@@ -990,17 +1110,27 @@ class ArticleGameComponent extends Component {
       this.buttonsGameManager.enableCheckButton();
       const gameButtonAuto = this.gameBlockPuzzles.getGameButtonAuto();
       if (gameButtonAuto) {
-        const buttonElementCheck = gameButtonAuto.getNode();
-        buttonElementCheck.addEventListener("click", () => {
+        const buttonElementAuto = gameButtonAuto.getNode();
+        buttonElementAuto.addEventListener("click", () => {
           this.sentenceCompletionChecker.autoCorrectSentence();
+          const gameButtonContinue = this.gameBlockPuzzles.getGameButtonContinue();
+          if (gameButtonContinue) {
+            const buttonElementContinue = gameButtonContinue.getNode();
+            buttonElementContinue.classList.add("check-visible");
+          }
+          this.buttonsGameManager.enableContinueButton();
+          if (gameButtonCheck) {
+            const buttonElementCheck = gameButtonCheck.getNode();
+            buttonElementCheck.classList.add("check-hidden");
+          }
         });
       }
     }
     if (isCorrect) {
       const gameButtonContinue = this.gameBlockPuzzles.getGameButtonContinue();
       if (gameButtonContinue) {
-        const buttonElementCheck = gameButtonContinue.getNode();
-        buttonElementCheck.classList.add("check-visible");
+        const buttonElementContinue = gameButtonContinue.getNode();
+        buttonElementContinue.classList.add("check-visible");
       }
       this.buttonsGameManager.enableContinueButton();
       const gameButtonCheck = this.gameBlockPuzzles.getGameButtonCheck();
@@ -1036,6 +1166,7 @@ class WordDataService {
     }
     return [];
   }
+  // метод получения перемешенного предложения
   static shuffleArray(array) {
     const arrayCopy = array.slice();
     for (let i = arrayCopy.length - 1; i > 0; i -= 1) {
@@ -1084,6 +1215,10 @@ class App {
     this.initMainComponent();
     this.initFooter();
     this.init();
+    EventEmitter$1.on("logout", this.handleLogout.bind(this));
+  }
+  handleLogout() {
+    this.switchState("access");
   }
   initHeader() {
     const header = new HeaderComponent();
