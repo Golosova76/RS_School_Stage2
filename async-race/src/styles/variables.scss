@@ -1,0 +1,22 @@
+$font-family: "NunitoSans10ptCondensed", sans-serif;
+$font-size: 20px;
+$font-weight: 600;
+$font-line-height: 150%;
+
+// $color-text-dark: #333;
+
+$color-text-dark: black;
+$color-background-body: #bfb0a3;
+$main-background-color: $color-background-body;
+
+@mixin margin-bottom40 {
+  &:not(:last-child) {
+    margin-bottom: 40px;
+  }
+}
+
+@mixin margin-bottom20 {
+  &:not(:last-child) {
+    margin-bottom: 20px;
+  }
+}
