@@ -1,7 +1,7 @@
 import { HttpMethod } from '../common-types';
 import { Winner, LIMIT_PAGE_WINNER } from './winners-type';
 
-export class WinnerService {
+class WinnerService {
   private baseUrl: string;
 
   private HEADER = { 'Content-Type': 'application/json' };

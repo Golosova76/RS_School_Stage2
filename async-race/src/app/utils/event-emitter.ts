@@ -1,29 +1,24 @@
-// Определение типа для функций обратного вызова событий
-type EventCallback = (...args: unknown[]) => void;
+import { EventValue, EventHandler } from '../components/view/common-types';
 
-export enum EventName {
-  Logout = 'logout',
-}
-
-// Класс EventEmitter с использованием типа EventCallback
 class EventEmitter {
-  private events: { [key: string]: EventCallback[] } = {};
+  private events = new Map<string, EventHandler[]>();
 
-  public on(eventName: string, fn: EventCallback) {
-    if (!this.events[eventName]) {
-      this.events[eventName] = [];
+  public on(event: string, handler: EventHandler): void {
+    let handlers: EventHandler[] | undefined = this.events.get(event);
+    if (handlers === undefined) {
+      handlers = [];
+      this.events.set(event, handlers);
     }
-    this.events[eventName].push(fn);
+    handlers.push(handler);
   }
 
-  public emit(eventName: string, ...args: unknown[]) {
-    const listeners = this.events[eventName];
-    if (listeners) {
-      listeners.forEach((fn) => {
-        fn(...args);
-      });
+  public emit(event: string, value: EventValue): void {
+    const handlers: EventHandler[] | undefined = this.events.get(event);
+
+    if (handlers) {
+      handlers.forEach((handler) => handler(value));
     }
   }
 }
 
-export default new EventEmitter();
+export default EventEmitter;
