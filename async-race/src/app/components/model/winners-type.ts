@@ -1,4 +1,4 @@
-export class Winner {
+class Winner {
   public id: number;
 
   public wins: number;
@@ -12,6 +12,4 @@ export class Winner {
   }
 }
 
-export const LIMIT_PAGE_WINNER = 10;
-
-export const WINNERS_DEFAULT_PAGE = 1;
+export default Winner;

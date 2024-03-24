@@ -7,3 +7,7 @@ export enum HttpMethod {
   Delete = 'DELETE',
   Patch = 'PATCH',
 }
+
+export const LIMIT_PAGE_WINNER = 10;
+
+export const WINNERS_DEFAULT_PAGE = 1;

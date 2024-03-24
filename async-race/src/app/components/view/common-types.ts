@@ -1,5 +1,5 @@
-import { Car } from '../../services/api-service/cars/cars-types';
-import { Winner } from '../../services/api-service/winners/winners-type';
+import { Car } from '../model/cars-types';
+import Winner from '../model/winners-type';
 
 export interface View {
   getElement(): HTMLElement;
