@@ -1,8 +1,8 @@
 import EventEmitter from '../../utils/event-emitter';
 import AppView from '../view/appView';
 import CommonService from '../../services/api-service/common-api';
-import AppStatePage from '../model/state-page';
-import { Page, Events, EventValue, StatePage } from '../view/common-types';
+import { Events, EventValue } from '../view/common-types';
+import { Page, StatePage, AppStatePage } from '../model/state-page';
 
 class AppControllers {
   private emitter: EventEmitter;

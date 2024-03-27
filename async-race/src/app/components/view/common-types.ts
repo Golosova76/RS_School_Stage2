@@ -1,22 +1,22 @@
-import { Car } from '../model/cars-types';
-import Winner from '../model/winners-type';
+import Car from '../model/car-class';
+import Winner from '../model/winner-class';
 
 export interface View {
   getElement(): HTMLElement;
 }
 
-export interface StatePage {
-  currentPage: Page;
-  garagePage: number;
-  winnersPage: number;
-}
-
-export enum Page {
-  Garage = 0,
-  Winners = 1,
-}
-
 export const DEFAULT_COLOR = '#ffffff';
+
+export enum SortValue {
+  Id = 'id',
+  Wins = 'wins',
+  Time = 'time',
+}
+
+export enum SortData {
+  Asc = 'ASC',
+  Desc = 'DESC',
+}
 
 export type EventValue = {
   id?: number;
@@ -27,6 +27,8 @@ export type EventValue = {
   car?: Car;
   winner?: Winner;
   winners?: Winner[];
+  sortValue?: SortValue;
+  sortData?: SortData;
 };
 
 export type EventHandler = (value: EventValue) => void;
@@ -34,4 +36,19 @@ export type EventHandler = (value: EventValue) => void;
 export enum Events {
   ClickNavButton = 'click:nav-button',
   SaveStatePage = 'save:state-page',
+  ClickCreateCarButton = 'click:create-car',
+  ClickUpdateCarButton = 'click:update-car',
+  ClickSelectCarButton = 'click:select-car',
+  ClickDeleteCarButton = 'click:delete-car',
+  ClickStartCarButton = 'click:start-car',
+  ClickResetCarBtn = 'click:stop-car',
+  ClickRaceButton = 'click:race',
+  ClickResetButton = 'click:reset',
+  ClickGenerateButton = 'click:generate-car',
+  ClickGaragePrevButton = 'click:garage-prev',
+  ClickGarageNextButton = 'click:garage-next',
+  ClickWinnersPrevButton = 'click:winners-prev',
+  ClickWinnersNextButton = 'click:winners-next',
+  ClickWinnersSort = 'click:winners-sort',
+  UpdateWinner = 'update:winner',
 }

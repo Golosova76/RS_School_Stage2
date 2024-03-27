@@ -1,11 +1,4 @@
-export interface CarInterface {
-  id?: number;
-  name: string;
-  color: string;
-}
-
-// или класс?
-export class Car {
+class Car {
   public id: number;
 
   public name: string;
@@ -18,3 +11,5 @@ export class Car {
     this.color = color;
   }
 }
+
+export default Car;

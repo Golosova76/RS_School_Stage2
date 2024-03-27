@@ -1,5 +1,6 @@
 import EventEmitter from '../../../utils/event-emitter';
-import { View, Page, Events } from '../common-types';
+import { View, Events } from '../common-types';
+import { Page } from '../../model/state-page';
 
 class UnionPage implements View {
   private element: HTMLElement;

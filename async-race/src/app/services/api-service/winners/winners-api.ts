@@ -1,5 +1,5 @@
 import { HttpMethod, LIMIT_PAGE_WINNER } from '../common-types';
-import Winner from '../../../components/model/winners-type';
+import Winner from '../../../components/model/winner-class';
 
 class WinnerService {
   private baseUrl: string;

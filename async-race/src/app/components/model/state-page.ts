@@ -1,6 +1,15 @@
-import { StatePage, Page } from '../view/common-types';
+export interface StatePage {
+  currentPage: Page;
+  garagePage: number;
+  winnersPage: number;
+}
 
-class AppStatePage implements StatePage {
+export enum Page {
+  Garage = 0,
+  Winners = 1,
+}
+
+export class AppStatePage implements StatePage {
   public currentPage: Page = Page.Garage;
 
   public garagePage = 1;
@@ -33,5 +42,3 @@ class AppStatePage implements StatePage {
     }
   }
 }
-
-export default AppStatePage;

@@ -2,7 +2,7 @@ import GarageView from './garage/garage';
 import WinnersView from './winners/winners';
 import UnionPage from './union/union-page';
 import EventEmitter from '../../utils/event-emitter';
-import { Page } from './common-types';
+import { Page } from '../model/state-page';
 
 class AppView {
   private emitter: EventEmitter;

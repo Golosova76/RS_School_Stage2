@@ -1,4 +1,4 @@
-import { Car } from '../../../components/model/cars-types';
+import Car from '../../../components/model/car-class';
 import { HttpMethod } from '../common-types';
 
 class CarService {
