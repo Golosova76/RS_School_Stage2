@@ -22,5 +22,35 @@ html {
 body {
   font: $font-weight $font-size $font-family;
   color: $color-text-dark;
-  background-color: #f4f4f4;
+  background-color: $main-background-color;
+}
+
+input {
+  border-radius: 4px;
+}
+
+.button {
+  width: 60px;
+  padding: 4px 2px 4px 2px;
+  border: none;
+  border-radius: 4px;
+  background-color: #a7cbd9;
+  color: #ffeb3b;
+  cursor: pointer;
+  font-weight: 800;
+  transition: background-color 0.3s ease;
+  @media (any-hover: hover) {
+    &:hover {
+      background-color: #007bff;
+      color: #ff00ff;
+    }
+  }
+  &:active {
+    transform: translateY(2px);
+    box-shadow: 0 2px 4px rgba(255, 255, 255, 0.8);
+  }
+}
+
+button.login-button:disabled {
+  pointer-events: none;
 }

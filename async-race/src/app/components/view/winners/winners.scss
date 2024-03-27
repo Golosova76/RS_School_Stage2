@@ -1,0 +1,39 @@
+.winners {
+  position: absolute;
+}
+
+.winners__title {
+  font-size: 32px;
+  font-weight: 800;
+  @include margin-bottom20;
+}
+
+.winners__subtitle {
+  font-size: 24px;
+  font-weight: 800;
+  @include margin-bottom20;
+}
+
+.table {
+  border-spacing: 0;
+  @include margin-bottom20;
+}
+
+.table__head {
+  background-color: #a7cbd9;
+}
+
+.table__th,
+.table td {
+  padding: 5px 15px;
+  text-align: left;
+}
+
+.table__th_sort {
+  cursor: pointer;
+}
+
+.winners__pagination {
+  display: flex;
+  column-gap: 10px;
+}

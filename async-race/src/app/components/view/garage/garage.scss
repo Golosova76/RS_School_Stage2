@@ -1,0 +1,40 @@
+.button.garage__button-generate {
+  width: 120px;
+}
+
+.nav {
+  display: flex;
+  column-gap: 20px;
+  padding-top: 20px;
+  @include margin-bottom40;
+}
+
+.garage {
+  position: absolute;
+  left: 0;
+  right: 10px;
+}
+
+.garage-blocks {
+  display: flex;
+  column-gap: 10px;
+  @include margin-bottom20;
+}
+
+.garage__create-car {
+}
+
+.garage__controls {
+  @include margin-bottom40;
+}
+.garage__title {
+  font-size: 32px;
+  font-weight: 800;
+  @include margin-bottom20;
+}
+
+.garage__subtitle {
+  font-size: 24px;
+  font-weight: 800;
+  @include margin-bottom20;
+}

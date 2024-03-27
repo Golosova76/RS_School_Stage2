@@ -81,7 +81,7 @@ class GarageView implements View {
 
   public createInputBlock(type: 'create' | 'update'): HTMLElement {
     const element = document.createElement('div');
-    element.className = `garage__${type}-car`;
+    element.className = `garage__${type}-car garage-blocks`;
     const { name } = this.elements[`${type}Car`];
     name.className = 'garage__name-input';
     element.append(name);
@@ -171,7 +171,7 @@ class GarageView implements View {
 
   private createControlButtons(): HTMLElement {
     const controlsButtons = document.createElement('div');
-    controlsButtons.className = 'garage__controls';
+    controlsButtons.className = 'garage__controls garage-blocks';
     const { race } = this.elements.controlButton;
     race.className = 'garage__button-control button';
     race.innerText = 'RACE';
@@ -199,7 +199,7 @@ class GarageView implements View {
 
   private createPagination(): HTMLElement {
     const pagination = document.createElement('div');
-    pagination.className = 'garage__pagination pagination';
+    pagination.className = 'garage__pagination pagination garage-blocks';
     const { prevBtn } = this.elements.pagination;
     prevBtn.className = 'pagination__button button';
     prevBtn.innerText = 'PREV';

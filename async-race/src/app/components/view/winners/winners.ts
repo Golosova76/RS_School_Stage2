@@ -51,13 +51,11 @@ class WinnersView implements View {
     title.append('Winners (', this.elements.title.totalCount, ')');
     root.append(title);
     const pageTitle = document.createElement('h3');
-    pageTitle.className = 'winners__page-title';
+    pageTitle.className = 'winners__subtitle';
     pageTitle.append('Page #', this.elements.title.page);
     root.append(pageTitle);
-
     const table = this.createWinnerTable();
     root.append(table);
-
     const pagination = this.createPagination();
     root.append(pagination);
   }
@@ -84,7 +82,7 @@ class WinnersView implements View {
       }
       return th;
     };
-    const thNumber = createThTable('#');
+    const thNumber = createThTable('Number');
     headTable.append(thNumber);
     const thId = createThTable('Id', SortValue.Id);
     headTable.append(thId);
@@ -105,7 +103,7 @@ class WinnersView implements View {
     const pagination = document.createElement('div');
     pagination.className = 'winners__pagination pagination';
     const { prevButton } = this.elements.pagination;
-    prevButton.className = 'pagination__btn btn btn_primary';
+    prevButton.className = 'pagination__button button';
     prevButton.innerText = 'PREV';
     prevButton.disabled = true;
     prevButton.onclick = (): void => {
@@ -113,7 +111,7 @@ class WinnersView implements View {
     };
     pagination.append(prevButton);
     const { nextButton } = this.elements.pagination;
-    nextButton.className = 'pagination__btn btn btn_primary';
+    nextButton.className = 'pagination__button button';
     nextButton.innerText = 'NEXT';
     nextButton.disabled = true;
     nextButton.onclick = (): void => {
