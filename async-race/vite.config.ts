@@ -1,5 +1,9 @@
+/* eslint-disable import/no-extraneous-dependencies */
 import path from 'path';
 // import { resolve } from 'path'; убрать path отсюда path.resolve(__dirname, 'src'),
+import createSvgSpritePlugin from 'vite-plugin-svg-sprite';
+
+const svgPaths = 'public/sprite.svg';
 
 export default {
   base: './',
@@ -13,6 +17,12 @@ export default {
       },
     },
   },
+  plugins: [
+    createSvgSpritePlugin({
+      include: svgPaths,
+      // symbolId: 'icon-[name]',
+    }),
+  ],
   resolve: {
     alias: {
       '@': path.resolve(__dirname, 'src'),

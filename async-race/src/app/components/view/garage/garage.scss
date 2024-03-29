@@ -13,15 +13,13 @@
   position: absolute;
   left: 0;
   right: 10px;
+  //padding: 5px;
 }
 
 .garage-blocks {
   display: flex;
   column-gap: 10px;
   @include margin-bottom20;
-}
-
-.garage__create-car {
 }
 
 .garage__controls {
@@ -37,4 +35,56 @@
   font-size: 24px;
   font-weight: 800;
   @include margin-bottom20;
+}
+
+.garage__cars {
+  @include margin-bottom40;
+}
+
+.car {
+  @include margin-bottom20;
+  border-bottom: 2px dashed rgb(108, 106, 106);
+  color: #ffeb3b;
+}
+
+.car__row-top {
+  display: flex;
+  column-gap: 10px;
+}
+
+.car__row {
+  display: flex;
+  column-gap: 10px;
+  align-items: center;
+  position: relative;
+}
+
+.icon-car {
+  width: 200px;
+  height: 50px;
+}
+.icon-flag {
+  position: absolute;
+  top: 0;
+  right: -20px;
+  width: 200px;
+  height: 50px;
+}
+.car__race-button {
+  display: block;
+  width: 30px;
+  height: 30px;
+  text-align: center;
+  font-size: 20px;
+  border-width: 1px;
+  border-style: solid;
+  border-radius: 4px;
+  background: none;
+  cursor: pointer;
+  @media (any-hover: hover) {
+    &:hover {
+      background-color: #007bff;
+      color: #ff00ff;
+    }
+  }
 }

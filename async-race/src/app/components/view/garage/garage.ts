@@ -1,6 +1,7 @@
 import EventEmitter from '../../../utils/event-emitter';
 import { View, DEFAULT_COLOR, Events, EventValue } from '../common-types';
 import Car from '../../model/car-class';
+import CarBlock from './car-block';
 
 class GarageView implements View {
   private emitter: EventEmitter;
@@ -9,7 +10,16 @@ class GarageView implements View {
 
   private DEFAULT_NAME = '';
 
+  private CARS_ON_PAGE = 7;
+
+  private carsBlocks: CarBlock[] = [];
+
   private selectCarId: number | null = null;
+
+  private paginationChoice = {
+    hasPrevPage: false,
+    hasNextPage: false,
+  };
 
   constructor(emitter: EventEmitter) {
     this.emitter = emitter;
@@ -56,6 +66,30 @@ class GarageView implements View {
     }
   }
 
+  public setCars(cars: Car[], total: number, page: number): void {
+    const hasCars = cars.length > 0;
+    this.elements.controlButton.race.disabled = !hasCars;
+    this.elements.controlButton.reset.disabled = !hasCars;
+    this.clearInputBlock('update');
+    console.log(total);
+    this.elements.title.totalCount.innerText = total.toString();
+    this.elements.title.page.innerText = page.toString();
+    this.paginationChoice.hasPrevPage = page > 1;
+    this.paginationChoice.hasNextPage = page * this.CARS_ON_PAGE < total;
+    this.elements.pagination.prevBtn.disabled =
+      !this.paginationChoice.hasPrevPage;
+    this.elements.pagination.nextBtn.disabled =
+      !this.paginationChoice.hasNextPage;
+    this.elements.cars.innerHTML = '';
+    const carBlocks: CarBlock[] = [];
+    cars.forEach((car) => {
+      const carBlock = new CarBlock(this.emitter, car);
+      carBlocks.push(carBlock);
+      this.elements.cars.append(carBlock.root);
+    });
+    this.carsBlocks = carBlocks;
+  }
+
   private init(): void {
     const { root } = this.elements;
     root.className = 'page__garage garage';
@@ -73,7 +107,7 @@ class GarageView implements View {
     garagePage.className = 'garage__subtitle';
     garagePage.append('Page #', this.elements.title.page);
     root.append(garagePage);
-    this.elements.cars.className = 'garage__cars cars';
+    this.elements.cars.className = 'garage__cars car';
     root.append(this.elements.cars);
     const pagination = this.createPagination();
     root.append(pagination);

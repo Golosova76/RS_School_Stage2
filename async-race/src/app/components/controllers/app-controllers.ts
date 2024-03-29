@@ -3,6 +3,7 @@ import AppView from '../view/appView';
 import CommonService from '../../services/api-service/common-api';
 import { Events, EventValue } from '../view/common-types';
 import { Page, StatePage, AppStatePage } from '../model/state-page';
+import GarageController from './garage/garage-controller';
 
 class AppControllers {
   private emitter: EventEmitter;
@@ -12,6 +13,8 @@ class AppControllers {
   private appView: AppView;
 
   private pageState: StatePage; // это интерфейс!!!!
+
+  private garageController: GarageController;
 
   private localStorageKey = 'golosova__race-state';
 
@@ -25,6 +28,13 @@ class AppControllers {
     this.appView = view;
     this.pageState = this.getState();
     this.init();
+
+    this.garageController = new GarageController(
+      emitter,
+      commonService,
+      view,
+      this.pageState
+    );
   }
 
   public start(): void {

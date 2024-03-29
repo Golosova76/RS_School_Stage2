@@ -3,6 +3,7 @@ import WinnersView from './winners/winners';
 import UnionPage from './union/union-page';
 import EventEmitter from '../../utils/event-emitter';
 import { Page } from '../model/state-page';
+import Car from '../model/car-class';
 
 class AppView {
   private emitter: EventEmitter;
@@ -31,6 +32,10 @@ class AppView {
       this.garageView.setVisibility(false);
       this.winnersView.setVisibility(true);
     }
+  }
+
+  public setCars(cars: Car[], total: number, page: number): void {
+    this.garageView.setCars(cars, total, page);
   }
 }
 

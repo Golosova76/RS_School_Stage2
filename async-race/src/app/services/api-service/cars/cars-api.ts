@@ -1,10 +1,8 @@
 import Car from '../../../components/model/car-class';
-import { HttpMethod } from '../common-types';
+import { HttpMethod, LIMIT_PAGE_CAR } from '../common-types';
 
 class CarService {
   private baseUrl: string;
-
-  private LIMIT_PAGE_CAR = 7;
 
   private HEADER = { 'Content-Type': 'application/json' };
 
@@ -27,7 +25,7 @@ class CarService {
   // Получение автомобилей
   public async getCars(page: number): Promise<Car[]> {
     const response = await fetch(
-      `${this.baseUrl}?_limit=${this.LIMIT_PAGE_CAR}&_page=${page}`
+      `${this.baseUrl}?_limit=${LIMIT_PAGE_CAR}&_page=${page}`
     );
     if (response.ok) {
       const json: unknown = await response.json();
