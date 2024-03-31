@@ -8,6 +8,10 @@ import {
   LIMIT_PAGE_CAR,
   DEFAULT_PAGE_CARS,
 } from '../../../services/api-service/common-types';
+import {
+  setRandomCarColor,
+  setRandomCarName,
+} from '../../../utils/random-avto';
 
 class GarageController {
   private emitter: EventEmitter;
@@ -54,16 +58,66 @@ class GarageController {
     this.loadCars(this.pageState.garagePage);
   }
 
-  private setListeners(): void {
-    this.emitter.on(Events.ClickCreateCarButton, this.onClickCreateCarBtn);
+  private async generateCars(): Promise<void> {
+    const promises = [];
+    for (let i = 0; i < 100; i += 1) {
+      const carName = setRandomCarName();
+      const carColor = setRandomCarColor();
+      promises.push(this.commonService.cars.createCar(carName, carColor));
+    }
+
+    await Promise.all(promises);
+    this.loadCars(this.pageState.garagePage);
   }
 
-  private onClickCreateCarBtn = (value: EventValue): void => {
+  private async updateCar(
+    id: number,
+    name: string,
+    color: string
+  ): Promise<void> {
+    const car = await this.commonService.cars.updateCar(id, name, color);
+    this.emitter.emit(Events.CarUpdate, { car });
+  }
+
+  private setListeners(): void {
+    this.emitter.on(Events.ClickCreateCarButton, this.сlickCreateCarButton);
+    this.emitter.on(Events.ClickUpdateCarButton, this.сlickUpdateCarButton);
+    this.emitter.on(Events.ClickGaragePrevButton, this.сlickPrevPageBtn);
+    this.emitter.on(Events.ClickGarageNextButton, this.сlickNextPageBtn);
+    this.emitter.on(Events.ClickGenerateButton, this.clickGenerateButton);
+  }
+
+  private сlickCreateCarButton = (value: EventValue): void => {
     const { name } = value;
     const { color } = value;
     if (name && color) {
       this.createCar(name, color);
     }
+  };
+
+  private сlickUpdateCarButton = (val: EventValue): void => {
+    const { id } = val;
+    const { name } = val;
+    const { color } = val;
+    if (id && name && color) {
+      this.updateCar(id, name, color);
+    }
+  };
+
+  private сlickPrevPageBtn = (): void => {
+    this.pageState.garagePage -= 1;
+    this.emitter.emit(Events.SaveState, {});
+    this.loadCars(this.pageState.garagePage);
+  };
+
+  private сlickNextPageBtn = (): void => {
+    this.pageState.garagePage += 1;
+    this.emitter.emit(Events.SaveState, {});
+    this.loadCars(this.pageState.garagePage);
+  };
+
+  private clickGenerateButton = (): void => {
+    this.generateCars();
   };
 }
 export default GarageController;

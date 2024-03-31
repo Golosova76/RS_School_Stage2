@@ -35,7 +35,7 @@ const nameCars = {
   ],
 };
 
-export function getRandomCarName(): string {
+export function setRandomCarName(): string {
   const carBrand =
     nameCars.brands[Math.floor(Math.random() * nameCars.brands.length)];
   const carModel =
@@ -44,7 +44,7 @@ export function getRandomCarName(): string {
   return `${carBrand} ${carModel}`;
 }
 
-export function getRandomCarColor(): string {
+export function setRandomCarColor(): string {
   const letters = '0123456789ABCDEF';
   let color = '#';
 

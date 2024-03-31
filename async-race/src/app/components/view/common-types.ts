@@ -51,4 +51,7 @@ export enum Events {
   ClickWinnersNextButton = 'click:winners-next',
   ClickWinnersSort = 'click:winners-sort',
   UpdateWinner = 'update:winner',
+  CarUpdate = 'car:update',
+  CarDelete = 'car:delete',
+  SaveState = 'save:state',
 }
