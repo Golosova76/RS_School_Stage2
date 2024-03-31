@@ -1,5 +1,6 @@
 import Car from '../../model/car-class';
 import EventEmitter from '../../../utils/event-emitter';
+import { Events } from '../common-types';
 
 class CarBlock {
   private emitter: EventEmitter;
@@ -77,6 +78,14 @@ class CarBlock {
     img.append(flagImage);
     row.append(img);
     root.append(row);
+    this.setListeners();
+  }
+
+  private setListeners(): void {
+    this.elements.control.selectButton.onclick = this.clickSelectButton;
+    this.elements.control.removeButton.onclick = this.clickDeleteButton;
+    this.elements.control.startButton.onclick = this.clickStartButton;
+    this.elements.control.resetButton.onclick = this.clickResetButton;
   }
 
   public createSvgIcon(iconId: string): SVGSVGElement {
@@ -110,6 +119,24 @@ class CarBlock {
     svgElement.appendChild(useElement);
     return svgElement;
   }
+
+  private clickSelectButton = (): void => {
+    this.emitter.emit(Events.ClickSelectCarButton, { car: this.car });
+  };
+
+  private clickDeleteButton = (): void => {
+    this.emitter.emit(Events.ClickDeleteCarButton, { id: this.id });
+  };
+
+  private clickStartButton = (): void => {
+    this.emitter.emit(Events.ClickStartCarButton, { car: this.car });
+    this.elements.control.startButton.disabled = true;
+  };
+
+  private clickResetButton = (): void => {
+    this.emitter.emit(Events.ClickResetCarBtn, { id: this.id });
+    this.elements.control.resetButton.disabled = true;
+  };
 }
 
 export default CarBlock;
