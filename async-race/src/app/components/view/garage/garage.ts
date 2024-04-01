@@ -71,7 +71,6 @@ class GarageView implements View {
     this.elements.controlButton.race.disabled = !hasCars;
     this.elements.controlButton.reset.disabled = !hasCars;
     this.clearInputBlock('update');
-    console.log(total);
     this.elements.title.totalCount.innerText = total.toString();
     this.elements.title.page.innerText = page.toString();
     this.paginationChoice.hasPrevPage = page > 1;
@@ -112,6 +111,97 @@ class GarageView implements View {
     const pagination = this.createPagination();
     root.append(pagination);
   }
+
+  private setEventListeners(): void {
+    this.emitter.on(Events.RaceStartCar, this.raceStartCar);
+    this.emitter.on(Events.RaceStopCar, this.raceStopCar);
+    this.emitter.on(Events.RaceResetCar, this.raceResetCar);
+    this.emitter.on(Events.RaceStart, this.raceStart);
+    this.emitter.on(Events.RaceStop, this.raceStop);
+    this.emitter.on(Events.CarUpdate, this.carUpdate);
+    // this.emitter.on(Events.RaceCarWin, this.onRaceCarWin);
+    // this.emitter.on(Events.RaceNoWin, this.onRaceNoWin);
+  }
+
+  private raceStartCar = (val: EventValue): void => {
+    const { id } = val;
+    const { driveTime } = val;
+    const { isRace } = val;
+    if (
+      id &&
+      typeof id === 'number' &&
+      driveTime &&
+      typeof driveTime === 'number'
+    ) {
+      const car = this.carsBlocks.find((carElem) => carElem.id === id);
+      if (car) {
+        car.start(driveTime, isRace);
+      }
+    }
+  };
+
+  private raceStopCar = (val: EventValue): void => {
+    const { id } = val;
+    if (id && typeof id === 'number') {
+      const car = this.carsBlocks.find((carElem) => carElem.id === id);
+      if (car) {
+        car.stop();
+      }
+    }
+  };
+
+  private raceResetCar = (val: EventValue): void => {
+    const { id } = val;
+    const { isRace } = val;
+    if (id) {
+      const car = this.carsBlocks.find((carElem) => carElem.id === id);
+      if (car) {
+        car.reset(isRace);
+      }
+    }
+  };
+
+  private carUpdate = (val: EventValue): void => {
+    const { car } = val;
+    if (car && car instanceof Car) {
+      const carElement = this.carsBlocks.find(
+        (carElem) => carElem.id === car.id
+      );
+      if (carElement) {
+        carElement.update(car);
+      }
+    }
+  };
+
+  private raceStart = (): void => {
+    this.elements.createCar.name.disabled = true;
+    this.elements.createCar.color.disabled = true;
+    this.elements.createCar.button.disabled = true;
+    this.elements.controlButton.race.disabled = true;
+    this.elements.controlButton.reset.disabled = true;
+    this.elements.controlButton.generate.disabled = true;
+    this.elements.pagination.prevBtn.disabled = true;
+    this.elements.pagination.nextBtn.disabled = true;
+    this.carsBlocks.forEach((car) => {
+      car.blockControlsTrue();
+    });
+  };
+
+  private raceStop = (): void => {
+    this.elements.createCar.name.disabled = false;
+    this.elements.createCar.color.disabled = false;
+    this.elements.createCar.button.disabled = false;
+    this.elements.controlButton.race.disabled = false;
+    this.elements.controlButton.reset.disabled = false;
+    this.elements.controlButton.generate.disabled = false;
+    this.elements.pagination.prevBtn.disabled =
+      !this.paginationChoice.hasPrevPage;
+    this.elements.pagination.nextBtn.disabled =
+      !this.paginationChoice.hasNextPage;
+    this.carsBlocks.forEach((car) => {
+      car.blockControlFalse();
+    });
+  };
 
   public createInputBlock(type: 'create' | 'update'): HTMLElement {
     const element = document.createElement('div');
@@ -193,14 +283,12 @@ class GarageView implements View {
     const inputBlock = this.elements[`${type}Car`];
     inputBlock.name.value = this.DEFAULT_NAME;
     inputBlock.color.value = DEFAULT_COLOR;
-    /*
     if (type === 'update') {
       this.selectCarId = null;
       inputBlock.name.disabled = true;
       inputBlock.color.disabled = true;
       inputBlock.button.disabled = true;
     }
-    */
   }
 
   private createControlButtons(): HTMLElement {

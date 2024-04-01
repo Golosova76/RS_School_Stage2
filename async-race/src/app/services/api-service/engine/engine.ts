@@ -5,7 +5,7 @@ export enum EngineActions {
 }
 
 export interface EngineParameters {
-  velocity: number;
+  speed: number;
   distance: number;
 }
 

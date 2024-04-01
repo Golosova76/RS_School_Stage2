@@ -29,6 +29,8 @@ export type EventValue = {
   winners?: Winner[];
   sortValue?: SortValue;
   sortData?: SortData;
+  driveTime?: number;
+  isRace?: boolean;
 };
 
 export type EventHandler = (value: EventValue) => void;
@@ -54,4 +56,9 @@ export enum Events {
   CarUpdate = 'car:update',
   CarDelete = 'car:delete',
   SaveState = 'save:state',
+  RaceStartCar = 'race:start-car',
+  RaceStopCar = 'race:stop-car',
+  RaceResetCar = 'race:reset-car',
+  RaceStart = 'race:start',
+  RaceStop = 'race:stop',
 }

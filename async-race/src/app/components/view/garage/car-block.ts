@@ -11,6 +11,13 @@ class CarBlock {
 
   private elements;
 
+  private animationState = {
+    DEFAULT: '',
+    PAUSED: 'paused',
+  };
+
+  private ANIMATION_TIME = 1.2;
+
   svgNamespace = 'http://www.w3.org/2000/svg';
 
   xlinkNamespace = 'http://www.w3.org/1999/xlink';
@@ -39,6 +46,46 @@ class CarBlock {
 
   public get root(): HTMLElement {
     return this.elements.root;
+  }
+
+  public blockControlsTrue(): void {
+    this.elements.control.removeButton.disabled = true;
+    this.elements.control.startButton.disabled = true;
+    this.elements.control.resetButton.disabled = true;
+  }
+
+  public blockControlFalse(): void {
+    this.elements.control.removeButton.disabled = false;
+  }
+
+  public start(driveTime: number, isRace = false): void {
+    const { img } = this.elements;
+    const animationDuration = driveTime * this.ANIMATION_TIME;
+    img.style.animationDuration = `${animationDuration}ms`;
+    img.classList.add('race');
+    this.elements.control.startButton.disabled = true;
+    this.elements.control.resetButton.disabled = isRace;
+  }
+
+  public stop(): void {
+    const { img } = this.elements;
+    img.style.animationPlayState = this.animationState.PAUSED;
+    this.elements.control.resetButton.disabled = false;
+  }
+
+  public reset(isRace = false): void {
+    const { img } = this.elements;
+    img.classList.remove('race');
+    img.style.animationPlayState = this.animationState.DEFAULT;
+    img.style.animationDuration = '';
+    this.elements.control.startButton.disabled = isRace;
+    this.elements.control.resetButton.disabled = true;
+  }
+
+  public update(car: Car): void {
+    this.car = car;
+    this.elements.name.innerText = car.name;
+    this.elements.img.style.backgroundColor = car.color;
   }
 
   private init(): void {
