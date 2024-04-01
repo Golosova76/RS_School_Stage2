@@ -1,0 +1,272 @@
+@font-face {
+  font-family: NunitoSans10ptCondensed;
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+  src: url("./NunitoSans10ptCondensed-Regular-CbZAlqln.woff2") format("woff2"), url("./NunitoSans10ptCondensed-Regular-B6Uf12nW.woff") format("woff");
+}
+@font-face {
+  font-family: NunitoSans10ptCondensed;
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+  src: url("./NunitoSans10ptCondensed-SemiBoldItalic-D_JEtG9E.woff2") format("woff2"), url("./NunitoSans10ptCondensed-SemiBold-Dl_IH1gT.woff") format("woff");
+}
+@font-face {
+  font-family: NunitoSans10ptCondensed;
+  font-weight: 600;
+  font-style: italic;
+  font-display: swap;
+  src: url("./NunitoSans10ptCondensed-SemiBoldItalic-D_JEtG9E.woff2") format("woff2"), url("./NunitoSans10ptCondensed-SemiBoldItalic-EmqmNDGV.woff") format("woff");
+}
+@font-face {
+  font-family: NunitoSans10ptCondensed;
+  font-weight: 800;
+  font-style: normal;
+  font-display: swap;
+  src: url("./NunitoSans10ptCondensed-ExtraBold-CJUszZ0u.woff2") format("woff2"), url("./NunitoSans10ptCondensed-ExtraBold-BDacxD0L.woff") format("woff");
+}
+@font-face {
+  font-family: NunitoSans10ptCondensed;
+  font-weight: 800;
+  font-style: italic;
+  font-display: swap;
+  src: url("./NunitoSans10ptCondensed-ExtraBoldItalic-DESfgaS9.woff2") format("woff2"), url("./NunitoSans10ptCondensed-ExtraBoldItalic-qRJ2pGkr.woff") format("woff");
+}
+* {
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+ul li {
+  list-style: none;
+}
+a {
+  color: inherit;
+}
+a:link,
+a:visited {
+  text-decoration: none;
+}
+a:hover {
+  text-decoration: none;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-size: inherit;
+  font-weight: inherit;
+}
+img {
+  vertical-align: top;
+}
+body,
+html {
+  height: 100%;
+}
+input,
+button,
+textarea {
+  font-family: "NunitoSans10ptCondensed", sans-serif;
+  font-size: inherit;
+}
+button {
+  cursor: pointer;
+  color: inherit;
+  background-color: inherit;
+}
+html {
+  scroll-behavior: smooth;
+}
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+}
+.wrapper > main {
+  flex: 1 1 auto;
+}
+[class*=__container] {
+  max-width: 1360px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+body {
+  font: 600 14px "NunitoSans10ptCondensed", sans-serif;
+  color: #f4f4f4;
+  background-color: black;
+}
+input {
+  border-radius: 4px;
+}
+.race {
+  padding: 5px;
+}
+.button {
+  width: 60px;
+  padding: 4px 2px 4px 2px;
+  border: none;
+  border-radius: 4px;
+  background-color: #a7cbd9;
+  color: #ffeb3b;
+  cursor: pointer;
+  font-weight: 800;
+  transition: background-color 0.3s ease;
+}
+@media (any-hover: hover) {
+  .button:hover {
+    background-color: #007bff;
+    color: #ff00ff;
+  }
+}
+.button:active {
+  transform: translateY(2px);
+  box-shadow: 0 2px 4px rgba(255, 255, 255, 0.8);
+}
+button:disabled {
+  border-color: gray;
+  color: gray;
+  pointer-events: none;
+}
+.page {
+  width: 100%;
+  position: relative;
+}
+.hidden {
+  visibility: hidden;
+}
+.button.garage__button-generate {
+  width: 120px;
+}
+.nav {
+  display: flex;
+  column-gap: 20px;
+  padding-top: 20px;
+}
+.nav:not(:last-child) {
+  margin-bottom: 40px;
+}
+.garage {
+  position: absolute;
+  left: 0;
+  right: 10px;
+}
+.garage-blocks {
+  display: flex;
+  column-gap: 10px;
+}
+.garage-blocks:not(:last-child) {
+  margin-bottom: 20px;
+}
+.garage__controls:not(:last-child) {
+  margin-bottom: 40px;
+}
+.garage__title {
+  font-size: 32px;
+  font-weight: 800;
+}
+.garage__title:not(:last-child) {
+  margin-bottom: 20px;
+}
+.garage__subtitle {
+  font-size: 24px;
+  font-weight: 800;
+}
+.garage__subtitle:not(:last-child) {
+  margin-bottom: 20px;
+}
+.garage__cars:not(:last-child) {
+  margin-bottom: 40px;
+}
+.car {
+  border-bottom: 2px dashed rgb(108, 106, 106);
+  color: #ffeb3b;
+}
+.car:not(:last-child) {
+  margin-bottom: 20px;
+}
+.car__row-top {
+  display: flex;
+  column-gap: 10px;
+}
+.car__row {
+  display: flex;
+  column-gap: 10px;
+  align-items: center;
+  position: relative;
+}
+.icon-car {
+  width: 200px;
+  height: 50px;
+}
+.icon-flag {
+  position: absolute;
+  top: 0;
+  right: -20px;
+  width: 200px;
+  height: 50px;
+}
+.car__race-button {
+  display: block;
+  width: 30px;
+  height: 30px;
+  text-align: center;
+  font-size: 20px;
+  border-width: 1px;
+  border-style: solid;
+  border-radius: 4px;
+  background: none;
+  cursor: pointer;
+}
+@media (any-hover: hover) {
+  .car__race-button:hover {
+    background-color: #007bff;
+    color: #ff00ff;
+  }
+}
+.winners {
+  position: absolute;
+}
+.winners__title {
+  font-size: 32px;
+  font-weight: 800;
+}
+.winners__title:not(:last-child) {
+  margin-bottom: 20px;
+}
+.winners__subtitle {
+  font-size: 24px;
+  font-weight: 800;
+}
+.winners__subtitle:not(:last-child) {
+  margin-bottom: 20px;
+}
+.table {
+  border-spacing: 0;
+}
+.table:not(:last-child) {
+  margin-bottom: 20px;
+}
+.table__head {
+  background-color: #a7cbd9;
+}
+.table__th,
+.table td {
+  padding: 5px 15px;
+  text-align: left;
+}
+.table__th_sort {
+  cursor: pointer;
+}
+.winners__pagination {
+  display: flex;
+  column-gap: 10px;
+}
