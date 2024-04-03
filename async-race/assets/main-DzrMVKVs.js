@@ -874,7 +874,7 @@ class CarBlock {
       this.svgNamespace,
       "use"
     );
-    useElement.setAttribute("href", `/sprite.svg#${iconId}`);
+    useElement.setAttribute("href", `./sprite.svg#${iconId}`);
     svgElement.appendChild(useElement);
     return svgElement;
   }
@@ -889,7 +889,7 @@ class CarBlock {
       this.svgNamespace,
       "use"
     );
-    useElement.setAttribute("href", `/sprite.svg#${iconId}`);
+    useElement.setAttribute("href", `./sprite.svg#${iconId}`);
     svgElement.appendChild(useElement);
     return svgElement;
   }
