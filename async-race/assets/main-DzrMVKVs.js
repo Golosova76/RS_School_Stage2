@@ -60,7 +60,7 @@ var Events = /* @__PURE__ */ ((Events2) => {
   Events2["ClickSelectCarButton"] = "click:select-car";
   Events2["ClickDeleteCarButton"] = "click:delete-car";
   Events2["ClickStartCarButton"] = "click:start-car";
-  Events2["ClickResetCarBtn"] = "click:stop-car";
+  Events2["ClickResetCarButton"] = "click:stop-car";
   Events2["ClickRaceButton"] = "click:race";
   Events2["ClickResetButton"] = "click:reset";
   Events2["ClickGenerateButton"] = "click:generate-car";
@@ -78,6 +78,8 @@ var Events = /* @__PURE__ */ ((Events2) => {
   Events2["RaceResetCar"] = "race:reset-car";
   Events2["RaceStart"] = "race:start";
   Events2["RaceStop"] = "race:stop";
+  Events2["RaceCarWin"] = "race:car-win";
+  Events2["RaceNoWin"] = "race:no-win";
   return Events2;
 })(Events || {});
 var Page = /* @__PURE__ */ ((Page2) => {
@@ -164,12 +166,102 @@ function setRandomCarColor() {
   }
   return color;
 }
+var EngineActions = /* @__PURE__ */ ((EngineActions2) => {
+  EngineActions2["Started"] = "started";
+  EngineActions2["Stopped"] = "stopped";
+  EngineActions2["Drive"] = "drive";
+  return EngineActions2;
+})(EngineActions || {});
+var ResponseCode = /* @__PURE__ */ ((ResponseCode2) => {
+  ResponseCode2[ResponseCode2["Ok"] = 200] = "Ok";
+  ResponseCode2[ResponseCode2["BadRequest"] = 400] = "BadRequest";
+  ResponseCode2[ResponseCode2["NotFound"] = 404] = "NotFound";
+  ResponseCode2[ResponseCode2["TooManyRequests"] = 429] = "TooManyRequests";
+  ResponseCode2[ResponseCode2["InternalServerError"] = 500] = "InternalServerError";
+  return ResponseCode2;
+})(ResponseCode || {});
+class EngineController {
+  constructor(baseUrl) {
+    __publicField(this, "baseUrl");
+    this.baseUrl = `${baseUrl}/engine`;
+  }
+  async start(carId) {
+    const status = EngineActions.Started;
+    const resp = await this.request(status, carId);
+    if (resp.ok) {
+      const json = await resp.json();
+      return EngineController.getEngineParametersFromJson(
+        json,
+        EngineActions.Started
+      );
+    }
+    const errorMsg = EngineController.getErrorMessage(resp, status, carId);
+    throw Error(errorMsg);
+  }
+  async stop(carId) {
+    const status = EngineActions.Stopped;
+    const resp = await this.request(status, carId);
+    if (resp.ok) {
+      const json = await resp.json();
+      return EngineController.getEngineParametersFromJson(
+        json,
+        EngineActions.Started
+      );
+    }
+    const errorMsg = EngineController.getErrorMessage(resp, status, carId);
+    throw Error(errorMsg);
+  }
+  async drive(carId) {
+    const status = EngineActions.Drive;
+    const resp = await this.request(status, carId);
+    if (resp.ok) {
+      return true;
+    }
+    if (resp.status === ResponseCode.InternalServerError) {
+      return false;
+    }
+    const errorMsg = EngineController.getErrorMessage(resp, status, carId);
+    throw Error(errorMsg);
+  }
+  async request(status, carId) {
+    const queryString = `id=${carId}&status=${status}`;
+    const resp = await fetch(`${this.baseUrl}?${queryString}`, {
+      method: HttpMethod.Patch
+    });
+    return resp;
+  }
+  static getErrorMessage(resp, status, carId) {
+    let message;
+    if (resp.status === ResponseCode.NotFound) {
+      message = `Engine ${status}: car with id: ${carId} not found`;
+    } else if (resp.status === ResponseCode.BadRequest) {
+      message = `Engine ${status}: incorrect id: ${carId}`;
+    } else if (resp.status === ResponseCode.TooManyRequests) {
+      message = `Engine ${status}: too many requests`;
+    } else {
+      message = `Engine ${status} : ${`response.status`}`;
+    }
+    return message;
+  }
+  static getEngineParametersFromJson(json, status) {
+    if (json && typeof json === "object" && "velocity" in json && typeof json.velocity === "number" && "distance" in json && typeof json.distance === "number") {
+      return {
+        velocity: json.velocity,
+        distance: json.distance
+      };
+    }
+    throw Error(
+      `Engine ${status}: incorrect json response: ${JSON.stringify(json)}`
+    );
+  }
+}
 class GarageController {
   constructor(emitter, commonService, view, pageState) {
     __publicField(this, "emitter");
     __publicField(this, "commonService");
     __publicField(this, "appView");
     __publicField(this, "pageState");
+    __publicField(this, "engineController");
     __publicField(this, "currentCars", []);
     __publicField(this, "сlickCreateCarButton", (value) => {
       const { name } = value;
@@ -179,19 +271,23 @@ class GarageController {
       }
     });
     __publicField(this, "сlickUpdateCarButton", (val) => {
-      const { id } = val;
-      const { name } = val;
-      const { color } = val;
+      const { id, name, color } = val;
       if (id && name && color) {
         this.updateCar(id, name, color);
       }
     });
-    __publicField(this, "сlickPrevPageBtn", () => {
+    __publicField(this, "clickRemoveCarButton", (val) => {
+      const { id } = val;
+      if (id) {
+        this.removeCar(id);
+      }
+    });
+    __publicField(this, "сlickPrevPageButton", () => {
       this.pageState.garagePage -= 1;
       this.emitter.emit(Events.SaveState, {});
       this.loadCars(this.pageState.garagePage);
     });
-    __publicField(this, "сlickNextPageBtn", () => {
+    __publicField(this, "сlickNextPageButton", () => {
       this.pageState.garagePage += 1;
       this.emitter.emit(Events.SaveState, {});
       this.loadCars(this.pageState.garagePage);
@@ -199,8 +295,30 @@ class GarageController {
     __publicField(this, "clickGenerateButton", () => {
       this.generateCars();
     });
+    __publicField(this, "clickStartCarButton", async (val) => {
+      const { car } = val;
+      if (car) {
+        try {
+          await this.startCar(car, false);
+        } catch {
+        }
+      }
+    });
+    __publicField(this, "clickResetCarButton", (val) => {
+      const { id } = val;
+      if (id) {
+        this.resetCar(id);
+      }
+    });
+    __publicField(this, "clickRaceButton", () => {
+      this.race();
+    });
+    __publicField(this, "clickResetButton", () => {
+      this.reset();
+    });
     this.emitter = emitter;
     this.commonService = commonService;
+    this.engineController = new EngineController(BASE_URL);
     this.appView = view;
     this.pageState = pageState;
     this.setListeners();
@@ -236,12 +354,71 @@ class GarageController {
     const car = await this.commonService.cars.updateCar(id, name, color);
     this.emitter.emit(Events.CarUpdate, { car });
   }
+  async removeCar(id) {
+    const res = await this.commonService.cars.deleteCar(id);
+    if (res) {
+      this.loadCars(this.pageState.garagePage);
+      this.emitter.emit(Events.CarDelete, { id });
+    }
+  }
+  async startCar(car, isRace = false) {
+    const engineParam = await this.engineController.start(
+      car.id
+    );
+    const driveTime = Math.round(engineParam.distance / engineParam.velocity);
+    this.emitter.emit(Events.RaceStartCar, { id: car.id, driveTime, isRace });
+    const res = await this.engineController.drive(car.id);
+    if (!res) {
+      this.emitter.emit(Events.RaceStopCar, { id: car.id });
+      throw Error("Car broken");
+    }
+    return { car, driveTime };
+  }
+  async resetCar(id, isRace = false) {
+    await this.engineController.stop(id);
+    this.emitter.emit(Events.RaceResetCar, { id, isRace });
+  }
+  async race() {
+    this.emitter.emit(Events.RaceStart, {});
+    await this.reset(true);
+    const cars = this.currentCars;
+    const promises = [];
+    cars.forEach((car) => {
+      const promise = this.startCar(car, true);
+      promises.push(promise);
+    });
+    try {
+      const winnerCar = await Promise.any(promises);
+      this.emitter.emit(Events.RaceCarWin, {
+        car: winnerCar.car,
+        driveTime: winnerCar.driveTime
+      });
+    } catch {
+      this.emitter.emit(Events.RaceNoWin, {});
+    }
+    await Promise.allSettled(promises);
+    this.emitter.emit(Events.RaceStop, {});
+  }
+  async reset(isRace = false) {
+    const cars = this.currentCars;
+    const promises = [];
+    cars.forEach((car) => {
+      const promise = this.resetCar(car.id, isRace);
+      promises.push(promise);
+    });
+    await Promise.all(promises);
+  }
   setListeners() {
     this.emitter.on(Events.ClickCreateCarButton, this.сlickCreateCarButton);
     this.emitter.on(Events.ClickUpdateCarButton, this.сlickUpdateCarButton);
-    this.emitter.on(Events.ClickGaragePrevButton, this.сlickPrevPageBtn);
-    this.emitter.on(Events.ClickGarageNextButton, this.сlickNextPageBtn);
+    this.emitter.on(Events.ClickGaragePrevButton, this.сlickPrevPageButton);
+    this.emitter.on(Events.ClickGarageNextButton, this.сlickNextPageButton);
     this.emitter.on(Events.ClickGenerateButton, this.clickGenerateButton);
+    this.emitter.on(Events.ClickDeleteCarButton, this.clickRemoveCarButton);
+    this.emitter.on(Events.ClickResetCarButton, this.clickResetCarButton);
+    this.emitter.on(Events.ClickRaceButton, this.clickRaceButton);
+    this.emitter.on(Events.ClickResetButton, this.clickResetButton);
+    this.emitter.on(Events.ClickStartCarButton, this.clickStartCarButton);
   }
 }
 class AppControllers {
@@ -382,17 +559,17 @@ class CarService {
   }
   // Обновление автомобиля
   async updateCar(id, name, color) {
-    const response = await fetch(this.baseUrl, {
+    const response = await fetch(`${this.baseUrl}/${id}`, {
       method: HttpMethod.Put,
       headers: this.HEADER,
-      body: JSON.stringify({ name, color })
+      body: JSON.stringify({ id, name, color })
     });
     if (response.ok) {
       const json = await response.json();
       const car = CarService.getCar(json);
       return car;
     }
-    throw new Error(`Can't update car: ${response.status}`);
+    throw Error(`Can't update car: ${response.status}`);
   }
   // Удаление автомобиля
   async deleteCar(id) {
@@ -571,7 +748,7 @@ class CarBlock {
       this.elements.control.startButton.disabled = true;
     });
     __publicField(this, "clickResetButton", () => {
-      this.emitter.emit(Events.ClickResetCarBtn, { id: this.id });
+      this.emitter.emit(Events.ClickResetCarButton, { id: this.id });
       this.elements.control.resetButton.disabled = true;
     });
     this.emitter = emitter;
@@ -605,30 +782,41 @@ class CarBlock {
     this.elements.control.removeButton.disabled = false;
   }
   start(driveTime, isRace = false) {
-    const { img } = this.elements;
+    const svgElement = this.elements.img.querySelector(
+      "svg.icon-car"
+    );
     const animationDuration = driveTime * this.ANIMATION_TIME;
-    img.style.animationDuration = `${animationDuration}ms`;
-    img.classList.add("race");
+    svgElement.style.animationDuration = `${animationDuration}ms`;
+    svgElement.classList.add("race");
     this.elements.control.startButton.disabled = true;
     this.elements.control.resetButton.disabled = isRace;
   }
   stop() {
-    const { img } = this.elements;
-    img.style.animationPlayState = this.animationState.PAUSED;
+    const svgElement = this.elements.img.querySelector(
+      "svg.icon-car"
+    );
+    svgElement.style.animationPlayState = this.animationState.PAUSED;
     this.elements.control.resetButton.disabled = false;
   }
   reset(isRace = false) {
-    const { img } = this.elements;
-    img.classList.remove("race");
-    img.style.animationPlayState = this.animationState.DEFAULT;
-    img.style.animationDuration = "";
+    const svgElement = this.elements.img.querySelector(
+      "svg.icon-car"
+    );
+    svgElement.classList.remove("race");
+    svgElement.style.animationPlayState = this.animationState.DEFAULT;
+    svgElement.style.animationDuration = "";
     this.elements.control.startButton.disabled = isRace;
     this.elements.control.resetButton.disabled = true;
   }
   update(car) {
     this.car = car;
     this.elements.name.innerText = car.name;
-    this.elements.img.style.backgroundColor = car.color;
+    const svgElement = this.elements.img.querySelector(
+      "svg.icon-car"
+    );
+    if (svgElement) {
+      svgElement.style.fill = car.color;
+    }
   }
   init() {
     const { root } = this.elements;
@@ -814,6 +1002,7 @@ class GarageView {
       },
       winner: document.createElement("div")
     };
+    this.setEventListeners();
     this.init();
   }
   getElement() {
