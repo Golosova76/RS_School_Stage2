@@ -43,7 +43,7 @@ export enum Events {
   ClickSelectCarButton = 'click:select-car',
   ClickDeleteCarButton = 'click:delete-car',
   ClickStartCarButton = 'click:start-car',
-  ClickResetCarBtn = 'click:stop-car',
+  ClickResetCarButton = 'click:stop-car',
   ClickRaceButton = 'click:race',
   ClickResetButton = 'click:reset',
   ClickGenerateButton = 'click:generate-car',
@@ -61,4 +61,6 @@ export enum Events {
   RaceResetCar = 'race:reset-car',
   RaceStart = 'race:start',
   RaceStop = 'race:stop',
+  RaceCarWin = 'race:car-win',
+  RaceNoWin = 'race:no-win',
 }

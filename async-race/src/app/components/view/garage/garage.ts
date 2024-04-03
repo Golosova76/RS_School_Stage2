@@ -51,6 +51,7 @@ class GarageView implements View {
       },
       winner: document.createElement('div'),
     };
+    this.setEventListeners();
     this.init();
   }
 
@@ -119,8 +120,6 @@ class GarageView implements View {
     this.emitter.on(Events.RaceStart, this.raceStart);
     this.emitter.on(Events.RaceStop, this.raceStop);
     this.emitter.on(Events.CarUpdate, this.carUpdate);
-    // this.emitter.on(Events.RaceCarWin, this.onRaceCarWin);
-    // this.emitter.on(Events.RaceNoWin, this.onRaceNoWin);
   }
 
   private raceStartCar = (val: EventValue): void => {

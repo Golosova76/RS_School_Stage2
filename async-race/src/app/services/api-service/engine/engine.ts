@@ -1,3 +1,5 @@
+import Car from '../../../components/model/car-class';
+
 export enum EngineActions {
   Started = 'started',
   Stopped = 'stopped',
@@ -5,7 +7,7 @@ export enum EngineActions {
 }
 
 export interface EngineParameters {
-  speed: number;
+  velocity: number;
   distance: number;
 }
 
@@ -15,4 +17,9 @@ export enum ResponseCode {
   NotFound = 404,
   TooManyRequests = 429,
   InternalServerError = 500,
+}
+
+export interface RaceResult {
+  car: Car;
+  driveTime: number;
 }

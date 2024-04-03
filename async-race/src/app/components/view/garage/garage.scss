@@ -88,3 +88,38 @@
     }
   }
 }
+
+.shake {
+  outline: 2px solid red;
+  animation: shake;
+  animation-duration: 0.15s;
+  animation-iteration-count: 3;
+}
+
+@keyframes shake {
+  20% {
+    transform: translateX(-2px);
+  }
+
+  80% {
+    transform: translateX(2px);
+  }
+}
+
+.car__img.race {
+  svg {
+    animation: race;
+    animation-timing-function: linear;
+    animation-fill-mode: forwards;
+  }
+}
+
+@keyframes race {
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(100%);
+  }
+}

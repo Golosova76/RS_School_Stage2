@@ -68,18 +68,17 @@ class CarService {
     name: string,
     color: string
   ): Promise<Car> {
-    const response = await fetch(this.baseUrl, {
+    const response = await fetch(`${this.baseUrl}/${id}`, {
       method: HttpMethod.Put,
       headers: this.HEADER,
-      body: JSON.stringify({ name, color }),
+      body: JSON.stringify({ id, name, color }),
     });
     if (response.ok) {
       const json: unknown = await response.json();
-      // опять создавать через new?????????
       const car = CarService.getCar(json);
       return car;
     }
-    throw new Error(`Can't update car: ${response.status}`);
+    throw Error(`Can't update car: ${response.status}`);
   }
 
   // Удаление автомобиля

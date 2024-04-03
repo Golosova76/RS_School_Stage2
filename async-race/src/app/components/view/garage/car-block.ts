@@ -59,25 +59,34 @@ class CarBlock {
   }
 
   public start(driveTime: number, isRace = false): void {
-    const { img } = this.elements;
+    const svgElement = this.elements.img.querySelector(
+      'svg.icon-car'
+    ) as SVGSVGElement;
+    // const { img } = this.elements;
     const animationDuration = driveTime * this.ANIMATION_TIME;
-    img.style.animationDuration = `${animationDuration}ms`;
-    img.classList.add('race');
+    svgElement.style.animationDuration = `${animationDuration}ms`;
+    svgElement.classList.add('race');
     this.elements.control.startButton.disabled = true;
     this.elements.control.resetButton.disabled = isRace;
   }
 
   public stop(): void {
-    const { img } = this.elements;
-    img.style.animationPlayState = this.animationState.PAUSED;
+    const svgElement = this.elements.img.querySelector(
+      'svg.icon-car'
+    ) as SVGSVGElement;
+    // const { img } = this.elements;
+    svgElement.style.animationPlayState = this.animationState.PAUSED;
     this.elements.control.resetButton.disabled = false;
   }
 
   public reset(isRace = false): void {
-    const { img } = this.elements;
-    img.classList.remove('race');
-    img.style.animationPlayState = this.animationState.DEFAULT;
-    img.style.animationDuration = '';
+    const svgElement = this.elements.img.querySelector(
+      'svg.icon-car'
+    ) as SVGSVGElement;
+    // const { img } = this.elements;
+    svgElement.classList.remove('race');
+    svgElement.style.animationPlayState = this.animationState.DEFAULT;
+    svgElement.style.animationDuration = '';
     this.elements.control.startButton.disabled = isRace;
     this.elements.control.resetButton.disabled = true;
   }
@@ -85,7 +94,12 @@ class CarBlock {
   public update(car: Car): void {
     this.car = car;
     this.elements.name.innerText = car.name;
-    this.elements.img.style.backgroundColor = car.color;
+    const svgElement = this.elements.img.querySelector(
+      'svg.icon-car'
+    ) as SVGSVGElement;
+    if (svgElement) {
+      svgElement.style.fill = car.color;
+    }
   }
 
   private init(): void {
@@ -181,7 +195,7 @@ class CarBlock {
   };
 
   private clickResetButton = (): void => {
-    this.emitter.emit(Events.ClickResetCarBtn, { id: this.id });
+    this.emitter.emit(Events.ClickResetCarButton, { id: this.id });
     this.elements.control.resetButton.disabled = true;
   };
 }
