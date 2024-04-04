@@ -1,5 +1,5 @@
 var __defProp = Object.defineProperty;
-var __defNormalProp = (obj, key, value) => key in obj ? __defProp(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;
+var __defNormalProp = (obj, key, value) => (key in obj ? __defProp(obj, key, { enumerable: true, configurable: true, writable: true, value }) : (obj[key] = value));
 var __publicField = (obj, key, value) => {
   __defNormalProp(obj, typeof key !== "symbol" ? key + "" : key, value);
   return value;
@@ -18,28 +18,21 @@ var __publicField = (obj, key, value) => {
         continue;
       }
       for (const node of mutation.addedNodes) {
-        if (node.tagName === "LINK" && node.rel === "modulepreload")
-          processPreload(node);
+        if (node.tagName === "LINK" && node.rel === "modulepreload") processPreload(node);
       }
     }
   }).observe(document, { childList: true, subtree: true });
   function getFetchOpts(link) {
     const fetchOpts = {};
-    if (link.integrity)
-      fetchOpts.integrity = link.integrity;
-    if (link.referrerPolicy)
-      fetchOpts.referrerPolicy = link.referrerPolicy;
-    if (link.crossOrigin === "use-credentials")
-      fetchOpts.credentials = "include";
-    else if (link.crossOrigin === "anonymous")
-      fetchOpts.credentials = "omit";
-    else
-      fetchOpts.credentials = "same-origin";
+    if (link.integrity) fetchOpts.integrity = link.integrity;
+    if (link.referrerPolicy) fetchOpts.referrerPolicy = link.referrerPolicy;
+    if (link.crossOrigin === "use-credentials") fetchOpts.credentials = "include";
+    else if (link.crossOrigin === "anonymous") fetchOpts.credentials = "omit";
+    else fetchOpts.credentials = "same-origin";
     return fetchOpts;
   }
   function processPreload(link) {
-    if (link.ep)
-      return;
+    if (link.ep) return;
     link.ep = true;
     const fetchOpts = getFetchOpts(link);
     fetch(link.href, fetchOpts);
@@ -83,8 +76,8 @@ var Events = /* @__PURE__ */ ((Events2) => {
   return Events2;
 })(Events || {});
 var Page = /* @__PURE__ */ ((Page2) => {
-  Page2[Page2["Garage"] = 0] = "Garage";
-  Page2[Page2["Winners"] = 1] = "Winners";
+  Page2[(Page2["Garage"] = 0)] = "Garage";
+  Page2[(Page2["Winners"] = 1)] = "Winners";
   return Page2;
 })(Page || {});
 class AppStatePage {
@@ -118,40 +111,8 @@ const LIMIT_PAGE_WINNER = 10;
 const LIMIT_PAGE_CAR = 7;
 const DEFAULT_PAGE_CARS = 1;
 const nameCars = {
-  brands: [
-    "Toyota",
-    "Ford",
-    "BMW",
-    "Mercedes-Benz",
-    "Audi",
-    "Honda",
-    "Nissan",
-    "Chevrolet",
-    "Volkswagen",
-    "Kia",
-    "Hyundai",
-    "Porsche",
-    "Subaru",
-    "Tesla",
-    "Volvo"
-  ],
-  models: [
-    "Camry",
-    "F-150",
-    "3 Series",
-    "S-Class",
-    "A4",
-    "Civic",
-    "Altima",
-    "Silverado",
-    "Golf",
-    "Sorento",
-    "Sonata",
-    "911",
-    "Forester",
-    "Model S",
-    "XC90"
-  ]
+  brands: ["Toyota", "Ford", "BMW", "Mercedes-Benz", "Audi", "Honda", "Nissan", "Chevrolet", "Volkswagen", "Kia", "Hyundai", "Porsche", "Subaru", "Tesla", "Volvo"],
+  models: ["Camry", "F-150", "3 Series", "S-Class", "A4", "Civic", "Altima", "Silverado", "Golf", "Sorento", "Sonata", "911", "Forester", "Model S", "XC90"],
 };
 function setRandomCarName() {
   const carBrand = nameCars.brands[Math.floor(Math.random() * nameCars.brands.length)];
@@ -173,11 +134,11 @@ var EngineActions = /* @__PURE__ */ ((EngineActions2) => {
   return EngineActions2;
 })(EngineActions || {});
 var ResponseCode = /* @__PURE__ */ ((ResponseCode2) => {
-  ResponseCode2[ResponseCode2["Ok"] = 200] = "Ok";
-  ResponseCode2[ResponseCode2["BadRequest"] = 400] = "BadRequest";
-  ResponseCode2[ResponseCode2["NotFound"] = 404] = "NotFound";
-  ResponseCode2[ResponseCode2["TooManyRequests"] = 429] = "TooManyRequests";
-  ResponseCode2[ResponseCode2["InternalServerError"] = 500] = "InternalServerError";
+  ResponseCode2[(ResponseCode2["Ok"] = 200)] = "Ok";
+  ResponseCode2[(ResponseCode2["BadRequest"] = 400)] = "BadRequest";
+  ResponseCode2[(ResponseCode2["NotFound"] = 404)] = "NotFound";
+  ResponseCode2[(ResponseCode2["TooManyRequests"] = 429)] = "TooManyRequests";
+  ResponseCode2[(ResponseCode2["InternalServerError"] = 500)] = "InternalServerError";
   return ResponseCode2;
 })(ResponseCode || {});
 class EngineController {
@@ -190,10 +151,7 @@ class EngineController {
     const resp = await this.request(status, carId);
     if (resp.ok) {
       const json = await resp.json();
-      return EngineController.getEngineParametersFromJson(
-        json,
-        EngineActions.Started
-      );
+      return EngineController.getEngineParametersFromJson(json, EngineActions.Started);
     }
     const errorMsg = EngineController.getErrorMessage(resp, status, carId);
     throw Error(errorMsg);
@@ -203,10 +161,7 @@ class EngineController {
     const resp = await this.request(status, carId);
     if (resp.ok) {
       const json = await resp.json();
-      return EngineController.getEngineParametersFromJson(
-        json,
-        EngineActions.Started
-      );
+      return EngineController.getEngineParametersFromJson(json, EngineActions.Started);
     }
     const errorMsg = EngineController.getErrorMessage(resp, status, carId);
     throw Error(errorMsg);
@@ -226,7 +181,7 @@ class EngineController {
   async request(status, carId) {
     const queryString = `id=${carId}&status=${status}`;
     const resp = await fetch(`${this.baseUrl}?${queryString}`, {
-      method: HttpMethod.Patch
+      method: HttpMethod.Patch,
     });
     return resp;
   }
@@ -247,12 +202,10 @@ class EngineController {
     if (json && typeof json === "object" && "velocity" in json && typeof json.velocity === "number" && "distance" in json && typeof json.distance === "number") {
       return {
         velocity: json.velocity,
-        distance: json.distance
+        distance: json.distance,
       };
     }
-    throw Error(
-      `Engine ${status}: incorrect json response: ${JSON.stringify(json)}`
-    );
+    throw Error(`Engine ${status}: incorrect json response: ${JSON.stringify(json)}`);
   }
 }
 class GarageController {
@@ -300,8 +253,7 @@ class GarageController {
       if (car) {
         try {
           await this.startCar(car, false);
-        } catch {
-        }
+        } catch {}
       }
     });
     __publicField(this, "clickResetCarButton", (val) => {
@@ -362,9 +314,7 @@ class GarageController {
     }
   }
   async startCar(car, isRace = false) {
-    const engineParam = await this.engineController.start(
-      car.id
-    );
+    const engineParam = await this.engineController.start(car.id);
     const driveTime = Math.round(engineParam.distance / engineParam.velocity);
     this.emitter.emit(Events.RaceStartCar, { id: car.id, driveTime, isRace });
     const res = await this.engineController.drive(car.id);
@@ -391,7 +341,7 @@ class GarageController {
       const winnerCar = await Promise.any(promises);
       this.emitter.emit(Events.RaceCarWin, {
         car: winnerCar.car,
-        driveTime: winnerCar.driveTime
+        driveTime: winnerCar.driveTime,
       });
     } catch {
       this.emitter.emit(Events.RaceNoWin, {});
@@ -435,12 +385,7 @@ class AppControllers {
     this.appView = view;
     this.pageState = this.getState();
     this.init();
-    this.garageController = new GarageController(
-      emitter,
-      commonService,
-      view,
-      this.pageState
-    );
+    this.garageController = new GarageController(emitter, commonService, view, this.pageState);
   }
   start() {
     this.appView.setView(this.pageState.currentPage);
@@ -523,9 +468,7 @@ class CarService {
   }
   // Получение автомобилей
   async getCars(page) {
-    const response = await fetch(
-      `${this.baseUrl}?_limit=${LIMIT_PAGE_CAR}&_page=${page}`
-    );
+    const response = await fetch(`${this.baseUrl}?_limit=${LIMIT_PAGE_CAR}&_page=${page}`);
     if (response.ok) {
       const json = await response.json();
       const cars = CarService.getCars(json);
@@ -548,7 +491,7 @@ class CarService {
     const response = await fetch(this.baseUrl, {
       method: HttpMethod.Post,
       headers: this.HEADER,
-      body: JSON.stringify({ name, color })
+      body: JSON.stringify({ name, color }),
     });
     if (response.ok) {
       const json = await response.json();
@@ -562,7 +505,7 @@ class CarService {
     const response = await fetch(`${this.baseUrl}/${id}`, {
       method: HttpMethod.Put,
       headers: this.HEADER,
-      body: JSON.stringify({ id, name, color })
+      body: JSON.stringify({ id, name, color }),
     });
     if (response.ok) {
       const json = await response.json();
@@ -574,7 +517,7 @@ class CarService {
   // Удаление автомобиля
   async deleteCar(id) {
     const response = await fetch(`${this.baseUrl}/${id}`, {
-      method: HttpMethod.Delete
+      method: HttpMethod.Delete,
     });
     if (response.ok) {
       return true;
@@ -641,9 +584,7 @@ class WinnerService {
   }
   // Получение победителей
   async getWinners(page) {
-    const response = await fetch(
-      `${this.baseUrl}?_limit=${LIMIT_PAGE_WINNER}&_page=${page}`
-    );
+    const response = await fetch(`${this.baseUrl}?_limit=${LIMIT_PAGE_WINNER}&_page=${page}`);
     if (response.ok) {
       const json = await response.json();
       const cars = WinnerService.getWinners(json);
@@ -656,7 +597,7 @@ class WinnerService {
     const response = await fetch(this.baseUrl, {
       method: HttpMethod.Post,
       headers: this.HEADER,
-      body: JSON.stringify({ id, wins, time })
+      body: JSON.stringify({ id, wins, time }),
     });
     if (response.ok) {
       const json = await response.json();
@@ -670,7 +611,7 @@ class WinnerService {
     const response = await fetch(`${this.baseUrl}/${id}`, {
       method: HttpMethod.Put,
       headers: this.HEADER,
-      body: JSON.stringify({ wins, time })
+      body: JSON.stringify({ wins, time }),
     });
     if (response.ok) {
       const json = await response.json();
@@ -682,7 +623,7 @@ class WinnerService {
   // Удаление победителя в ТЗ нет
   async deleteWinner(id) {
     const response = await fetch(`${this.baseUrl}/${id}`, {
-      method: HttpMethod.Delete
+      method: HttpMethod.Delete,
     });
     if (response.ok) {
       return true;
@@ -732,7 +673,7 @@ class CarBlock {
     __publicField(this, "elements");
     __publicField(this, "animationState", {
       DEFAULT: "",
-      PAUSED: "paused"
+      PAUSED: "paused",
     });
     __publicField(this, "ANIMATION_TIME", 1.2);
     __publicField(this, "svgNamespace", "http://www.w3.org/2000/svg");
@@ -760,10 +701,10 @@ class CarBlock {
         selectButton: document.createElement("button"),
         removeButton: document.createElement("button"),
         startButton: document.createElement("button"),
-        resetButton: document.createElement("button")
+        resetButton: document.createElement("button"),
       },
       name: document.createElement("div"),
-      img: document.createElement("div")
+      img: document.createElement("div"),
     };
     this.init();
   }
@@ -782,9 +723,7 @@ class CarBlock {
     this.elements.control.removeButton.disabled = false;
   }
   start(driveTime, isRace = false) {
-    const svgElement = this.elements.img.querySelector(
-      "svg.icon-car"
-    );
+    const svgElement = this.elements.img.querySelector("svg.icon-car");
     const animationDuration = driveTime * this.ANIMATION_TIME;
     svgElement.style.animationDuration = `${animationDuration}ms`;
     svgElement.classList.add("race");
@@ -792,16 +731,12 @@ class CarBlock {
     this.elements.control.resetButton.disabled = isRace;
   }
   stop() {
-    const svgElement = this.elements.img.querySelector(
-      "svg.icon-car"
-    );
+    const svgElement = this.elements.img.querySelector("svg.icon-car");
     svgElement.style.animationPlayState = this.animationState.PAUSED;
     this.elements.control.resetButton.disabled = false;
   }
   reset(isRace = false) {
-    const svgElement = this.elements.img.querySelector(
-      "svg.icon-car"
-    );
+    const svgElement = this.elements.img.querySelector("svg.icon-car");
     svgElement.classList.remove("race");
     svgElement.style.animationPlayState = this.animationState.DEFAULT;
     svgElement.style.animationDuration = "";
@@ -811,9 +746,7 @@ class CarBlock {
   update(car) {
     this.car = car;
     this.elements.name.innerText = car.name;
-    const svgElement = this.elements.img.querySelector(
-      "svg.icon-car"
-    );
+    const svgElement = this.elements.img.querySelector("svg.icon-car");
     if (svgElement) {
       svgElement.style.fill = car.color;
     }
@@ -864,31 +797,19 @@ class CarBlock {
     this.elements.control.resetButton.onclick = this.clickResetButton;
   }
   createSvgIcon(iconId) {
-    const svgElement = document.createElementNS(
-      this.svgNamespace,
-      "svg"
-    );
+    const svgElement = document.createElementNS(this.svgNamespace, "svg");
     svgElement.setAttribute("class", "icon-car");
     svgElement.style.fill = this.car.color;
-    const useElement = document.createElementNS(
-      this.svgNamespace,
-      "use"
-    );
+    const useElement = document.createElementNS(this.svgNamespace, "use");
     useElement.setAttribute("href", `./sprite.svg#${iconId}`);
     svgElement.appendChild(useElement);
     return svgElement;
   }
   createSvgIconFlag(iconId) {
-    const svgElement = document.createElementNS(
-      this.svgNamespace,
-      "svg"
-    );
+    const svgElement = document.createElementNS(this.svgNamespace, "svg");
     svgElement.setAttribute("class", "icon-flag");
     svgElement.style.fill = "red";
-    const useElement = document.createElementNS(
-      this.svgNamespace,
-      "use"
-    );
+    const useElement = document.createElementNS(this.svgNamespace, "use");
     useElement.setAttribute("href", `./sprite.svg#${iconId}`);
     svgElement.appendChild(useElement);
     return svgElement;
@@ -904,7 +825,7 @@ class GarageView {
     __publicField(this, "selectCarId", null);
     __publicField(this, "paginationChoice", {
       hasPrevPage: false,
-      hasNextPage: false
+      hasNextPage: false,
     });
     __publicField(this, "raceStartCar", (val) => {
       const { id } = val;
@@ -939,9 +860,7 @@ class GarageView {
     __publicField(this, "carUpdate", (val) => {
       const { car } = val;
       if (car && car instanceof Car) {
-        const carElement = this.carsBlocks.find(
-          (carElem) => carElem.id === car.id
-        );
+        const carElement = this.carsBlocks.find((carElem) => carElem.id === car.id);
         if (carElement) {
           carElement.update(car);
         }
@@ -978,29 +897,29 @@ class GarageView {
       root: document.createElement("div"),
       title: {
         totalCount: document.createElement("span"),
-        page: document.createElement("span")
+        page: document.createElement("span"),
       },
       createCar: {
         name: document.createElement("input"),
         color: document.createElement("input"),
-        button: document.createElement("button")
+        button: document.createElement("button"),
       },
       updateCar: {
         name: document.createElement("input"),
         color: document.createElement("input"),
-        button: document.createElement("button")
+        button: document.createElement("button"),
       },
       controlButton: {
         race: document.createElement("button"),
         reset: document.createElement("button"),
-        generate: document.createElement("button")
+        generate: document.createElement("button"),
       },
       cars: document.createElement("div"),
       pagination: {
         prevBtn: document.createElement("button"),
-        nextBtn: document.createElement("button")
+        nextBtn: document.createElement("button"),
       },
-      winner: document.createElement("div")
+      winner: document.createElement("div"),
     };
     this.setEventListeners();
     this.init();
@@ -1095,7 +1014,7 @@ class GarageView {
       } else {
         this.emitter.emit(Events.ClickCreateCarButton, {
           name: name.value,
-          color: color.value
+          color: color.value,
         });
         this.clearInputBlock("create");
       }
@@ -1115,7 +1034,7 @@ class GarageView {
         this.emitter.emit(Events.ClickUpdateCarButton, {
           id,
           name: name.value,
-          color: color.value
+          color: color.value,
         });
         this.clearInputBlock("update");
       }
@@ -1202,20 +1121,20 @@ class WinnersView {
       root: document.createElement("div"),
       title: {
         totalCount: document.createElement("span"),
-        page: document.createElement("span")
+        page: document.createElement("span"),
       },
       table: {
         head: {
           idSort: document.createElement("span"),
           winsSort: document.createElement("span"),
-          timeSort: document.createElement("span")
+          timeSort: document.createElement("span"),
         },
-        body: document.createElement("tbody")
+        body: document.createElement("tbody"),
       },
       pagination: {
         prevButton: document.createElement("button"),
-        nextButton: document.createElement("button")
-      }
+        nextButton: document.createElement("button"),
+      },
     };
     this.init();
   }
@@ -1376,11 +1295,7 @@ class App {
     this.emitter = new EventEmitter();
     this.commonService = new CommonService(BASE_URL);
     this.view = new AppView(this.emitter);
-    this.controller = new AppControllers(
-      this.emitter,
-      this.commonService,
-      this.view
-    );
+    this.controller = new AppControllers(this.emitter, this.commonService, this.view);
   }
   start() {
     this.controller.start();

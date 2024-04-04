@@ -210,7 +210,7 @@ button:disabled {
 .icon-flag {
   position: absolute;
   top: 0;
-  right: -20px;
+  right: 30px;
   width: 200px;
   height: 50px;
 }
