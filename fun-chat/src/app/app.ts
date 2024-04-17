@@ -1,10 +1,16 @@
 import AccessView from './components/view/access';
 import AboutView from './components/view/about';
+import MainView from './components/view/main-page';
+import WebSocketClient from './services/websocket-service';
 
 class App {
-  private currentView: AccessView | AboutView | null = null;
+  private currentView: AccessView | MainView | AboutView | null = null;
+
+  private webSocketClient: WebSocketClient;
 
   constructor() {
+    const url = 'wss://example.com/websocket';
+    this.webSocketClient = new WebSocketClient(url);
     window.addEventListener('hashchange', this.route);
     window.addEventListener('load', this.route);
   }
@@ -16,6 +22,9 @@ class App {
     }
 
     switch (window.location.hash) {
+      case '#main':
+        this.currentView = new MainView();
+        break;
       case '#about':
         this.currentView = new AboutView();
         break;

@@ -1,5 +1,6 @@
 import Router from '../../utils/router';
 import { View } from '../model/common';
+import Validator from '../../utils/validate';
 
 class AccessView implements View {
   private form: HTMLFormElement;
@@ -11,7 +12,6 @@ class AccessView implements View {
     this.container.classList.add('access-container');
     document.body.appendChild(this.container);
 
-    // this.container = container;
     this.form = this.createForm();
     this.container.appendChild(this.form);
   }
@@ -36,7 +36,30 @@ class AccessView implements View {
     form.appendChild(submitButton);
     form.appendChild(infoButton);
 
+    form.addEventListener('submit', (event) => {
+      event.preventDefault();
+      this.handleFormSubmission(usernameInput, passwordInput);
+    });
+
     return form;
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  private handleFormSubmission(...inputs: HTMLInputElement[]): void {
+    const allValid = inputs.every((input) => {
+      Validator.validateInput(input);
+      if (input.parentNode) {
+        const errorSpanExists =
+          input.parentNode.querySelector('span.error-message');
+        return !errorSpanExists;
+      }
+      return false;
+    });
+
+    if (allValid)
+      if (allValid) {
+        Router.navigateTo('main');
+      }
   }
 
   // eslint-disable-next-line class-methods-use-this
