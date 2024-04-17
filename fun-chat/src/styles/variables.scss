@@ -1,12 +1,12 @@
 $font-family: "NunitoSans10ptCondensed", sans-serif;
-$font-size: 14px;
+$font-size: 16px;
 $font-weight: 600;
 $font-line-height: 150%;
 
 // $color-text-dark: #333;
 
-$color-text-dark: #f4f4f4;
-$color-background-body: black;
+$color-text-dark: black;
+$color-background-body: #f4f4f4;
 $main-background-color: $color-background-body;
 
 @mixin margin-bottom40 {

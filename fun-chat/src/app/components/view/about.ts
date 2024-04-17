@@ -12,26 +12,33 @@ class AboutView implements View {
   }
 
   private initializeContent(): void {
+    const aboutShadow = document.createElement('div');
+    aboutShadow.classList.add('shadow-about');
+    this.container.appendChild(aboutShadow);
+
     const title = document.createElement('h1');
     title.textContent = 'Fun Chat';
     title.classList.add('title-about');
-    this.container.appendChild(title);
+    aboutShadow.appendChild(title);
 
     const description = document.createElement('p');
     description.textContent =
       'The application is designed to demonstrate the Fun Chat assignment in the RSSchool JS/FE 2023Q3 course. Users and messages are deleted once a day.';
-    this.container.appendChild(description);
+    description.classList.add('text-about');
+    aboutShadow.appendChild(description);
 
     const authorLink = document.createElement('a');
     authorLink.textContent = 'Anna Golosova';
     authorLink.href = 'https://github.com/Golosova76';
     authorLink.target = '_blank';
-    this.container.appendChild(authorLink);
+    authorLink.classList.add('link-about');
+    aboutShadow.appendChild(authorLink);
 
     const backButton = document.createElement('button');
-    backButton.textContent = 'Вернуться назад';
+    backButton.textContent = 'Go home';
+    backButton.classList.add('button-about');
     backButton.addEventListener('click', () => Router.navigateTo('access'));
-    this.container.appendChild(backButton);
+    aboutShadow.appendChild(backButton);
   }
 }
 
