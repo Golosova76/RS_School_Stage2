@@ -35,7 +35,7 @@ class AccessView implements View {
       'submit',
       'submit-button'
     );
-    this.submitButton.disabled = true;
+    // this.submitButton.disabled = true;
     const infoButton = this.createButtonElement(
       'Info',
       'button',
@@ -68,7 +68,7 @@ class AccessView implements View {
     });
 
     if (allValid) {
-      this.submitButton.disabled = false;
+      // this.submitButton.disabled = false;
       const loginData = {
         user: {
           login: inputs[0].value,
@@ -91,6 +91,9 @@ class AccessView implements View {
     input.type = type;
     input.placeholder = placeholder;
     input.className = 'form-input';
+    input.addEventListener('input', () => {
+      Validator.validateInput(input);
+    });
     return input;
   }
 
