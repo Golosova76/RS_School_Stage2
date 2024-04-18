@@ -1,6 +1,7 @@
 import Router from '../../utils/router';
 import { View } from '../model/common';
 import Validator from '../../utils/validate';
+import webSocketClient from '../../services/websocket-service';
 
 class AccessView implements View {
   private form: HTMLFormElement;
@@ -16,6 +17,13 @@ class AccessView implements View {
 
     this.form = this.createForm();
     this.container.appendChild(this.form);
+    webSocketClient.onMessage(function (event) {
+      console.log(JSON.parse(event.data));
+      const object = JSON.parse(event.data);
+      if (object.type === 'USER_LOGIN') {
+        console.log('WebSocket.');
+      }
+    });
   }
 
   createForm() {
@@ -27,7 +35,7 @@ class AccessView implements View {
       'submit',
       'submit-button'
     );
-    // this.submitButton.disabled = true;
+    this.submitButton.disabled = true;
     const infoButton = this.createButtonElement(
       'Info',
       'button',
@@ -60,7 +68,16 @@ class AccessView implements View {
     });
 
     if (allValid) {
-      // this.submitButton.disabled = !allValid;
+      this.submitButton.disabled = false;
+      const loginData = {
+        user: {
+          login: inputs[0].value,
+          password: inputs[1].value,
+        },
+      };
+      sessionStorage.setItem('loginData', JSON.stringify(loginData.user));
+
+      webSocketClient.sendRequest('USER_LOGIN', loginData);
       Router.navigateTo('main');
     }
   }

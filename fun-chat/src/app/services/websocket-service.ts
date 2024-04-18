@@ -87,4 +87,8 @@ class WebSocketClient {
   }
 }
 
-export default WebSocketClient;
+const webSocketClient = new WebSocketClient('ws://127.0.0.1:4000');
+
+webSocketClient.connect();
+
+export default webSocketClient;

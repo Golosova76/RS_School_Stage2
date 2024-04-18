@@ -1,16 +1,12 @@
 import AccessView from './components/view/access';
 import AboutView from './components/view/about';
 import MainView from './components/view/main-page';
-import WebSocketClient from './services/websocket-service';
+// import WebSocketClient from './services/websocket-service';
 
 class App {
   private currentView: AccessView | MainView | AboutView | null = null;
 
-  private webSocketClient: WebSocketClient;
-
   constructor() {
-    const url = 'ws://127.0.0.1:4000';
-    this.webSocketClient = new WebSocketClient(url);
     window.addEventListener('hashchange', this.route);
     window.addEventListener('load', this.route);
   }
