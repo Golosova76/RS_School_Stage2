@@ -9,7 +9,7 @@ class App {
   private webSocketClient: WebSocketClient;
 
   constructor() {
-    const url = 'wss://example.com/websocket';
+    const url = 'ws://127.0.0.1:4000';
     this.webSocketClient = new WebSocketClient(url);
     window.addEventListener('hashchange', this.route);
     window.addEventListener('load', this.route);

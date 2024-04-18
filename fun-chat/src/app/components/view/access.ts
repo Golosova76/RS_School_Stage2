@@ -7,6 +7,8 @@ class AccessView implements View {
 
   public container: HTMLDivElement;
 
+  private submitButton!: HTMLButtonElement;
+
   constructor() {
     this.container = document.createElement('div');
     this.container.classList.add('access-container');
@@ -20,11 +22,12 @@ class AccessView implements View {
     const form = document.createElement('form');
     const usernameInput = this.createInputElement('Enter your name', 'text');
     const passwordInput = this.createInputElement('Enter password', 'password');
-    const submitButton = this.createButtonElement(
+    this.submitButton = this.createButtonElement(
       'Login',
       'submit',
       'submit-button'
     );
+    // this.submitButton.disabled = true;
     const infoButton = this.createButtonElement(
       'Info',
       'button',
@@ -33,7 +36,7 @@ class AccessView implements View {
 
     form.appendChild(usernameInput);
     form.appendChild(passwordInput);
-    form.appendChild(submitButton);
+    form.appendChild(this.submitButton);
     form.appendChild(infoButton);
 
     form.addEventListener('submit', (event) => {
@@ -56,10 +59,10 @@ class AccessView implements View {
       return false;
     });
 
-    if (allValid)
-      if (allValid) {
-        Router.navigateTo('main');
-      }
+    if (allValid) {
+      // this.submitButton.disabled = !allValid;
+      Router.navigateTo('main');
+    }
   }
 
   // eslint-disable-next-line class-methods-use-this
