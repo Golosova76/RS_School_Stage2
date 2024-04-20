@@ -17,11 +17,13 @@ class AccessView implements View {
 
     this.form = this.createForm();
     this.container.appendChild(this.form);
-    webSocketClient.onMessage(function (event) {
-      console.log(JSON.parse(event.data));
-      const object = JSON.parse(event.data);
-      if (object.type === 'USER_LOGIN') {
-        console.log('WebSocket.');
+
+    this.submitButton.disabled = true;
+
+    webSocketClient.onMessage((event) => {
+      const serverMessage = JSON.parse(event.data);
+      if (serverMessage.type === 'USER_LOGIN') {
+        Router.navigateTo('main');
       }
     });
   }
@@ -35,7 +37,6 @@ class AccessView implements View {
       'submit',
       'submit-button'
     );
-    // this.submitButton.disabled = true;
     const infoButton = this.createButtonElement(
       'Info',
       'button',
@@ -68,17 +69,18 @@ class AccessView implements View {
     });
 
     if (allValid) {
-      // this.submitButton.disabled = false;
-      const loginData = {
+      const loginDataAG = {
         user: {
           login: inputs[0].value,
           password: inputs[1].value,
         },
       };
-      sessionStorage.setItem('loginData', JSON.stringify(loginData.user));
+      sessionStorage.setItem('loginData', JSON.stringify(loginDataAG.user));
 
-      webSocketClient.sendRequest('USER_LOGIN', loginData);
-      Router.navigateTo('main');
+      webSocketClient.sendRequest('USER_LOGIN', loginDataAG);
+      // Router.navigateTo('main');
+    } else {
+      this.submitButton.disabled = true;
     }
   }
 
@@ -91,10 +93,30 @@ class AccessView implements View {
     input.type = type;
     input.placeholder = placeholder;
     input.className = 'form-input';
+    input.dataset.validated = 'false';
+
     input.addEventListener('input', () => {
       Validator.validateInput(input);
+      if (
+        input.parentNode &&
+        !input.parentNode.querySelector('span.error-message')
+      ) {
+        input.dataset.validated = 'true'; // Отмечаем поле как валидно, если ошибок нет
+      } else {
+        input.dataset.validated = 'false'; // Отмечаем поле как невалидно, если есть ошибки
+      }
+      this.checkFormValidity();
     });
     return input;
+  }
+
+  private checkFormValidity() {
+    const inputs = this.form.querySelectorAll('input.form-input');
+    const allValid = Array.from(inputs).every((input) => {
+      return (input as HTMLElement).dataset.validated === 'true';
+    });
+
+    this.submitButton.disabled = !allValid;
   }
 
   // eslint-disable-next-line class-methods-use-this
