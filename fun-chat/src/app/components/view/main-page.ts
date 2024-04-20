@@ -34,6 +34,16 @@ class MainView implements View {
     userText.textContent = 'User: ';
     const userTitle = document.createElement('span');
     userTitle.className = 'user-title';
+    const sessionUser = sessionStorage.getItem('loginData');
+    // Проверка, что данные пользователя действительно были получены
+    if (sessionUser) {
+      const userData = JSON.parse(sessionUser);
+      // Установка логина пользователя как текста для элемента userTitle
+      userTitle.textContent = userData.login;
+    } else {
+      // Если данных в sessionStorage нет, установить текст по умолчанию
+      userTitle.textContent = 'No user name';
+    }
     userDiv.appendChild(userText);
     userDiv.appendChild(userTitle);
 
