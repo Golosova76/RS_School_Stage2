@@ -2,6 +2,7 @@ import Router from '../../utils/router';
 import { View } from '../model/common';
 import Validator from '../../utils/validate';
 import webSocketClient from '../../services/websocket-service';
+import ModalShowUserAuth from '../../utils/show-modal';
 
 class AccessView implements View {
   private form: HTMLFormElement;
@@ -20,10 +21,15 @@ class AccessView implements View {
 
     this.submitButton.disabled = true;
 
+    const modalShowUserAuth = new ModalShowUserAuth();
+
     webSocketClient.onMessage((event) => {
       const serverMessage = JSON.parse(event.data);
       if (serverMessage.type === 'USER_LOGIN') {
         Router.navigateTo('main');
+      } else if (serverMessage.type === 'ERROR') {
+        // Вызов функции, которая показывает модальное окно с ошибкой
+        modalShowUserAuth.showModal(serverMessage.payload.error);
       }
     });
   }
@@ -78,7 +84,6 @@ class AccessView implements View {
       sessionStorage.setItem('loginData', JSON.stringify(loginDataAG.user));
 
       webSocketClient.sendRequest('USER_LOGIN', loginDataAG);
-      // Router.navigateTo('main');
     } else {
       this.submitButton.disabled = true;
     }
