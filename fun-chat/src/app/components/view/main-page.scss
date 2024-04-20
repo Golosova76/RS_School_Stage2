@@ -52,6 +52,7 @@
 }
 
 .main-body {
+  min-height: 500px;
   display: flex;
   gap: 20px;
   @include margin-bottom20;
@@ -66,9 +67,34 @@
   border: 2px dashed rgba(0, 0, 0, 0.4);
 }
 
+.main-search {
+  border-bottom: 2px dashed rgba(0, 0, 0, 0.4);
+  width: 100%;
+  min-height: 50px;
+}
+
+.main-users {
+}
+
 .main-right {
   flex-basis: 70%;
   border: 2px dashed rgba(0, 0, 0, 0.4);
+}
+
+.main-dialog-user {
+  min-height: 50px;
+  border-bottom: 2px dashed rgba(0, 0, 0, 0.4);
+}
+
+.main-dialog-content {
+  text-align: center;
+  min-height: 480px;
+  border-bottom: 2px dashed rgba(0, 0, 0, 0.4);
+}
+
+.main-dialog-input {
+  display: flex;
+  justify-content: space-between;
 }
 
 .main-footer {

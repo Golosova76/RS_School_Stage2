@@ -81,7 +81,7 @@ class AccessView implements View {
           password: inputs[1].value,
         },
       };
-      sessionStorage.setItem('loginData', JSON.stringify(loginDataAG.user));
+      sessionStorage.setItem('loginDataAG', JSON.stringify(loginDataAG.user));
 
       webSocketClient.sendRequest('USER_LOGIN', loginDataAG);
     } else {

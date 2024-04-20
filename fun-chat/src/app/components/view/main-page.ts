@@ -1,5 +1,6 @@
-// import Router from '../../utils/router';
+import Router from '../../utils/router';
 import { View } from '../model/common';
+import webSocketClient from '../../services/websocket-service';
 
 class MainView implements View {
   public container: HTMLDivElement;
@@ -9,6 +10,16 @@ class MainView implements View {
     this.container.classList.add('main-container');
     document.body.appendChild(this.container);
     this.initializeContent();
+    webSocketClient.onMessage((event) => {
+      const serverMessage = JSON.parse(event.data);
+      if (serverMessage.type === 'USER_LOGOUT') {
+        Router.navigateTo('access');
+        sessionStorage.clear();
+      } else if (serverMessage.type === 'ERROR') {
+        // Вызов функции, которая показывает модальное окно с ошибкой
+        // modalShowUserAuth.showModal(serverMessage.payload.error);
+      }
+    });
   }
 
   private initializeContent(): void {
@@ -34,7 +45,7 @@ class MainView implements View {
     userText.textContent = 'User: ';
     const userTitle = document.createElement('span');
     userTitle.className = 'user-title';
-    const sessionUser = sessionStorage.getItem('loginData');
+    const sessionUser = sessionStorage.getItem('loginDataAG');
     // Проверка, что данные пользователя действительно были получены
     if (sessionUser) {
       const userData = JSON.parse(sessionUser);
@@ -58,9 +69,27 @@ class MainView implements View {
     const infoButton = document.createElement('button');
     infoButton.className = 'main-info button';
     infoButton.textContent = 'Info';
+    if (infoButton.textContent === 'Info') {
+      infoButton.addEventListener('click', () => Router.navigateTo('about'));
+    }
     const logoutButton = document.createElement('button');
     logoutButton.className = 'main-logout button';
     logoutButton.textContent = 'Logout';
+    logoutButton.addEventListener('click', (event) => {
+      event.preventDefault();
+      // Проверка, что данные пользователя действительно были получены
+      if (sessionUser) {
+        const userData = JSON.parse(sessionUser);
+        const loginDataAG = {
+          user: {
+            login: userData.login,
+            password: userData.password,
+          },
+        };
+        webSocketClient.sendRequest('USER_LOGOUT', loginDataAG);
+      }
+      // webSocketClient.sendRequest('USER_LOGOUT', loginDataAG);
+    });
     buttonDiv.appendChild(infoButton);
     buttonDiv.appendChild(logoutButton);
 
