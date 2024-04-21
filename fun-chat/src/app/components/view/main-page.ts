@@ -34,6 +34,9 @@ class MainView implements View {
         this.updateUserList(serverMessage.payload.users);
       } else if (serverMessage.type === 'USER_EXTERNAL_LOGIN') {
         this.updateUserYU(serverMessage.payload.user.login, true);
+      } else if (serverMessage.type === 'USER_EXTERNAL_LOGOUT') {
+        const logoutUserLogin = serverMessage.payload.user.login;
+        this.removeUser(logoutUserLogin);
       }
     });
   }
@@ -60,7 +63,7 @@ class MainView implements View {
         ) as HTMLSpanElement;
         statusIndicator.style.backgroundColor = 'green';
       } else {
-        this.createUser(login, status);
+        this.handleUserElement(login, status);
       }
     }
   }
@@ -224,23 +227,6 @@ class MainView implements View {
     // Добавление в родительский элемент
     parent.appendChild(section);
   }
-  /*
-  private updateUserList(users: Users) {
-    this.userList.innerHTML = ''; // Очищаем текущий список
-    users.forEach((user: User) => {
-      const userstList = document.createElement('li');
-
-      const statusIndicator = document.createElement('span');
-      statusIndicator.className = 'status-indicator';
-      statusIndicator.style.backgroundColor = user.isLogined
-        ? 'green'
-        : 'black';
-      userstList.appendChild(statusIndicator);
-      userstList.appendChild(document.createTextNode(user.login));
-      this.userList.appendChild(userstList);
-    });
-  }
-*/
 
   private updateUserList(users: Users) {
     const sessionUser = sessionStorage.getItem('loginDataAG');
@@ -250,34 +236,12 @@ class MainView implements View {
     const userData = JSON.parse(sessionUser);
     const currentUserLogin = userData.login;
 
-    // Добавляем новых пользователей или обновляем информацию о существующих
-
     users.forEach((user: User) => {
       if (user.login !== currentUserLogin) {
-        let userstListItem = this.userElements[user.login];
-        if (!userstListItem) {
-          // Создаем новый элемент списка для пользователя
-          userstListItem = document.createElement('li');
-          const statusIndicator = document.createElement('span');
-          statusIndicator.className = 'status-indicator';
-          statusIndicator.style.backgroundColor = user.isLogined
-            ? 'green'
-            : 'black';
-          userstListItem.appendChild(statusIndicator);
-          userstListItem.appendChild(document.createTextNode(user.login));
-          this.userList.appendChild(userstListItem);
-          this.userElements[user.login] = userstListItem;
-        } else {
-          // Обновляем статус индикатора для существующего пользователя
-          const statusIndicator = userstListItem.querySelector(
-            '.status-indicator'
-          ) as HTMLSpanElement;
-          statusIndicator.style.backgroundColor = user.isLogined
-            ? 'green'
-            : 'black';
-        }
+        this.handleUserElement(user.login, user.isLogined);
       }
     });
+
     // Удаляем элементы пользователей, которые больше не существуют в актуальном списке
     Object.keys(this.userElements).forEach((login) => {
       if (!users.some((user) => user.login === login)) {
@@ -287,16 +251,30 @@ class MainView implements View {
     });
   }
 
-  private createUser(login: string, active: boolean) {
-    // Создаем новый элемент списка для пользователя
-    const userstListItem = document.createElement('li');
-    const statusIndicator = document.createElement('span');
-    statusIndicator.className = 'status-indicator';
-    statusIndicator.style.backgroundColor = active ? 'green' : 'black';
-    userstListItem.appendChild(statusIndicator);
-    userstListItem.appendChild(document.createTextNode(login));
-    this.userList.appendChild(userstListItem);
-    this.userElements[login] = userstListItem;
+  private handleUserElement(login: string, isActive: boolean) {
+    let userElement = this.userElements[login];
+    if (!userElement) {
+      userElement = document.createElement('li');
+      const statusIndicator = document.createElement('span');
+      statusIndicator.className = 'status-indicator';
+      userElement.appendChild(statusIndicator);
+      userElement.appendChild(document.createTextNode(login));
+      this.userList.appendChild(userElement);
+      this.userElements[login] = userElement;
+    }
+    const statusIndicator = userElement.querySelector(
+      '.status-indicator'
+    ) as HTMLSpanElement;
+    statusIndicator.style.backgroundColor = isActive ? 'green' : 'black';
+  }
+
+  private removeUser(login: string) {
+    if (this.userElements[login]) {
+      // Удаляем элемент из DOM
+      this.userList.removeChild(this.userElements[login]);
+      // Удаляем элемент из словаря активных пользователей
+      delete this.userElements[login];
+    }
   }
 
   // eslint-disable-next-line class-methods-use-this
