@@ -9,6 +9,8 @@ class MainView implements View {
 
   userList!: HTMLElement;
 
+  dialogUserDiv!: HTMLElement;
+
   private userElements: Record<string, HTMLElement> = {};
 
   constructor() {
@@ -152,14 +154,29 @@ class MainView implements View {
     searchInput.placeholder = 'Search...';
     this.userList = document.createElement('ul');
     this.userList.className = 'main-users';
+    this.userList.addEventListener('click', (event) => {
+      const target = event.target as HTMLElement;
+      // Проверяем, что клик был сделан по элементу списка
+      if (target.tagName === 'SPAN' || target.tagName === 'LI') {
+        const userLi = target.closest('li') as HTMLElement | null;
+        if (userLi) {
+          const username = userLi.textContent?.trim();
+          const statusIndicator = userLi.querySelector(
+            '.status-indicator'
+          ) as HTMLElement | null;
+          const isActive = statusIndicator?.style.backgroundColor === 'green';
+          this.updateUserDialog(username, isActive);
+        }
+      }
+    });
     asideLeft.appendChild(searchInput);
     asideLeft.appendChild(this.userList);
 
     // Создание и добавление основного содержимого справа
     const articleRight = document.createElement('article');
     articleRight.className = 'main-right';
-    const dialogUserDiv = document.createElement('div');
-    dialogUserDiv.className = 'main-dialog-user';
+    this.dialogUserDiv = document.createElement('div');
+    this.dialogUserDiv.className = 'main-dialog-user';
     const dialogContentDiv = document.createElement('div');
     dialogContentDiv.className = 'main-dialog-content';
     const messageSpan = document.createElement('span');
@@ -184,7 +201,7 @@ class MainView implements View {
     dialogInputDiv.appendChild(messageInput);
     dialogInputDiv.appendChild(sendButton);
 
-    articleRight.appendChild(dialogUserDiv);
+    articleRight.appendChild(this.dialogUserDiv);
     articleRight.appendChild(dialogContentDiv);
     articleRight.appendChild(dialogInputDiv);
 
@@ -226,6 +243,30 @@ class MainView implements View {
 
     // Добавление в родительский элемент
     parent.appendChild(section);
+  }
+
+  // добавление спанов с логином и в сети в контейнер
+  public updateUserDialog(
+    username: string | undefined,
+    isActive: boolean | undefined
+  ) {
+    // Очистить предыдущее содержимое
+    this.dialogUserDiv.innerHTML = '';
+
+    // Создать элементы для отображения информации
+    const usernameSpan = document.createElement('span');
+    usernameSpan.textContent = username ?? 'Неизвестный пользователь';
+
+    const statusSpanUser = document.createElement('span');
+    statusSpanUser.textContent = isActive ? 'в сети' : 'не в сети';
+
+    // Добавить стили для наглядности (опционально)
+    statusSpanUser.style.color = isActive ? 'green' : 'red';
+
+    // Добавить элементы в div
+    this.dialogUserDiv.appendChild(usernameSpan);
+    // dialogUserDiv.appendChild(document.createTextNode(' ')); // Добавляем пробел между спанами
+    this.dialogUserDiv.appendChild(statusSpanUser);
   }
 
   private updateUserList(users: Users) {
