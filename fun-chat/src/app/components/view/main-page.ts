@@ -1,11 +1,15 @@
 import Router from '../../utils/router';
 import { View, Users, User } from '../model/common';
 import webSocketClient from '../../services/websocket-service';
+import userService from '../../services/user-service';
+import ModalShowUserLogout from '../../utils/show-modal-error-logout';
 
 class MainView implements View {
   public container: HTMLDivElement;
 
   userList!: HTMLElement;
+
+  private userElements: Record<string, HTMLElement> = {};
 
   constructor() {
     this.container = document.createElement('div');
@@ -13,20 +17,23 @@ class MainView implements View {
     document.body.appendChild(this.container);
     this.initializeContent();
     this.fetchUsers();
+    const modalShowUserLogout = new ModalShowUserLogout();
     webSocketClient.onMessage((event) => {
       const serverMessage = JSON.parse(event.data);
       if (serverMessage.type === 'USER_LOGOUT') {
         Router.navigateTo('access');
         sessionStorage.clear();
+        userService.isLogined = false;
       } else if (serverMessage.type === 'ERROR') {
         // Вызов функции, которая показывает модальное окно с ошибкой
-        // modalShowUserAuth.showModal(serverMessage.payload.error);
+        modalShowUserLogout.showModalErrorLogout(serverMessage.payload.error);
       } else if (
         serverMessage.type === 'USER_ACTIVE' ||
         serverMessage.type === 'USER_INACTIVE'
       ) {
-        // Предполагаем, что payload содержит массив пользователей
         this.updateUserList(serverMessage.payload.users);
+      } else if (serverMessage.type === 'USER_EXTERNAL_LOGIN') {
+        this.updateUserYU(serverMessage.payload.user.login, true);
       }
     });
   }
@@ -39,6 +46,23 @@ class MainView implements View {
     this.createHeader(mainShadow);
     this.createBody(mainShadow);
     this.createFooter(mainShadow);
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  private updateUserYU(login: string, status: boolean) {
+    const changeUserElement = Object.values(this.userElements).find((elem) => {
+      return elem.innerText === login;
+    });
+    if (status) {
+      if (changeUserElement) {
+        const statusIndicator = changeUserElement.querySelector(
+          '.status-indicator'
+        ) as HTMLSpanElement;
+        statusIndicator.style.backgroundColor = 'green';
+      } else {
+        this.createUser(login, status);
+      }
+    }
   }
 
   // eslint-disable-next-line class-methods-use-this
@@ -200,7 +224,7 @@ class MainView implements View {
     // Добавление в родительский элемент
     parent.appendChild(section);
   }
-
+  /*
   private updateUserList(users: Users) {
     this.userList.innerHTML = ''; // Очищаем текущий список
     users.forEach((user: User) => {
@@ -216,13 +240,68 @@ class MainView implements View {
       this.userList.appendChild(userstList);
     });
   }
+*/
+
+  private updateUserList(users: Users) {
+    const sessionUser = sessionStorage.getItem('loginDataAG');
+    if (sessionUser === null) {
+      return;
+    }
+    const userData = JSON.parse(sessionUser);
+    const currentUserLogin = userData.login;
+
+    // Добавляем новых пользователей или обновляем информацию о существующих
+
+    users.forEach((user: User) => {
+      if (user.login !== currentUserLogin) {
+        let userstListItem = this.userElements[user.login];
+        if (!userstListItem) {
+          // Создаем новый элемент списка для пользователя
+          userstListItem = document.createElement('li');
+          const statusIndicator = document.createElement('span');
+          statusIndicator.className = 'status-indicator';
+          statusIndicator.style.backgroundColor = user.isLogined
+            ? 'green'
+            : 'black';
+          userstListItem.appendChild(statusIndicator);
+          userstListItem.appendChild(document.createTextNode(user.login));
+          this.userList.appendChild(userstListItem);
+          this.userElements[user.login] = userstListItem;
+        } else {
+          // Обновляем статус индикатора для существующего пользователя
+          const statusIndicator = userstListItem.querySelector(
+            '.status-indicator'
+          ) as HTMLSpanElement;
+          statusIndicator.style.backgroundColor = user.isLogined
+            ? 'green'
+            : 'black';
+        }
+      }
+    });
+    // Удаляем элементы пользователей, которые больше не существуют в актуальном списке
+    Object.keys(this.userElements).forEach((login) => {
+      if (!users.some((user) => user.login === login)) {
+        this.userList.removeChild(this.userElements[login]);
+        delete this.userElements[login];
+      }
+    });
+  }
+
+  private createUser(login: string, active: boolean) {
+    // Создаем новый элемент списка для пользователя
+    const userstListItem = document.createElement('li');
+    const statusIndicator = document.createElement('span');
+    statusIndicator.className = 'status-indicator';
+    statusIndicator.style.backgroundColor = active ? 'green' : 'black';
+    userstListItem.appendChild(statusIndicator);
+    userstListItem.appendChild(document.createTextNode(login));
+    this.userList.appendChild(userstListItem);
+    this.userElements[login] = userstListItem;
+  }
 
   // eslint-disable-next-line class-methods-use-this
   public fetchUsers() {
-    // Запрос активных пользователей
     webSocketClient.sendRequest('USER_ACTIVE', null);
-
-    // Запрос неактивных пользователей
     webSocketClient.sendRequest('USER_INACTIVE', null);
   }
 }

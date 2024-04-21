@@ -3,6 +3,7 @@ import { View } from '../model/common';
 import Validator from '../../utils/validate';
 import webSocketClient from '../../services/websocket-service';
 import ModalShowUserAuth from '../../utils/show-modal';
+import userService from '../../services/user-service';
 
 class AccessView implements View {
   private form: HTMLFormElement;
@@ -25,9 +26,10 @@ class AccessView implements View {
 
     webSocketClient.onMessage((event) => {
       const serverMessage = JSON.parse(event.data);
-      console.log(serverMessage);
+      // console.log(serverMessage);
       if (serverMessage.type === 'USER_LOGIN') {
         Router.navigateTo('main');
+        userService.isLogined = true;
       } else if (serverMessage.type === 'ERROR') {
         // Вызов функции, которая показывает модальное окно с ошибкой
         modalShowUserAuth.showModal(serverMessage.payload.error);

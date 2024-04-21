@@ -1,7 +1,8 @@
 import AccessView from './components/view/access';
 import AboutView from './components/view/about';
 import MainView from './components/view/main-page';
-// import WebSocketClient from './services/websocket-service';
+import webSocketClient from './services/websocket-service';
+import userService from './services/user-service';
 
 class App {
   private currentView: AccessView | MainView | AboutView | null = null;
@@ -12,9 +13,25 @@ class App {
   }
 
   private route = (): void => {
+    const sessionUser = sessionStorage.getItem('loginDataAG');
     if (this.currentView) {
       document.body.removeChild(this.currentView.container);
       this.currentView = null;
+    }
+
+    if (!sessionUser) {
+      if (window.location.hash !== '#access') {
+        window.location.hash = '#access';
+      }
+    } else if (!userService.isLogined) {
+      const userData = JSON.parse(sessionUser ?? '');
+      const loginDataAG = {
+        user: {
+          login: userData.login,
+          password: userData.password,
+        },
+      };
+      webSocketClient.sendRequest('USER_LOGIN', loginDataAG);
     }
 
     switch (window.location.hash) {
