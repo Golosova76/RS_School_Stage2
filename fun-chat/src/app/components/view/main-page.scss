@@ -74,6 +74,7 @@
 }
 
 .main-users {
+  overflow: auto;
 }
 
 .main-right {
@@ -124,4 +125,12 @@
       color: black;
     }
   }
+}
+
+.status-indicator {
+  height: 10px;
+  width: 10px;
+  border-radius: 50%;
+  display: inline-block;
+  margin-right: 10px;
 }

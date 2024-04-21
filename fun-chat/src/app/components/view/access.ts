@@ -25,6 +25,7 @@ class AccessView implements View {
 
     webSocketClient.onMessage((event) => {
       const serverMessage = JSON.parse(event.data);
+      console.log(serverMessage);
       if (serverMessage.type === 'USER_LOGIN') {
         Router.navigateTo('main');
       } else if (serverMessage.type === 'ERROR') {

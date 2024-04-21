@@ -20,6 +20,7 @@ class App {
     switch (window.location.hash) {
       case '#main':
         this.currentView = new MainView();
+        this.currentView.fetchUsers();
         break;
       case '#about':
         this.currentView = new AboutView();

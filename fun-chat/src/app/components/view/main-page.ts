@@ -1,15 +1,18 @@
 import Router from '../../utils/router';
-import { View } from '../model/common';
+import { View, Users, User } from '../model/common';
 import webSocketClient from '../../services/websocket-service';
 
 class MainView implements View {
   public container: HTMLDivElement;
+
+  userList!: HTMLElement;
 
   constructor() {
     this.container = document.createElement('div');
     this.container.classList.add('main-container');
     document.body.appendChild(this.container);
     this.initializeContent();
+    this.fetchUsers();
     webSocketClient.onMessage((event) => {
       const serverMessage = JSON.parse(event.data);
       if (serverMessage.type === 'USER_LOGOUT') {
@@ -18,6 +21,12 @@ class MainView implements View {
       } else if (serverMessage.type === 'ERROR') {
         // Вызов функции, которая показывает модальное окно с ошибкой
         // modalShowUserAuth.showModal(serverMessage.payload.error);
+      } else if (
+        serverMessage.type === 'USER_ACTIVE' ||
+        serverMessage.type === 'USER_INACTIVE'
+      ) {
+        // Предполагаем, что payload содержит массив пользователей
+        this.updateUserList(serverMessage.payload.users);
       }
     });
   }
@@ -107,17 +116,17 @@ class MainView implements View {
     const section = document.createElement('section');
     section.className = 'main-body';
 
-    // Создание и добавление боковой панели слева
+    // Создание и добавление боковой панели слева (список users)
     const asideLeft = document.createElement('aside');
     asideLeft.className = 'main-left';
     const searchInput = document.createElement('input');
     searchInput.type = 'text';
     searchInput.className = 'main-search';
     searchInput.placeholder = 'Search...';
-    const userList = document.createElement('ul');
-    userList.className = 'main-users';
+    this.userList = document.createElement('ul');
+    this.userList.className = 'main-users';
     asideLeft.appendChild(searchInput);
-    asideLeft.appendChild(userList);
+    asideLeft.appendChild(this.userList);
 
     // Создание и добавление основного содержимого справа
     const articleRight = document.createElement('article');
@@ -190,6 +199,31 @@ class MainView implements View {
 
     // Добавление в родительский элемент
     parent.appendChild(section);
+  }
+
+  private updateUserList(users: Users) {
+    this.userList.innerHTML = ''; // Очищаем текущий список
+    users.forEach((user: User) => {
+      const userstList = document.createElement('li');
+
+      const statusIndicator = document.createElement('span');
+      statusIndicator.className = 'status-indicator';
+      statusIndicator.style.backgroundColor = user.isLogined
+        ? 'green'
+        : 'black';
+      userstList.appendChild(statusIndicator);
+      userstList.appendChild(document.createTextNode(user.login));
+      this.userList.appendChild(userstList);
+    });
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  public fetchUsers() {
+    // Запрос активных пользователей
+    webSocketClient.sendRequest('USER_ACTIVE', null);
+
+    // Запрос неактивных пользователей
+    webSocketClient.sendRequest('USER_INACTIVE', null);
   }
 }
 
