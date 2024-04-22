@@ -105,7 +105,9 @@
 
 .main-dialog-input {
   display: flex;
+  gap: 20px;
   justify-content: space-between;
+  align-items: center;
 }
 
 .main-footer {
@@ -143,4 +145,23 @@
   border-radius: 50%;
   display: inline-block;
   margin-right: 10px;
+}
+
+.main-message-input:disabled {
+  border-color: gray;
+  color: gray;
+  pointer-events: none;
+}
+
+.main-message {
+  flex-basis: 80%;
+  padding: 10px;
+  outline: none;
+  border-radius: 4px;
+  border: 2px dashed rgba(0, 0, 0, 0.4);
+  border-top: none;
+}
+
+.main-message-input {
+  flex-basis: 20%;
 }

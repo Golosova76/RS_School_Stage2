@@ -1,8 +1,9 @@
 import Router from '../../utils/router';
-import { View, Users, User } from '../model/common';
+import { View, Users, User, MessageInfo } from '../model/common';
 import webSocketClient from '../../services/websocket-service';
 import userService from '../../services/user-service';
 import ModalShowUserLogout from '../../utils/show-modal-error-logout';
+import MessageUsers from '../../utils/message';
 
 class MainView implements View {
   public container: HTMLDivElement;
@@ -11,7 +12,11 @@ class MainView implements View {
 
   dialogUserDiv!: HTMLElement;
 
+  dialogContentDiv!: HTMLElement;
+
   private userElements: Record<string, HTMLElement> = {};
+
+  private currentActiveUserName: string | null = null;
 
   constructor() {
     this.container = document.createElement('div');
@@ -39,8 +44,34 @@ class MainView implements View {
       } else if (serverMessage.type === 'USER_EXTERNAL_LOGOUT') {
         const logoutUserLogin = serverMessage.payload.user.login;
         this.removeUser(logoutUserLogin);
+      } else if (serverMessage.type === 'MSG_SEND') {
+        // Обработка получения или подтверждения отправки сообщения
+        const messageData = serverMessage.payload.message;
+        this.displayMessage(messageData);
       }
     });
+  }
+
+  // Функция для отображения сообщения в DOM
+  // eslint-disable-next-line class-methods-use-this
+  public displayMessage(messageData: MessageInfo): void {
+    const newMessage = new MessageUsers();
+    console.log(messageData.text);
+    newMessage.setMessageText(messageData.text);
+    newMessage.setMessageDate(new Date(messageData.datetime).toLocaleString());
+
+    // Изначально устанавливаем статус сообщения как 'Pending'
+    let statusText = 'Pending';
+
+    if (messageData.status.isDelivered) {
+      statusText = 'Delivered';
+    }
+    if (messageData.status.isReaded) {
+      statusText = 'Read';
+    }
+
+    newMessage.setMessageStatus(statusText);
+    newMessage.appendToParent(this.dialogContentDiv);
   }
 
   private initializeContent(): void {
@@ -165,6 +196,9 @@ class MainView implements View {
             '.status-indicator'
           ) as HTMLElement | null;
           const isActive = statusIndicator?.style.backgroundColor === 'green';
+          if (username) {
+            this.currentActiveUserName = username;
+          }
           this.updateUserDialog(username, isActive);
         }
       }
@@ -177,8 +211,8 @@ class MainView implements View {
     articleRight.className = 'main-right';
     this.dialogUserDiv = document.createElement('div');
     this.dialogUserDiv.className = 'main-dialog-user';
-    const dialogContentDiv = document.createElement('div');
-    dialogContentDiv.className = 'main-dialog-content';
+    this.dialogContentDiv = document.createElement('div');
+    this.dialogContentDiv.className = 'main-dialog-content';
     const messageSpan = document.createElement('span');
     messageSpan.className = 'info-message';
     messageSpan.textContent = 'Select the user to send the message to...';
@@ -186,8 +220,8 @@ class MainView implements View {
     hiddenMessageSpan.className = 'info-message';
     hiddenMessageSpan.textContent = 'Write your first post...';
     hiddenMessageSpan.hidden = true;
-    dialogContentDiv.appendChild(messageSpan);
-    dialogContentDiv.appendChild(hiddenMessageSpan);
+    this.dialogContentDiv.appendChild(messageSpan);
+    this.dialogContentDiv.appendChild(hiddenMessageSpan);
     const dialogInputDiv = document.createElement('div');
     dialogInputDiv.className = 'main-dialog-input';
     const messageInput = document.createElement('input');
@@ -198,11 +232,29 @@ class MainView implements View {
     sendButton.className = 'main-message-input button';
     sendButton.textContent = 'Send';
     sendButton.disabled = true;
+    // Включение кнопки отправки при наличии текста
+    messageInput.addEventListener('input', () => {
+      sendButton.disabled = !messageInput.value.trim();
+    });
+    sendButton.addEventListener('click', () => {
+      const messageText = messageInput.value;
+      // Подготовка и отправка сообщения
+      const messagePayload = {
+        message: {
+          to: this.currentActiveUserName,
+          text: messageText,
+        },
+      };
+      webSocketClient.sendRequest('MSG_SEND', messagePayload);
+
+      // Очистка поля ввода после отправки сообщения
+      messageInput.value = '';
+    });
     dialogInputDiv.appendChild(messageInput);
     dialogInputDiv.appendChild(sendButton);
 
     articleRight.appendChild(this.dialogUserDiv);
-    articleRight.appendChild(dialogContentDiv);
+    articleRight.appendChild(this.dialogContentDiv);
     articleRight.appendChild(dialogInputDiv);
 
     // Добавление созданных элементов в блок

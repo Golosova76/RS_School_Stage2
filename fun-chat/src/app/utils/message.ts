@@ -25,25 +25,25 @@ class MessageUsers {
     const youUser = document.createElement('span');
     youUser.className = 'you-user';
 
-    const messageDate = document.createElement('span');
-    messageDate.className = 'message-date';
+    this.messageDate = document.createElement('span');
+    this.messageDate.className = 'message-date';
 
     messageControls.appendChild(youUser);
-    messageControls.appendChild(messageDate);
+    messageControls.appendChild(this.messageDate);
 
-    const messageText = document.createElement('div');
-    messageText.className = 'message-text';
+    this.messageText = document.createElement('div');
+    this.messageText.className = 'message-text';
 
     const messageStatus = document.createElement('div');
     messageStatus.className = 'message-status';
 
-    const statusSpan = document.createElement('span');
-    statusSpan.className = 'status';
+    this.statusSpan = document.createElement('span');
+    this.statusSpan.className = 'status';
 
-    messageStatus.appendChild(statusSpan);
+    messageStatus.appendChild(this.statusSpan);
 
     messageContainer.appendChild(messageControls);
-    messageContainer.appendChild(messageText);
+    messageContainer.appendChild(this.messageText);
     messageContainer.appendChild(messageStatus);
 
     userMessageContainer.appendChild(messageContainer);
