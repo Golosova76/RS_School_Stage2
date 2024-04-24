@@ -445,9 +445,11 @@ class MainView {
         userService.isLogined = false;
       } else if (serverMessage.type === "ERROR") {
         modalShowUserLogout.showModalErrorLogout(serverMessage.payload.error);
-      } else if (serverMessage.type === "USER_ACTIVE" || serverMessage.type === "USER_INACTIVE") {
+      } else if (serverMessage.type === "USER_ACTIVE") {
         this.updateUserList(serverMessage.payload.users);
-      } else if (serverMessage.type === "USER_EXTERNAL_LOGIN") {
+      } else if (serverMessage.type === "USER_INACTIVE")
+        ;
+      else if (serverMessage.type === "USER_EXTERNAL_LOGIN") {
         this.updateUserYU(serverMessage.payload.user.login, true);
       } else if (serverMessage.type === "USER_EXTERNAL_LOGOUT") {
         const logoutUserLogin = serverMessage.payload.user.login;
