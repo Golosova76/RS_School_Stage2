@@ -34,11 +34,10 @@ class MainView implements View {
       } else if (serverMessage.type === 'ERROR') {
         // Вызов функции, которая показывает модальное окно с ошибкой
         modalShowUserLogout.showModalErrorLogout(serverMessage.payload.error);
-      } else if (
-        serverMessage.type === 'USER_ACTIVE' ||
-        serverMessage.type === 'USER_INACTIVE'
-      ) {
+      } else if (serverMessage.type === 'USER_ACTIVE') {
         this.updateUserList(serverMessage.payload.users);
+      } else if (serverMessage.type === 'USER_INACTIVE') {
+        // this.updateUserList(serverMessage.payload.users);
       } else if (serverMessage.type === 'USER_EXTERNAL_LOGIN') {
         this.updateUserYU(serverMessage.payload.user.login, true);
       } else if (serverMessage.type === 'USER_EXTERNAL_LOGOUT') {
@@ -60,7 +59,6 @@ class MainView implements View {
     newMessage.setMessageText(messageData.text);
     newMessage.setMessageDate(new Date(messageData.datetime).toLocaleString());
 
-    // Изначально устанавливаем статус сообщения как 'Pending'
     let statusText = 'Pending';
 
     if (messageData.status.isDelivered) {
